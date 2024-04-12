@@ -5,7 +5,7 @@ plugins {
 static def getDate() { return new Date().format('yyyyMMdd') }
 
 static def getDateSeconds() {
-    return 9999999
+    return 10000169
 }
 
 def getVersionName = {
@@ -194,8 +194,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     bundle {
