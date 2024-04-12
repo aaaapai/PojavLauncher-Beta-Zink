@@ -420,4 +420,5 @@
     <string name="preference_rendererexp_custom_glversion">允许您自定义Mesa GL/GLSL版本</string>
     <string name="custom_gl_version">Mesa GL版本:</string>
     <string name="custom_glsl_version">Mesa GLSL版本:</string>
+    <string name="mcl_setting_renderer_gles2_4_ptitseb">PtitSeb GL4ES - (?,快)</string>
 </resources>
