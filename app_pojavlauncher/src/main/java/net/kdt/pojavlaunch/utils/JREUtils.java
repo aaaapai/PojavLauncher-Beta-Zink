@@ -507,6 +507,9 @@ public class JREUtils {
             case "opengles3":
                 renderLibrary = "libgl4es_114.so";
                 break;
+            case "opengles3_ptitseb":
+                renderLibrary = "libgl4es_114_ptitseb.so";
+                break;
             case "opengles2_vgpu":
                 renderLibrary = "libvgpu.so";
                 break;
