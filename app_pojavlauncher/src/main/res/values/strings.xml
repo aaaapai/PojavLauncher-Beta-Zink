@@ -459,4 +459,5 @@
     <string name="preference_rendererexp_custom_glversion">Allow custom Mesa GL/GLSL version</string>
     <string name="custom_gl_version">Mesa GL version:</string>
     <string name="custom_glsl_version">Mesa GLSL version:</string>
+    <string name="mcl_setting_renderer_gles2_4_ptitseb">PtitSeb GL4ES - (?, fast)</string>
 </resources>
