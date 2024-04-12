@@ -44,7 +44,7 @@ LOCAL_SRC_FILES := \
     driver_helper/nsbypass.c
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-LOCAL_CFLAGS += -DADRENO_POSSIBLE
+LOCAL_CFLAGS += -DADRENO_POSSIBLE -DANDROID -pipe -integrated-as -fno-plt -Ofast -flto -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce
 LOCAL_LDLIBS += -lEGL -lGLESv2
 endif
 include $(BUILD_SHARED_LIBRARY)
@@ -88,7 +88,7 @@ include $(BUILD_SHARED_LIBRARY)
 LOCAL_PATH := $(HERE_PATH)/awt_xawt
 include $(CLEAR_VARS)
 LOCAL_MODULE := awt_xawt
-# LOCAL_CFLAGS += -DHEADLESS
+# LOCAL_CFLAGS += -DHEADLESS -DANDROID -pipe -integrated-as -fno-plt -Ofast -flto -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SHARED_LIBRARIES := awt_headless
 LOCAL_SRC_FILES := xawt_fake.c
