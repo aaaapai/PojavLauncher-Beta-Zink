@@ -5,7 +5,7 @@
 #include <dlfcn.h>
 #include <android/dlext.h>
 #include "driver_helper/nsbypass.h"
-#include "GL/glcorearb.h"
+#include "GL/gl.h"
 
 GLAPI const GLubyte *APIENTRY glGetString(GLenum name);
 
