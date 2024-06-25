@@ -101,3 +101,5 @@ LOCAL_SRC_FILES := xawt_fake.c
 LOCAL_CFLAGS += -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -Wno-int-conversion
 include $(BUILD_SHARED_LIBRARY)
 
+# delete fake libs after linked
+$(info $(shell (rm $(HERE_PATH)/../jniLibs/*/libawt_headless.so)))
