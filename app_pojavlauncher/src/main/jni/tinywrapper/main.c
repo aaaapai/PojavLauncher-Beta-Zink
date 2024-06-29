@@ -5,8 +5,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "GL/glcorearb.h"
 #include "GLES/gl.h"
+#include "GL/glcorearb.h"
 #include "string_utils.h"
 
 GLAPI void APIENTRY glClearDepthf (GLfloat d);
