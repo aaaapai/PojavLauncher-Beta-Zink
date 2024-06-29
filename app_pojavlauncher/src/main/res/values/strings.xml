@@ -65,7 +65,7 @@
     <string name="mcl_setting_category_renderer">Renderer</string>
     <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (all versions, fast)</string>
     <string name="mcl_setting_renderer_ptitseb_gl4es">PtitSeb GL4ES - (not all versions, fast)</string>
-    <string name="mcl_setting_renderer_vulkan_zink">Mesa(Vulkan)</string>
+    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (all versions, mid)</string>
     <string name="mcl_setting_renderer_angle">ANGLE (Vulkan) - (1.17+ only, mid)</string>
     <string name="mcl_setting_veroption_release">Release</string>
     <string name="mcl_setting_veroption_snapshot">Snapshot</string>
@@ -404,6 +404,9 @@
     <string name="preference_category_custom_path">Custom path</string>
     <string name="app_start_toast">#Welcome to Pojav Glow·Worm!!!!</string>
     <string name="mcl_setting_renderer_vgpu">vgpu - (up to 1.16.5, fast)</string>
+    <string name="mcl_setting_renderer_virgl">virglrenderer - (all versions, mid)</string>
+    <string name="mcl_setting_renderer_freedreno">Freedreno (Adreno) - (all versions, mid)</string>
+    <string name="mcl_setting_renderer_panfrost">Panfrost (Mali)</string>
     <string name="preference_mouse_title">Mouce customization</string>
     <string name="preference_mouse_description">Set mouse pointer icon in game</string>
     <string name="notif_mouse">Set done.</string>
@@ -441,7 +444,7 @@
     <string name="preference_renderer_setup_extra">Renderer (Extra)</string>
     <string name="preference_renderer_extra_default">Mesa24.1.2 (Default)</string>
     <string name="preference_extra_mesa_version">Mesa Version</string>
-    <string name="preference_extra_driver_modle">Driver Modle</string>
+    <string name="preference_extra_driver_model">Driver Modle</string>
     <!-- Dialog box prompt -->
     <string name="preference_rendererexp_alertdialog_warning">Warning</string>
     <string name="preference_rendererexp_alertdialog_message">You have turned on experimental settings.This feature may generate unexpected bugs.Continue to use?</string>
