@@ -9,6 +9,8 @@
 #include "GL/glcorearb.h"
 #include "string_utils.h"
 
+#define GL_PROXY_TEXTURE_RECTANGLE_ARB    0x84F7
+
 #define LOOKUP_FUNC(func) \
     if (!gles_##func) { \
         gles_##func = dlsym(RTLD_NEXT, #func); \
