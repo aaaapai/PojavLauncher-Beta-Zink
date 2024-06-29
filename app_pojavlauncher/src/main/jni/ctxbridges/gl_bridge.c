@@ -1,4 +1,4 @@
-#include <EGL/egl.h>
+#include "EGL/egl.h"
 #include <android/log.h>
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
