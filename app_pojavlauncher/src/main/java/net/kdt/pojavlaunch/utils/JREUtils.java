@@ -31,10 +31,10 @@ import net.kdt.pojavlaunch.plugins.FFmpegPlugin;
 import net.kdt.pojavlaunch.prefs.*;
 import org.lwjgl.glfw.*;
 
-import jakarta.microedition.khronos.egl.EGL10;
-import jakarta.microedition.khronos.egl.EGLConfig;
-import jakarta.microedition.khronos.egl.EGLContext;
-import jakarta.microedition.khronos.egl.EGLDisplay;
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
 
 public class JREUtils {
     private JREUtils() {}
