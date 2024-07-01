@@ -552,7 +552,13 @@ public class JREUtils {
                 case "opengles3":
                     renderLibrary = "libgl4es_114.so";
                     break;
+                case "opengles2_ptitseb":
+                case "opengles2_5_ptitseb":
+                case "opengles3_ptitseb":
+                renderLibrary = "libgl4es_ptitseb.so";
+                    break;
                 case "opengles2_vgpu":
+                case "opengles3_vgpu":
                     renderLibrary = "libvgpu.so";
                     break;
                 case "vulkan_zink":

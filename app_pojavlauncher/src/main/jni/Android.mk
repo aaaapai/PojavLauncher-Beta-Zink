@@ -11,6 +11,7 @@ LOCAL_PATH := $(HERE_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE := angle_gles2
 LOCAL_SRC_FILES := tinywrapper/angle-gles/$(TARGET_ARCH_ABI)/libGLESv2_angle.so
+LOCAL_CFLAGS += -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce
 include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -18,7 +19,7 @@ LOCAL_MODULE := tinywrapper
 LOCAL_SHARED_LIBRARIES := angle_gles2
 LOCAL_SRC_FILES := tinywrapper/main.c tinywrapper/string_utils.c
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/tinywrapper
-LOCAL_CFLAGS += -g -rdynamic
+LOCAL_CFLAGS +=  -g -rdynamic -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce
 include $(BUILD_SHARED_LIBRARY)
 
 
@@ -27,7 +28,7 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS := -ldl -llog -landroid
 # -lGLESv2
 LOCAL_MODULE := pojavexec
-LOCAL_CFLAGS += -g -rdynamic
+LOCAL_CFLAGS += -g -rdynamic -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce
 # LOCAL_CFLAGS += -DDEBUG
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
@@ -46,8 +47,8 @@ LOCAL_SRC_FILES := \
     driver_helper/nsbypass.c
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-LOCAL_CFLAGS += -DADRENO_POSSIBLE
-LOCAL_LDLIBS += -lEGL -lGLESv2
+LOCAL_CFLAGS += -O2 -DADRENO_POSSIBLE  -Wno-int-conversion -Wno-unknown-warning-option -Wno-unused-const-variable -Wno-unused-variable -Wno-unused-parameter -Wno-format -Wno-sign-compare -Wno-error=implicit-function-declaration -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -std=gnu2x
+LOCAL_LDLIBS += -landroid -lEGL -lGLESv3
 endif
 include $(BUILD_SHARED_LIBRARY)
 
@@ -56,6 +57,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := linkerhook
 LOCAL_SRC_FILES := driver_helper/hook.c
 LOCAL_LDFLAGS := -z global
+LOCAL_CFLAGS += -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -Wno-int-conversion
 include $(BUILD_SHARED_LIBRARY)
 #endif
 
@@ -67,12 +69,14 @@ LOCAL_MODULE := istdio
 LOCAL_SHARED_LIBRARIES := bytehook
 LOCAL_SRC_FILES := \
     stdio_is.c
+LOCAL_CFLAGS += -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -Wno-int-conversion
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := pojavexec_awt
 LOCAL_SRC_FILES := \
     awt_bridge.c
+LOCAL_CFLAGS += -Wno-unknown-warning-option -Wno-unused-const-variable -Wno-unused-variable -Wno-unused-parameter -Wno-format -Wno-sign-compare -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -Wno-int-conversion -std=gnu2x
 include $(BUILD_SHARED_LIBRARY)
 
 # Helper to get current thread
@@ -94,8 +98,8 @@ LOCAL_MODULE := awt_xawt
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SHARED_LIBRARIES := awt_headless
 LOCAL_SRC_FILES := xawt_fake.c
+LOCAL_CFLAGS += -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -Wno-int-conversion
 include $(BUILD_SHARED_LIBRARY)
 
 # delete fake libs after linked
 $(info $(shell (rm $(HERE_PATH)/../jniLibs/*/libawt_headless.so)))
-
