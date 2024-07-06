@@ -146,6 +146,7 @@ EXTERNAL_API void* pojavGetCurrentContext() {
         || pojav_environ->config_renderer == RENDERER_VIRGL) {
         return (void *)OSMesaGetCurrentContext_p();
     }
+    return;
 }
 
 //Switches specifically provided for other renderers
