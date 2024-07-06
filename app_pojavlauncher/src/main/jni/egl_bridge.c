@@ -486,9 +486,9 @@ void* egl_make_current(void* window) {
     if (pojav_environ->config_renderer == RENDERER_VIRGL) {
         printf("VirGL: vtest_main = %p\n", vtest_main_p);
         printf("VirGL: Calling VTest server's main function\n");
-        vtest_main_p(3, (const char*[]){"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
+        vtest_main_p(3, {"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
     }
-    return egl_make_current();
+    return 1;
 }
 
 EXTERNAL_API void pojavMakeCurrent(void* window) {
@@ -554,7 +554,7 @@ EXTERNAL_API void* pojavCreateContext(void* contextSrc) {
         printf("OSMDroid: context=%p\n",ctx);
         return ctx;
     }
-    return pojavCreateContext();
+    return 1;
 }
 
 EXTERNAL_API JNIEXPORT jlong JNICALL
@@ -586,7 +586,7 @@ Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr(JNIEnv *env, jobject thiz) {
     if (getenv("POJAV_EXP_FRAME_BUFFER") != NULL && pojav_environ->config_renderer != RENDERER_VK_ZINK) {
         return &gbuffer;
     }
-    return Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr();
+    return 1;
 }
 
 EXTERNAL_API JNIEXPORT jintArray JNICALL
@@ -597,7 +597,7 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
         (*env)->SetIntArrayRegion(env,ret,0,2,arr);
         return ret;
     }
-    return Java_org_lwjgl_opengl_GL_getNativeWidthHeight();
+    return 1;
 }
 #endif
 
