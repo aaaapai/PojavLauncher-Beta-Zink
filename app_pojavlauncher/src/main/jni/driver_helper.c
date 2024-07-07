@@ -72,7 +72,7 @@ void* load_turnip_vulkan() {
         return NULL;
     }
     linkerhook_pass_handles(turnip_driver_handle, android_dlopen_ext, android_get_exported_namespace);
-    void* libvulkan = linker_ns_dlopen_unique(cache_dir, "libvulkan.so", RTLD_LOCAL | RTLD_NOW);
+    void* libvulkan = linker_ns_dlopen_unique(cache_dir, "libvulkan_1.so", RTLD_LOCAL | RTLD_NOW);
     return libvulkan;
 }
 #endif
