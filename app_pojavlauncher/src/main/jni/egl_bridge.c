@@ -77,7 +77,7 @@ struct PotatoBridge {
 EGLConfig config;
 struct PotatoBridge potatoBridge;
 
-int (*vtest_main_p) (int argc, char*[] argv);
+int (*vtest_main_p) (int argc, argv(char*[]));
 void (*vtest_swap_buffers_p) (void);
 void bigcore_set_affinity();
 
