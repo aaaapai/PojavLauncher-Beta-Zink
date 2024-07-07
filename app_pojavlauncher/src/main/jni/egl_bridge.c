@@ -488,7 +488,7 @@ void* egl_make_current(void* window) {
         printf("VirGL: Calling VTest server's main function\n");
         vtest_main_p(3, (const char*[]){"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
     }
-    return ret;
+    return &egl_make_current;
 }
 
 EXTERNAL_API void pojavMakeCurrent(void* window) {
