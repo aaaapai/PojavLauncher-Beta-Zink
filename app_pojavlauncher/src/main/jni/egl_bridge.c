@@ -486,9 +486,10 @@ void* egl_make_current(void* window) {
     if (pojav_environ->config_renderer == RENDERER_VIRGL) {
         printf("VirGL: vtest_main = %p\n", vtest_main_p);
         printf("VirGL: Calling VTest server's main function\n");
-        vtest_main_p(3, (const char*[]){"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
+        vtest_main_p(3, (char**[]){"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
+        return 1;
     }
-    return &egl_make_current;
+    return 1;
 }
 
 EXTERNAL_API void pojavMakeCurrent(void* window) {
