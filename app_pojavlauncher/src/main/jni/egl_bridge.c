@@ -178,7 +178,7 @@ bool loadSymbolsVirGL() {
     vtest_swap_buffers_p = dlsym(handle, "vtest_swap_buffers");
 
     free(fileName);
-    return loadSymbolsVirGL();
+    return 1;
 }
 
 static void set_vulkan_ptr(void* ptr) {
@@ -584,7 +584,7 @@ Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr(JNIEnv *env, jobject thiz) {
     if (getenv("POJAV_EXP_FRAME_BUFFER") != NULL && pojav_environ->config_renderer != RENDERER_VK_ZINK) {
         return &gbuffer;
     }
-    return 1;
+    return Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr;
 }
 
 EXTERNAL_API JNIEXPORT jintArray JNICALL
@@ -595,7 +595,7 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
         (*env)->SetIntArrayRegion(env,ret,0,2,arr);
         return ret;
     }
-    return 1;
+    return Java_org_lwjgl_opengl_GL_getNativeWidthHeight;
 }
 #endif
 
