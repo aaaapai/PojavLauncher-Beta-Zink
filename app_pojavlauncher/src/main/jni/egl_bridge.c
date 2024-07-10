@@ -5,7 +5,6 @@
 #include <assert.h>
 #include <dlfcn.h>
 
-#include <pthread.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -13,13 +12,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "EGL/egl.h"
-#include "GL/osmesa.h"
+#include <EGL/egl.h>
+#include <GL/osmesa.h>
 #include "ctxbridges/egl_loader.h"
 #include "ctxbridges/osmesa_loader.h"
 
 #ifdef GLES_TEST
-#include "GLES/gl.h"
+#include <GLES2/gl2.h>
 #endif
 
 #include <android/native_window.h>
@@ -77,11 +76,12 @@ struct PotatoBridge {
 EGLConfig config;
 struct PotatoBridge potatoBridge;
 
-int (*vtest_main_p) (int argc, char* argv);
+int (*vtest_main_p) (int argc, char** argv);
 void (*vtest_swap_buffers_p) (void);
 void bigcore_set_affinity();
 
 void* egl_make_current(void* window);
+
 
 
 EXTERNAL_API void pojavTerminate() {
@@ -146,7 +146,6 @@ EXTERNAL_API void* pojavGetCurrentContext() {
         || pojav_environ->config_renderer == RENDERER_VIRGL) {
         return (void *)OSMesaGetCurrentContext_p();
     }
-    return pojavGetCurrentContext();
 }
 
 //Switches specifically provided for other renderers
@@ -178,7 +177,6 @@ bool loadSymbolsVirGL() {
     vtest_swap_buffers_p = dlsym(handle, "vtest_swap_buffers");
 
     free(fileName);
-    return &loadSymbolsVirGL;
 }
 
 static void set_vulkan_ptr(void* ptr) {
@@ -200,7 +198,7 @@ void load_vulkan() {
 #endif
     }
     printf("OSMDroid: loading vulkan regularly...\n");
-    void* vulkan_ptr = dlopen("libvulkan_1.so", RTLD_LAZY | RTLD_LOCAL);
+    void* vulkan_ptr = dlopen("libvulkan.so", RTLD_LAZY | RTLD_LOCAL);
     printf("OSMDroid: loaded vulkan, ptr=%p\n", vulkan_ptr);
     set_vulkan_ptr(vulkan_ptr);
 }
@@ -237,7 +235,8 @@ int pojavInitOpenGL() {
             setenv("GALLIUM_DRIVER","zink",1);
             printf("Bridge: Use Zink Renderer\n");
             renderer_load_config();
-            load_vulkan();
+            if(getenv("POJAV_LEGACY_ZINK_ALLOW") == NULL)
+                load_vulkan();
         }
         if(strcmp(ldrivermodel, "driver_virgl") == 0) {
             printf("Bridge: Use VirglRenderer\n");
@@ -483,9 +482,10 @@ void* egl_make_current(void* window) {
     }
 
     if (pojav_environ->config_renderer == RENDERER_VIRGL) {
-        vtest_main_p(3, (char*){"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
+        printf("VirGL: vtest_main = %p\n", vtest_main_p);
+        printf("VirGL: Calling VTest server's main function\n");
+        vtest_main_p(3, (const char*[]){"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
     }
-    return &egl_make_current;
 }
 
 EXTERNAL_API void pojavMakeCurrent(void* window) {
@@ -551,7 +551,6 @@ EXTERNAL_API void* pojavCreateContext(void* contextSrc) {
         printf("OSMDroid: context=%p\n",ctx);
         return ctx;
     }
-    return &pojavCreateContext;
 }
 
 EXTERNAL_API JNIEXPORT jlong JNICALL
@@ -583,7 +582,6 @@ Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr(JNIEnv *env, jobject thiz) {
     if (getenv("POJAV_EXP_FRAME_BUFFER") != NULL && pojav_environ->config_renderer != RENDERER_VK_ZINK) {
         return &gbuffer;
     }
-    return &Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr;
 }
 
 EXTERNAL_API JNIEXPORT jintArray JNICALL
@@ -594,7 +592,6 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
         (*env)->SetIntArrayRegion(env,ret,0,2,arr);
         return ret;
     }
-    return &Java_org_lwjgl_opengl_GL_getNativeWidthHeight;
 }
 #endif
 
@@ -614,4 +611,3 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
         // Nothing to do here
     }
 }
-
