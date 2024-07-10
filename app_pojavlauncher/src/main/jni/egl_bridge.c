@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <dlfcn.h>
 
+#include <pthread.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -12,13 +13,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <EGL/egl.h>
-#include <GL/osmesa.h>
+#include "EGL/egl.h"
+#include "GL/osmesa.h"
 #include "ctxbridges/egl_loader.h"
 #include "ctxbridges/osmesa_loader.h"
 
 #ifdef GLES_TEST
-#include <GLES2/gl2.h>
+#include <GLES/gl.h>
 #endif
 
 #include <android/native_window.h>
@@ -81,7 +82,6 @@ void (*vtest_swap_buffers_p) (void);
 void bigcore_set_affinity();
 
 void* egl_make_current(void* window);
-
 
 
 EXTERNAL_API void pojavTerminate() {
