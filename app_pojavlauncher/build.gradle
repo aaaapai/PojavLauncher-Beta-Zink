@@ -87,14 +87,14 @@ android {
     }
 
     signingConfigs {
-        customDebug {
+        releaseBuild {
             def pwd = System.getenv("VERA_KEYSTORE_PASSWORD")
             storeFile file("key-store.jks")
             storePassword pwd
             keyAlias "Firefly"
             keyPassword pwd
         }
-        releaseBuild {
+        customDebug {
             storeFile file("debug.keystore")
             storePassword "android"
             keyAlias "androiddebugkey"
@@ -113,7 +113,7 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             applicationIdSuffix '.debug'
             debuggable true
             minifyEnabled false
@@ -124,7 +124,7 @@ android {
             resValue 'string', 'storageProviderAuthorities', 'net.kdt.pojavlaunch.scoped.gamefolder.debug'
             resValue 'string', 'fileProviderAuthorities', 'net.kdt.pojavlaunch.scoped.FileFileProvider.debug'
         }
-        debug {
+        release {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -214,7 +214,7 @@ android {
         prefab true
     }
 
-    buildToolsVersion = '34.0.0'
+    buildToolsVersion = '35.0.1'
 }
 
 dependencies {
