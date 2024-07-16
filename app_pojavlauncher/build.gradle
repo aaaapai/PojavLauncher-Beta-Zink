@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application' version '8.6.0-alpha08'
+    id 'com.android.application' version '8.6.0-beta01'
 }
 
 static def getDate() { return new Date().format('yyyyMMdd') }
@@ -113,7 +113,7 @@ android {
     }
 
     buildTypes {
-        debug {
+        release {
             applicationIdSuffix '.debug'
             debuggable true
             minifyEnabled false
@@ -124,7 +124,7 @@ android {
             resValue 'string', 'storageProviderAuthorities', 'net.kdt.pojavlaunch.scoped.gamefolder.debug'
             resValue 'string', 'fileProviderAuthorities', 'net.kdt.pojavlaunch.scoped.FileFileProvider.debug'
         }
-        release {
+        debug {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -193,8 +193,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 
     bundle {
