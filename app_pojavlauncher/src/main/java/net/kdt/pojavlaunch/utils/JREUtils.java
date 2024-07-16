@@ -421,7 +421,7 @@ public class JREUtils {
                 "-Dpojav.path.private.account=" + Tools.DIR_ACCOUNT_NEW,
                 "-Duser.timezone=" + TimeZone.getDefault().getID(),
 
-                "-Dorg.lwjgl.vulkan.libname=libvulkan_1.so",
+                "-Dorg.lwjgl.vulkan.libname=libvulkan.so",
                 //LWJGL 3 DEBUG FLAGS
                 "-Dorg.lwjgl.util.Debug=true",
                 "-Dorg.lwjgl.util.DebugFunctions=true",
@@ -549,7 +549,6 @@ public class JREUtils {
                 case "opengles3_old_holy":
                 renderLibrary = "libgl4es_old_holy.so";
                     break;
-                case "opengles2_vgpu":
                 case "opengles3_vgpu":
                     renderLibrary = "libvgpu.so";
                     break;
@@ -558,7 +557,7 @@ public class JREUtils {
                     renderLibrary = "libOSMesa_8.so";
                     break;
                 case "opengles3_virgl":
-                    renderLibrary = "libOSMesa_2205.so";
+                    renderLibrary = "libOSMesa_8.so";
                     break;
                 case "panfrost":
                     renderLibrary = "libOSMesa_2300d.so";
