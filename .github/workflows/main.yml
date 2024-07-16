@@ -46,7 +46,7 @@ jobs:
 
       - name: Build Release ${{matrix.arch}} .apk
         run: |
-          ./gradlew app_pojavlauncher:assemblerelease -Darch=${{matrix.arch}}
+          ./gradlew app_pojavlauncher:assembledebug -Darch=${{matrix.arch}}
 
       - name: Upload Release
         uses: actions/upload-artifact@v4
