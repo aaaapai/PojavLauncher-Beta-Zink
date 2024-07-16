@@ -413,6 +413,10 @@
     <string name="preference_mouse_title1">Remove mouse icon</string>
     <string name="notif_mouse1">Delete done</string>
     <string name="microsoft_login_fragment">Login started!</string>
+    <string name="preference_skip_download_title">Don\'t check resource integrity</string>
+    <string name="preference_skip_download">Launch the game without checking the integrity of the game</string>
+    <string name="preference_quit_launcher_title">Quit Launcher</string>
+    <string name="preference_quit_launcher">Exit the launcher when the running the game</string>
     <!-- Other login -->
     <string name="other_login_api">Other Login</string>
     <string name="other_login_authentication_server">Authentication server</string>
@@ -432,8 +436,8 @@
     <string name="other_login_external">External Landing</string>
     <string name="other_login_server_error">No authentication server</string>
     <!-- Renderer Experimental Setup -->
-    <string name="preference_rendererexp_title">Renderer Experimental Settings</string>
-    <string name="preference_rendererexp_description">Non-professionals should not use it</string>
+    <string name="preference_exp_title">Experimental Settings</string>
+    <string name="preference_exp_description">Non-professionals should not use it</string>
     <string name="preference_category_renderer_experimental_settings">Renderer exp setup</string>
     <string name="preference_renderer_setup_title">Enable Renderer Exp Setup</string>
     <string name="preference_renderer_setup">Use more renderer-specific settings</string>
