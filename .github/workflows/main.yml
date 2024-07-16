@@ -48,8 +48,8 @@ jobs:
         run: |
           ./gradlew app_pojavlauncher:assembledebug -Darch=${{matrix.arch}}
 
-      - name: Upload Release
+      - name: Upload Debug
         uses: actions/upload-artifact@v4
         with:
-          name: app-release-${{matrix.arch}}
-          path: app_pojavlauncher/build/outputs/apk/release/*
+          name: app-debug-${{matrix.arch}}
+          path: app_pojavlauncher/build/outputs/apk/debug/*
