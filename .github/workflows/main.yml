@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         arch: [ "arm64" ]
@@ -35,26 +35,19 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v3
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
       - name: Build Release ${{matrix.arch}} .apk
-        if: github.repository_owner == 'Vera-Firefly' && github.ref_name == 'main_v3'
         run: |
           chmod +x gradlew
           ./gradlew app_pojavlauncher:assemblerelease -Darch=${{matrix.arch}}
 
-      - name: Build Debug ${{matrix.arch}} .apk
-        run: |
-          chmod +x gradlew
-          ./gradlew app_pojavlauncher:assembleDebug -Darch=${{matrix.arch}}
-
       - name: Upload Release
-        if: github.repository_owner == 'Vera-Firefly' && github.ref_name == 'main_v3'
         uses: actions/upload-artifact@v4
         with:
           name: app-release-${{matrix.arch}}
           path: app_pojavlauncher/build/outputs/apk/release/*
-
-      - name: Upload Debug
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug-${{matrix.arch}}
-          path: app_pojavlauncher/build/outputs/apk/debug/*
