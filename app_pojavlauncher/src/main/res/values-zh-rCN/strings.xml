@@ -367,6 +367,10 @@
     <string name="notif_mouse1">删除成功</string>
     <string name="microsoft_login_fragment">开始登陆!</string>
     <string name="customctrl_absolute_tracking">绝对手指跟踪</string>
+    <string name="preference_skip_download_title">不检查游戏完整性</string>
+    <string name="preference_skip_download">在启动游戏时不检查完整性,直接启动游戏</string>
+    <string name="preference_quit_launcher_title">退出启动器</string>
+    <string name="preference_quit_launcher">在应用正式开始运行游戏时,是否退出启动器</string>
     <!-- Other login -->
     <string name="other_login_api">外置登录</string>
     <string name="other_login_authentication_server">身份验证服务器</string>
@@ -386,8 +390,8 @@
     <string name="other_login_external">外置登陆</string>
     <string name="other_login_server_error">无认证服务器</string>
     <!-- Renderer Experimental Setup -->
-    <string name="preference_rendererexp_title">渲染器实验性设置</string>
-    <string name="preference_rendererexp_description">非专业人员请勿使用</string>
+    <string name="preference_exp_title">实验性设置</string>
+    <string name="preference_exp_description">非专业人员请勿使用</string>
     <string name="preference_category_renderer_experimental_settings">渲染器实验性设置</string>
     <string name="preference_renderer_setup_title">启用渲染器实验性设置</string>
     <string name="preference_renderer_setup">更多的渲染器特定设置</string>

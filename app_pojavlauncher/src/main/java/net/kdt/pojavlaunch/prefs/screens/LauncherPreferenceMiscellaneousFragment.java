@@ -22,7 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-
 public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceFragment {
     @Override
     public void onCreatePreferences(Bundle b, String str) {
@@ -31,6 +30,7 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
         if(!Tools.checkVulkanSupport(driverPreference.getContext().getPackageManager())) {
             driverPreference.setVisible(false);
         }
+
         findPreference("control_mouse_setting").setOnPreferenceClickListener((preference) -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
@@ -46,6 +46,7 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
             Toast.makeText(getContext(), R.string.notif_mouse1, Toast.LENGTH_SHORT).show();
             return true;
         });
+
     }
     @Override
     public void onActivityResult(
