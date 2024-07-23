@@ -204,9 +204,6 @@ android {
     }
 
     packagingOptions {
-        jniLibs {
-            useLegacyPackaging = true
-        }
         pickFirst '**/libbytehook.so'
     }
 
@@ -214,7 +211,7 @@ android {
         prefab true
     }
 
-    buildToolsVersion = '34.0.0'
+    buildToolsVersion = '35.0.0'
 }
 
 dependencies {
