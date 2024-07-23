@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application' version '8.6.0-beta01'
+    id 'com.android.application' version '8.7.0-alpha01'
 }
 
 static def getDate() { return new Date().format('yyyyMMdd') }
