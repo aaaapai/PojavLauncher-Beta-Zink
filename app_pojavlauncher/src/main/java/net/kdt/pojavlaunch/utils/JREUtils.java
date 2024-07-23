@@ -182,7 +182,7 @@ public class JREUtils {
         envMap.put("JAVA_HOME", jreHome);
         envMap.put("HOME", ProfilePathManager.getCurrentPath());
         envMap.put("TMPDIR", Tools.DIR_CACHE.getAbsolutePath());
-        envMap.put("LIBGL_MIPMAP", "3");
+        envMap.put("LIBGL_MIPMAP", "0");
 
         // Prevent OptiFine (and other error-reporting stuff in Minecraft) from balooning the log
         envMap.put("LIBGL_NOERROR", "1");
@@ -192,6 +192,8 @@ public class JREUtils {
 
         // Fix white color on banner and sheep, since GL4ES 1.1.5
         envMap.put("LIBGL_NORMALIZE", "1");
+
+        envMap.put("LIBGL_GL", "33");
 
         // The OPEN GL version is changed according
         envMap.put("LIBGL_ES", (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
@@ -363,15 +365,9 @@ public class JREUtils {
         List<String> userArgs = getJavaArgs(activity, runtimeHome, userArgsString);
 
         //Remove arguments that can interfere with the good working of the launcher
-        purgeArg(userArgs,"-Xms");
-        purgeArg(userArgs,"-Xmx");
         purgeArg(userArgs,"-d32");
         purgeArg(userArgs,"-d64");
         purgeArg(userArgs, "-Xint");
-        purgeArg(userArgs, "-XX:+UseTransparentHugePages");
-        purgeArg(userArgs, "-XX:+UseLargePagesInMetaspace");
-        purgeArg(userArgs, "-XX:+UseLargePages");
-        purgeArg(userArgs, "-Dorg.lwjgl.opengl.libname");
 
         //Add automatically generated args
         userArgs.add("-Xms" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
@@ -429,9 +425,9 @@ public class JREUtils {
 
                 "-Dorg.lwjgl.vulkan.libname=libvulkan.so",
                 //LWJGL 3 DEBUG FLAGS
-                //"-Dorg.lwjgl.util.Debug=true",
-                //"-Dorg.lwjgl.util.DebugFunctions=true",
-                //"-Dorg.lwjgl.util.DebugLoader=true",
+                "-Dorg.lwjgl.util.Debug=true",
+                "-Dorg.lwjgl.util.DebugFunctions=true",
+                "-Dorg.lwjgl.util.DebugLoader=true",
                 // GLFW Stub width height
                 "-Dglfwstub.windowWidth=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.widthPixels, LauncherPreferences.PREF_SCALE_FACTOR/100F),
                 "-Dglfwstub.windowHeight=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.heightPixels, LauncherPreferences.PREF_SCALE_FACTOR/100F),
@@ -552,10 +548,9 @@ public class JREUtils {
                 case "opengles3":
                     renderLibrary = "libgl4es_114.so";
                     break;
-                case "opengles2_ptitseb":
-                case "opengles2_5_ptitseb":
-                case "opengles3_ptitseb":
-                renderLibrary = "libgl4es_ptitseb.so";
+                case "opengles2_old_holy":
+                case "opengles3_old_holy":
+                renderLibrary = "libgl4es_old_holy.so";
                     break;
                 case "opengles2_vgpu":
                 case "opengles3_vgpu":
@@ -566,7 +561,7 @@ public class JREUtils {
                     renderLibrary = "libOSMesa_8.so";
                     break;
                 case "opengles3_virgl":
-                    renderLibrary = "libOSMesa_2205.so";
+                    renderLibrary = "libOSMesa_8.so";
                     break;
                 case "panfrost":
                     renderLibrary = "libOSMesa_2300d.so";

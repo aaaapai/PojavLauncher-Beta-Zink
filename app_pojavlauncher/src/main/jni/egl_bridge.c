@@ -19,7 +19,7 @@
 #include "ctxbridges/osmesa_loader.h"
 
 #ifdef GLES_TEST
-#include "GLES/gl.h"
+#include <GLES/gl.h>
 #endif
 
 #include <android/native_window.h>
@@ -146,7 +146,6 @@ EXTERNAL_API void* pojavGetCurrentContext() {
         || pojav_environ->config_renderer == RENDERER_VIRGL) {
         return (void *)OSMesaGetCurrentContext_p();
     }
-    return pojavGetCurrentContext();
 }
 
 //Switches specifically provided for other renderers
@@ -178,7 +177,6 @@ bool loadSymbolsVirGL() {
     vtest_swap_buffers_p = dlsym(handle, "vtest_swap_buffers");
 
     free(fileName);
-    return loadSymbolsVirGL();
 }
 
 static void set_vulkan_ptr(void* ptr) {
@@ -487,7 +485,6 @@ void* egl_make_current(void* window) {
         printf("VirGL: Calling VTest server's main function\n");
         vtest_main_p(3, (const char*[]){"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
     }
-    return egl_make_current();
 }
 
 EXTERNAL_API void pojavMakeCurrent(void* window) {
@@ -553,7 +550,6 @@ EXTERNAL_API void* pojavCreateContext(void* contextSrc) {
         printf("OSMDroid: context=%p\n",ctx);
         return ctx;
     }
-    return pojavCreateContext();
 }
 
 EXTERNAL_API JNIEXPORT jlong JNICALL
@@ -585,7 +581,6 @@ Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr(JNIEnv *env, jobject thiz) {
     if (getenv("POJAV_EXP_FRAME_BUFFER") != NULL && pojav_environ->config_renderer != RENDERER_VK_ZINK) {
         return &gbuffer;
     }
-    return Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr();
 }
 
 EXTERNAL_API JNIEXPORT jintArray JNICALL
@@ -596,7 +591,6 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
         (*env)->SetIntArrayRegion(env,ret,0,2,arr);
         return ret;
     }
-    return Java_org_lwjgl_opengl_GL_getNativeWidthHeight();
 }
 #endif
 
@@ -616,4 +610,3 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
         // Nothing to do here
     }
 }
-
