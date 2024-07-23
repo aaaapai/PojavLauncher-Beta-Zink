@@ -38,12 +38,6 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
           
-      - name: Gradle Wrapper Validation
-        uses: gradle/wrapper-validation-action@v3
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-
       - name: Build Release ${{matrix.arch}} .apk
         run: |
           ./gradlew app_pojavlauncher:assembledebug -Darch=${{matrix.arch}}
