@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:sharedUserId="Penghe.data">
 
@@ -15,10 +16,14 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
     <application
         android:name=".PojavApplication"
@@ -26,6 +31,7 @@
         android:allowNativeHeapPointerTagging="false"
         android:appCategory="game"
         android:hasFragileUserData="true"
+        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher"
         android:isGame="true"
         android:label="@string/app_name"
@@ -79,7 +85,8 @@
             android:name=".FatalErrorActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
-        <activity android:name=".ShowErrorActivity"
+        <activity
+            android:name=".ShowErrorActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity
@@ -109,6 +116,18 @@
             android:process=":game"
             android:screenOrientation="sensorLandscape" />
 
+        <activity
+            android:name="com.qz.terminal2.ConsoleActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/Theme.AppCompat"
+            android:resizeableActivity="true"
+            android:label="@string/main_terminal"
+            android:taskAffinity=""
+            android:launchMode="singleInstance"
+            android:process=":terminal"
+            android:exported="true" />
+
         <provider
             android:name=".scoped.FolderProvider"
             android:authorities="@string/storageProviderAuthorities"
@@ -119,13 +138,37 @@
                 <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
             </intent-filter>
         </provider>
+        
+        <provider
+            android:name=".scoped.FileProvider"
+            android:authorities="@string/fileProviderAuthorities"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
-        <service android:name=".services.ProgressService" />
+
+        <service
+            android:name=".services.ProgressService"
+            android:foregroundServiceType="specialUse"
+            android:exported="false" />
+
         <service
             android:name=".services.GameService"
-            android:process=":game" />
+            android:process=":game"
+            android:foregroundServiceType="specialUse"
+            android:exported="false" />
+
+        <service
+            android:name="com.qz.terminal2.TermuxService"
+            android:foregroundServiceType="specialUse"
+            android:process=":terminal"
+            android:exported="false" />
+
     </application>
     <queries>
-        <package android:name="net.kdt.pojavlaunch.ffmpeg"/>
+        <package android:name="net.kdt.pojavlaunch.ffmpeg" />
     </queries>
 </manifest>
