@@ -204,9 +204,11 @@ android {
     }
 
     packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
         pickFirst '**/libbytehook.so'
     }
-
     buildFeatures {
         prefab true
     }
