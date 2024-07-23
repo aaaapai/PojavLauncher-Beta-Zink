@@ -22,7 +22,7 @@
     <string name="alerttitle_installmod">Select a mod installer</string>
 
     <!-- Error messages -->
-    <string name="error_fatal">PojavLauncher has unexpectedly crashed</string>
+    <string name="error_fatal">Pojav Glow·Worm has unexpectedly crashed</string>
     <string name="error_no_version">No version!</string>
     <string name="error_show_more">Show more</string>
     <string name="error_show_less">Show less</string>
@@ -47,6 +47,7 @@
 
     <string name="mcl_options">Options</string>
     <string name="mcl_option_customcontrol">Custom controls</string>
+
 
     <string name="mcl_setting_title_use_surface_view">Use alternate surface rendering</string>
     <string name="mcl_setting_subtitle_use_surface_view">May help performance in GPU bound scenarios.</string>
@@ -90,9 +91,6 @@
     <string name="global_select">Select</string>
     <string name="global_retry">Retry</string>
     <string name="global_default">Default</string>
-    <string name="global_rename">Rename</string>
-    <string name="global_return">Return</string>
-    <string name="global_refresh">Refresh</string>
 
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Application/Game exited with code %d, check latestlog.txt for more details.</string>
@@ -155,10 +153,6 @@
     <string name="customctrl_selectdefault">Select default controlmap</string>
     <string name="customctrl_export">Export controlmap</string>
 
-    <string name="main_terminal">Terminal</string>
-    <string name="main_termianl_init">Initialization</string>
-    <string name="main_terminal_loading">Loading...</string>
-    
     <string name="main_share_logs">Share log file</string>
     <string name="main_install_jar_file">Execute a .jar</string>
     <string name="main_play">Play</string>
@@ -191,7 +185,6 @@
     <string name="multirt_config_setdefault">Set default</string>
     <string name="multirt_config_setdefault_already">Default</string>
     <string name="multirt_config_removeerror_last">You must have at least one Java Runtime installed.</string>
-    <string name="multirt_nocompartiblert">Can\'t find any compartible Java Runtime. This version requires Java %d or newer.</string>
     <string name="multirt_nojava8rt">Can\'t find Java 8. In order to use this option, you need to install Java 8.</string>
     <string name="multirt_delete_runtime">Delete runtime</string>
     <string name="pvc_gameDirectory">Game directory</string>
@@ -272,7 +265,7 @@
     <string name="preference_gyro_sample_rate_title">Gyroscope sampling rate</string>
     <string name="preference_gyro_sample_rate_description">If you have performance issues with gyroscope controls, increase this.</string>
     <string name="microsoft_login_retry_later">Too many requests, please try again later.</string>
-    <string name="storage_required">PojavLauncher requires external storage to be attached. Please reconnect it and restart the app.</string>
+    <string name="storage_required">Pojav Glow·Worm requires external storage to be attached. Please reconnect it and restart the app.</string>
     <string name="mcl_setting_title_buttonallcaps">Only use capital letters in button labels</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Disable this if you want to use lowercase letters in your controls.</string>
     <string name="create_profile">Create new profile</string>
@@ -368,12 +361,13 @@
     <string name="preference_category_miscellaneous">Miscellaneous settings</string>
     <string name="preference_category_video">Video settings</string>
     <string name="notification_permission_dialog_title">Permission request</string>
-    <string name="notification_permission_dialog_text">PojavLauncher requires a permission to post notifications to prevent game/modpack downloads from stopping when you leave the app. Without this permission, Android may shut down your downloads when you put PojavLauncher in background mode.</string>
+    <string name="notification_permission_dialog_text">Pojav Glow·Worm requires a permission to post notifications to prevent game/modpack downloads from stopping when you leave the app. Without this permission, Android may shut down your downloads when you put Pojav Glow·Worm in background mode.</string>
     <string name="notification_permission_toast">You can always change your mind later by going into Settings</string>
     <string name="preference_ask_for_notification_title">Allow notifications</string>
     <string name="preference_ask_for_notification_description">Click to re-request the notification permission, required for game/modpack background downloads to work properly.</string>
     <string name="preference_vsync_in_zink_title">Allow V-Sync with Zink</string>
     <string name="preference_vsync_in_zink_description">Allows the launcher to use internal system APIs to enable V-Sync for Zink. Turn this off if your launcher suddenly crashes with Zink after a system update.</string>
+    <string name="exception_failed_to_unpack_jre17">Failed to install JRE 17</string>
     <string name="newdl_starting">Reading game metadata…</string>
     <string name="newdl_downloading_metadata">Downloading game metadata (%s)</string>
     <string name="newdl_downloading_game_files">Downloading game files… (%d/%d, %.2f MB)</string>
@@ -394,6 +388,7 @@
     <string name="preference_category_in_menu_title">In Menu</string>
     <string name="preference_category_microsoft_account_title">Microsoft Account</string>
     <string name="preference_category_local_account_title">Local account</string>
+    <!-- Pojav Glow·Worm -->
     <string name="preference_category_follow_game_language">Follow the game language</string>
     <string name="preference_category_language_default">Default (Follow the game language)</string>
     <string name="preference_category_language">Language Selection</string>
@@ -413,10 +408,14 @@
     <string name="preference_mouse_title1">Remove mouse icon</string>
     <string name="notif_mouse1">Delete done</string>
     <string name="microsoft_login_fragment">Login started!</string>
-    <string name="preference_skip_download_title">Don\'t check resource integrity</string>
-    <string name="preference_skip_download">Launch the game without checking the integrity of the game</string>
     <string name="preference_quit_launcher_title">Quit Launcher</string>
     <string name="preference_quit_launcher">Exit the launcher when the running the game</string>
+    <string name="main_terminal">Terminal</string>
+    <string name="main_termianl_init">Initialization</string>
+    <string name="main_terminal_loading">Loading...</string>
+    <string name="global_rename">Rename</string>
+    <string name="global_return">Return</string>
+    <string name="global_refresh">Refresh</string>
     <!-- Other login -->
     <string name="other_login_api">Other Login</string>
     <string name="other_login_authentication_server">Authentication server</string>
@@ -446,10 +445,10 @@
     <string name="preference_exp_framebuffer_title">Spare frame buffer</string>
     <string name="preference_exp_framebuffer">Use the frame buffer of the second scheme, close it if launch failed</string>
     <string name="preference_renderer_setup_extra">Renderer (Extra)</string>
-    <string name="preference_renderer_extra_default">Mesa24.1.3 (Default)</string>
+    <string name="preference_renderer_extra_default">Mesa24.1.4 (Default)</string>
     <string name="preference_extra_mesa_version">Mesa Version</string>
     <string name="preference_extra_driver_model">Driver Modle</string>
-    <!-- Dialog box prompt -->
+    <!-- Dialog -->
     <string name="preference_rendererexp_alertdialog_warning">Warning</string>
     <string name="preference_rendererexp_alertdialog_message">You have turned on experimental settings.This feature may generate unexpected bugs.Continue to use?</string>
     <string name="preference_rendererexp_alertdialog_done">Fuck</string>
@@ -460,18 +459,16 @@
     <string name="alertdialog_tipc">Remember to check if your device supports these features before using them</string>
     <string name="alertdialog_done">Done</string>
     <string name="alertdialog_cancel">Cancel</string>
-    <string name="customglglsl_alertdialog_error_gl">GL version must be between 2.8 and 4.6</string>
-    <string name="customglglsl_alertdialog_error_glsl">GLSL version must be between 280 and 460</string>
     <!-- Custom GL/GLSL Version -->
-    <string name="preference_exp_alertdialog_glmessage">Before you do this, you must know what you are doing\nAre you sure you want to open it?</string>
     <string name="preference_exp_custommv">GL/GLSL Version</string>
     <string name="preference_exp_ebsystem">Select according to system</string>
     <string name="preference_exp_ebspecific">Use specific version</string>
-    <string name="preference_exp_ebcustom">Custom</string>
     <string name="preference_rendererexp_custom_glversion_title">Custom GL/GLSL</string>
     <string name="preference_rendererexp_custom_glversion">Allow custom Mesa GL/GLSL version</string>
     <string name="custom_gl_version">Mesa GL version:</string>
     <string name="custom_glsl_version">Mesa GLSL version:</string>
+    <string name="customglglsl_alertdialog_error_gl">GL version must be between 2.8 and 4.6</string>
+    <string name="customglglsl_alertdialog_error_glsl">GLSL version must be between 280 and 460</string>
     <!-- Customize Game Path -->
     <string name="permissions_manage_external_storage">Pojav Glow·Worm requires permission to manage all files on the device in order to customize the location where game files are saved. Please grant permission to Pojav Glow·Worm!</string>
     <string name="profiles_path_title">Game Path Management</string>
@@ -481,5 +478,16 @@
     <string name="profiles_path_delete_title">Delete This Path</string>
     <string name="profiles_path_delete_message">The launcher will delete this path, but it will not delete the files saved in the corresponding path. You can re-add this path after deletion.</string>
     <string name="profiles_path_task_in_progress">Task in progress, path management features are temporarily unavailable</string>
-
+    <!-- Video resolution -->
+    <string name="setting_set_resolution_too_big">The current resolution is too large, maximum allowable size is %d</string>
+    <string name="setting_set_resolution_too_small">The current resolution is too small, at least %d is required</string>
+    <string name="setting_set_resolution_outofrange">The input value %s is out of the acceptable range</string>
+    <!-- Pojav Zenith·Horizon -->
+    <string name="zh_setting_java_memory_desc">Control how much memory is allocated to Minecraft</string>
+    <string name="zh_setting_java_memory_info">Current memory usage: %s / %s, Free memory size: %s</string>
+    <string name="zh_setting_java_memory_max">Maximum allowable memory size: %s</string>
+    <string name="zh_setting_java_memory_exceeded">The current memory allocation exceeds available memory size</string>
+    <string name="zh_setting_java_memory_too_big">The current memory allocation is too large, maximum allowable size is %d MB</string>
+    <string name="zh_setting_java_memory_too_small">The current memory allocation is too small, at least %d MB is required</string>
+    <string name="setting_java_memory_outofrange">The input value %s MB is out of the acceptable range</string>
 </resources>

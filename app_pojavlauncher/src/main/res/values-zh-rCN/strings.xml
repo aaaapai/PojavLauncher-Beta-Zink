@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App name part -->
-    <string name="app_name">Pojav Glow·Worm</string>
-    <string name="app_short_name">Pojav Glow·Worm</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -15,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">选择模组安装器</string>
     <!-- Error messages -->
-    <string name="error_fatal">PojavLauncher 意外崩溃</string>
+    <string name="error_fatal">Pojav Glow·Worm 意外崩溃</string>
     <string name="error_no_version">无版本！</string>
     <string name="error_show_more">显示细节</string>
     <string name="error_show_less">隐藏细节</string>
@@ -26,7 +24,6 @@
     <string name="toast_3">Exit</string>
     -->
     <!-- MCLauncherActivity: Tabs -->
-    <string name="mcl_tab_wiki">Github</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_launch_cleancache">正在清理缓存</string>
@@ -71,7 +68,7 @@
     <string name="global_restart">重启</string>
     <string name="global_save">保存</string>
     <string name="global_unpacking">正在解压 %s</string>
-    <string name="global_error_field_empty">此处表单不能为空</string>
+    <string name="global_error_field_empty">此处段不能为空</string>
     <string name="global_waiting">请稍等</string>
     <string name="global_select">选择</string>
     <string name="global_retry">重试</string>
@@ -237,7 +234,7 @@
     <string name="preference_gyro_sample_rate_title">陀螺仪采样率</string>
     <string name="preference_gyro_sample_rate_description">如果您在陀螺仪控制上遇到性能问题，请增加此值。</string>
     <string name="microsoft_login_retry_later">您的操作过于频繁，请稍后再试</string>
-    <string name="storage_required">PojavLauncher 需要连接外部存储。请重新连接并重启应用。</string>
+    <string name="storage_required">Pojav Glow·Worm 需要连接外部存储。请重新连接并重启应用。</string>
     <string name="mcl_setting_title_buttonallcaps">在按钮标签中仅使用大写字母</string>
     <string name="mcl_setting_subtitle_buttonallcaps">如果您想在控制键中使用小写字母，请禁用此功能。</string>
     <string name="create_profile">创建新配置</string>
@@ -316,7 +313,7 @@
     <string name="notif_download_finished">游戏已经准备好启动了</string>
     <string name="notif_download_finished_desc">点击这里启动它！</string>
     <string name="notification_permission_dialog_title">权限请求</string>
-    <string name="notification_permission_dialog_text">PojavLauncher需要发布通知的权限，以防止您离开应用程序时，停止 游戏/整合包 的下载。如果没有此权限，当您将PojavLauncher置于后台时，安卓系统可能会停止您的下载进度</string>
+    <string name="notification_permission_dialog_text">Pojav Glow·Worm需要发布通知的权限，以防止您离开应用程序时，停止 游戏/整合包 的下载。如果没有此权限，当您将Pojav Glow·Worm置于后台时，安卓系统可能会停止您的下载进度</string>
     <string name="notification_permission_toast">您可以随时通过进入“系统设置”改变您的主意</string>
     <string name="preference_ask_for_notification_title">允许通知</string>
     <string name="preference_ask_for_notification_description">单击可重新请求通知权限，这是 游戏/整合包 在后台正常下载所必需的</string>
@@ -337,6 +334,7 @@
     <string name="log_view_label_log_output">日志输出:</string>
 
 
+
     <!-- App New Annotation -->
     <string name="preference_category_gestures">手势</string>
     <string name="preference_category_buttons">按键</string>
@@ -350,6 +348,7 @@
     <string name="preference_category_in_menu_title">游戏外显示</string>
     <string name="preference_category_microsoft_account_title">微软账号</string>
     <string name="preference_category_local_account_title">离线账号</string>
+    <!-- Pojav Glow·Worm -->
     <string name="preference_category_follow_game_language">跟随游戏语言变化</string>
     <string name="preference_category_language_default">默认 (跟随游戏语言变化)</string>
     <string name="preference_category_language">语言选择</string>
@@ -367,8 +366,6 @@
     <string name="notif_mouse1">删除成功</string>
     <string name="microsoft_login_fragment">开始登陆!</string>
     <string name="customctrl_absolute_tracking">绝对手指跟踪</string>
-    <string name="preference_skip_download_title">不检查游戏完整性</string>
-    <string name="preference_skip_download">在启动游戏时不检查完整性,直接启动游戏</string>
     <string name="preference_quit_launcher_title">退出启动器</string>
     <string name="preference_quit_launcher">在应用正式开始运行游戏时,是否退出启动器</string>
     <!-- Other login -->
@@ -400,10 +397,10 @@
     <string name="preference_exp_framebuffer_title">备用帧缓冲区</string>
     <string name="preference_exp_framebuffer">使用第二方案帧缓冲区,如果启动失败,请关闭</string>
     <string name="preference_renderer_setup_extra">渲染器 (拓展)</string>
-    <string name="preference_renderer_extra_default">Mesa24.1.3 (默认)</string>
+    <string name="preference_renderer_extra_default">Mesa24.1.4 (默认)</string>
     <string name="preference_extra_mesa_version">Mesa版本</string>
     <string name="preference_extra_driver_model">驱动模型</string>
-    <!-- Dialog box prompt -->
+    <!-- Dialog -->
     <string name="preference_rendererexp_alertdialog_warning">警告</string>
     <string name="preference_rendererexp_alertdialog_message">您已打开实验性设置,此功能可能会产生意想不到的mojang,是否继续使用?</string>
     <string name="preference_rendererexp_alertdialog_done">不要管我</string>
@@ -414,18 +411,16 @@
     <string name="alertdialog_tipc">在使用这些功能之前,请记得检查您的设备是否支持这些功能!</string>
     <string name="alertdialog_done">确定</string>
     <string name="alertdialog_cancel">取消</string>
-    <string name="customglglsl_alertdialog_error_gl">GL版本必须在2.8和4.6之间</string>
-    <string name="customglglsl_alertdialog_error_glsl">GLSL版本必须在280和460之间</string>
     <!-- Custom GL/GLSL Version -->
-    <string name="preference_exp_alertdialog_glmessage">在你执行此操作之前你必须知道你在做什么\n你真的确定你要开启它吗?</string>
     <string name="preference_exp_custommv">GL/GLSL版本</string>
     <string name="preference_exp_ebsystem">跟随系统</string>
     <string name="preference_exp_ebspecific">使用固定版本</string>
-    <string name="preference_exp_ebcustom">自定义</string>
     <string name="preference_rendererexp_custom_glversion_title">自定义GL/GLSL</string>
     <string name="preference_rendererexp_custom_glversion">允许您自定义Mesa GL/GLSL版本</string>
     <string name="custom_gl_version">Mesa GL版本:</string>
     <string name="custom_glsl_version">Mesa GLSL版本:</string>
+    <string name="customglglsl_alertdialog_error_gl">GL版本必须在2.8和4.6之间</string>
+    <string name="customglglsl_alertdialog_error_glsl">GLSL版本必须在280和460之间</string>
     <!-- Customize Game Path  -->
     <string name="permissions_manage_external_storage">Pojav Glow·Worm 需要管理设备所有文件的权限，以便自定义保存游戏文件位置，请为 Pojav Glow·Worm 开启权限！</string>
     <string name="profiles_path_title">游戏路径管理</string>
@@ -435,4 +430,16 @@
     <string name="profiles_path_delete_title">删除此路径</string>
     <string name="profiles_path_delete_message">启动器将删除此路径，但不会删除对应路径内保存的文件，删除之后仍然可以重新添加此路径</string>
     <string name="profiles_path_task_in_progress">任务执行中，暂时无法使用路径管理功能</string>
+    <!-- Video resolution -->
+    <string name="setting_set_resolution_too_big">当前设置的分辨率过大,最多只能设置为 %d</string>
+    <string name="setting_set_resolution_too_small">当前设置的分辨率过小,至少需要设置为 %d</string>
+    <string name="setting_set_resolution_outofrange">输入值 %s 超出可接受范围</string>
+    <!-- Pojav Zenith·Horizon -->
+    <string name="zh_setting_java_memory_desc">控制给 Minecraft 分配多少内存</string>
+    <string name="zh_setting_java_memory_info">当前内存使用信息：%s / %s ,空闲内存大小：%s</string>
+    <string name="zh_setting_java_memory_max">最大可设置的内存大小：%s</string>
+    <string name="zh_setting_java_memory_exceeded">当前设置的内存空间超出了可用内存大小</string>
+    <string name="zh_setting_java_memory_too_big">当前设置的内存空间过大,最多只能设置为 %d MB</string>
+    <string name="zh_setting_java_memory_too_small">当前设置的内存空间过小,至少需要设置为 %d MB</string>
+    <string name="setting_java_memory_outofrange">输入值 %s MB超出可接受范围</string>
 </resources>
