@@ -49,9 +49,9 @@
     <string name="mcl_setting_subtitle_javaargs">注意，非专业人士修改此值可能导致游戏弄～</string>
     <string name="mcl_setting_category_renderer">渲染者</string>
     <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (全版本可用(骗小孩的),速度较快)</string>
-      <string name="mcl_setting_renderer_old_holy">Old Holy GL4ES -(You're my sunshine)</string>
+    <string name="mcl_setting_renderer_old_holy">Old Holy GL4ES - (旧版本可用，快)</string>
     <string name="mcl_setting_renderer_vulkan_zink">锌 (Vulkan) - (非全版本可用,发展中)</string>
-    <string name="mcl_setting_renderer_angle">ANGLE (Vulkan) - (仅 紫水晶 以上、中)</string>
+    <string name="mcl_setting_renderer_angle">ANGLE (Vulkan) - (仅 紫水晶 以上,中)</string>
     <string name="mcl_setting_veroption_release">正式版</string>
     <string name="mcl_setting_veroption_snapshot">快照</string>
     <string name="mcl_setting_veroption_oldalpha">远古 alpha 版</string>
