@@ -13,13 +13,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "EGL/egl.h"
+#include <EGL/egl.h>
 #include "GL/osmesa.h"
 #include "ctxbridges/egl_loader.h"
 #include "ctxbridges/osmesa_loader.h"
 
 #ifdef GLES_TEST
-#include <GLES/gl.h>
+#include "GLES3/gl32.h"
 #endif
 
 #include <android/native_window.h>
