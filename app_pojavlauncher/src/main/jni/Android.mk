@@ -31,13 +31,13 @@ LOCAL_MODULE := pojavexec
 # LOCAL_CFLAGS += -DDEBUG
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
+    driver_helper.c \
+    driver_helper/nsbypass.c \
     environ/environ.c \
     utils.c \
     bigcoreaffinity.c \
-    input_bridge_v3.c \
     jre_launcher.c \
-    driver_helper/nsbypass.c \
-    driver_helper.c \
+    input_bridge_v3.c \
     egl_bridge.c \
     ctxbridges/egl_loader.c \
     ctxbridges/gl_bridge.c \
@@ -46,7 +46,7 @@ LOCAL_SRC_FILES := \
     ctxbridges/swap_interval_no_egl.c
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-LOCAL_CFLAGS += -O3 -fPIC -flto=auto -fwhole-program-vtables -DADRENO_POSSIBLE -Wno-int-conversion -mllvm -polly -std=c2x
+LOCAL_CFLAGS += -O3 -fPIC -flto=auto -fwhole-program-vtables -DGLES_TEST -DADRENO_POSSIBLE -Wno-int-conversion -mllvm -polly -std=c2x
 LOCAL_LDLIBS += -landroid -lEGL -lGLESv3
 endif
 include $(BUILD_SHARED_LIBRARY)
