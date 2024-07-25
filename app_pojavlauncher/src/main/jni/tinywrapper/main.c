@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 #include "GL/osmesa.h"
+#include "GL/glext.h"
 #include <GLES3/gl32.h>
 #include "string_utils.h"
 
