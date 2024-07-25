@@ -5,13 +5,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "GL/gl.h"
-#include "GLES/gl.h"
+#include "GL/osmesa.h"
+#include <GLES3/gl32.h>
 #include "string_utils.h"
-
-GLAPI void APIENTRY glClearDepthf (GLfloat d);
-GLAPI void APIENTRY glGetBufferParameteriv (GLenum target, GLenum pname, GLint *params);
-GLAPI void *APIENTRY glMapBufferRange (GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access);
 
 #define LOOKUP_FUNC(func) \
     if (!gles_##func) { \
