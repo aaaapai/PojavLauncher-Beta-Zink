@@ -46,7 +46,7 @@ LOCAL_SRC_FILES := \
     ctxbridges/swap_interval_no_egl.c
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-LOCAL_CFLAGS += -O3 -fPIC -flto=auto -fwhole-program-vtables -DGLES_TEST -DADRENO_POSSIBLE -Wno-int-conversion -mllvm -polly -std=c2x
+LOCAL_CFLAGS += -O3 -fPIC -flto=auto -fwhole-program-vtables -D_REENTRANT -DGLES_TEST -DADRENO_POSSIBLE -Wno-int-conversion -mllvm -polly -std=c2x
 LOCAL_LDLIBS += -landroid -lEGL -lGLESv3
 endif
 include $(BUILD_SHARED_LIBRARY)
