@@ -31,22 +31,23 @@ LOCAL_MODULE := pojavexec
 # LOCAL_CFLAGS += -DDEBUG
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
-    driver_helper.c \
-    driver_helper/nsbypass.c \
     environ/environ.c \
     utils.c \
-    bigcoreaffinity.c \
     jre_launcher.c \
     input_bridge_v3.c \
-    egl_bridge.c \
+    driver_helper/nsbypass.c \
     ctxbridges/egl_loader.c \
+    egl_bridge.c \
     ctxbridges/gl_bridge.c \
     ctxbridges/osm_bridge.c \
     ctxbridges/osmesa_loader.c \
     ctxbridges/swap_interval_no_egl.c
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-LOCAL_CFLAGS += -O3 -fPIC -flto=auto -fwhole-program-vtables -D_REENTRANT -DGLES_TEST -DADRENO_POSSIBLE -Wno-int-conversion -mllvm -polly -std=c2x
+LOCAL_CFLAGS += -DGLES_TEST -DADRENO_POSSIBLE
+LOCAL_CFLAGS += -O3 -fPIC -flto=auto -fwhole-program-vtables -mllvm -polly -O3
+LOCAL_CFLAGS += -std=c2x -Wno-int-conversion
+LOCAL_CFLAGS += -D_GNU_SOURCE -D_REENTRANT -D_FILE_OFFSET_BITS=64
 LOCAL_LDLIBS += -landroid -lEGL -lGLESv3
 endif
 include $(BUILD_SHARED_LIBRARY)
@@ -75,7 +76,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := pojavexec_awt
 LOCAL_SRC_FILES := \
     awt_bridge.c
-LOCAL_CFLAGS += -O2 -fPIC -flto=auto -fwhole-program-vtables -Wno-unknown-warning-option -Wno-unused-const-variable -Wno-unused-variable -Wno-unused-parameter -Wno-format -Wno-sign-compare -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -Wno-int-conversion -std=gnu2x
+LOCAL_CFLAGS += -O2 -flto=auto -fwhole-program-vtables -Wno-unknown-warning-option -Wno-unused-const-variable -Wno-unused-variable -Wno-unused-parameter -Wno-format -Wno-sign-compare -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -Wno-int-conversion -std=gnu2x
 include $(BUILD_SHARED_LIBRARY)
 
 # Helper to get current thread
@@ -97,7 +98,7 @@ LOCAL_MODULE := awt_xawt
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SHARED_LIBRARIES := awt_headless
 LOCAL_SRC_FILES := xawt_fake.c
-LOCAL_CFLAGS += -O2 -fPIC -flto=auto -fwhole-program-vtables -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -Wno-int-conversion
+LOCAL_CFLAGS += -O2 -flto=auto -fwhole-program-vtables -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -Wno-int-conversion
 include $(BUILD_SHARED_LIBRARY)
 
 # delete fake libs after linked
