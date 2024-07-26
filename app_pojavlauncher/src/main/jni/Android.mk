@@ -35,9 +35,9 @@ LOCAL_SRC_FILES := \
     utils.c \
     jre_launcher.c \
     input_bridge_v3.c \
-    driver_helper/nsbypass.c \
     ctxbridges/egl_loader.c \
     egl_bridge.c \
+    driver_helper/nsbypass.c \
     ctxbridges/gl_bridge.c \
     ctxbridges/osm_bridge.c \
     ctxbridges/osmesa_loader.c \
@@ -47,7 +47,7 @@ ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
 LOCAL_CFLAGS += -DGLES_TEST -DADRENO_POSSIBLE
 LOCAL_CFLAGS += -O3 -fPIC -flto=auto -fwhole-program-vtables -mllvm -polly -O3
 LOCAL_CFLAGS += -std=c2x -Wno-int-conversion
-LOCAL_CFLAGS += -D_GNU_SOURCE -D_REENTRANT -D_FILE_OFFSET_BITS=64
+LOCAL_CFLAGS += -D_REENTRANT -D_FILE_OFFSET_BITS=64
 LOCAL_LDLIBS += -landroid -lEGL -lGLESv3
 endif
 include $(BUILD_SHARED_LIBRARY)
