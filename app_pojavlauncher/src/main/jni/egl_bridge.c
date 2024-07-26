@@ -641,7 +641,7 @@ EXTERNAL_API void pojavMakeCurrent(void* window) {
         glReadPixels_p(0, 0, 1, 1, GL_RGB, GL_INT, &pixelsArr);
 
         pojavSwapBuffers();
-        return 1;
+        return;
     }
 }
 
