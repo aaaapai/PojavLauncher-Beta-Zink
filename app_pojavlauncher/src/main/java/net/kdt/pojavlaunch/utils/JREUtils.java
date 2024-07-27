@@ -301,7 +301,9 @@ public class JREUtils {
                     envMap.put("VTEST_SOCKET_NAME", new File(Tools.DIR_CACHE, ".virgl_test").getAbsolutePath());
                 if (DRIVER_MODLE.equals("driver_panfrost")) {
                     envMap.put("MESA_DISK_CACHE_SINGLE_FILE", "1");
-                    envMap.put("MESA_DISK_CACHE_SINGLE_FILE", "true");
+                    if (MESA_LIBS.equals("default")) {
+                        envMap.put("PAN_MESA_DEBUG", "trace");
+                    }
                 }
             }
             if (LOCAL_RENDERER.equals("opengles3_desktopgl_angle_vulkan")) {
