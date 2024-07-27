@@ -42,10 +42,10 @@
 
 #define FREQ_MAX 256
 
-#define GLFW_CLIENT_API 0x22001
+#define GLFW_CLIENT_API 0x00022001
 /* Consider GLFW_NO_API as Vulkan API */
 #define GLFW_NO_API 0
-#define GLFW_OPENGL_API 0x30001
+#define GLFW_OPENGL_API 0x00030001
 // region OSMESA internals
 
 // This means that the function is an external API and that it will be used
