@@ -48,7 +48,7 @@ public class OtherLoginApi {
         authRequest.setUsername(userName);
         authRequest.setPassword(password);
         AuthRequest.Agent agent = new AuthRequest.Agent();
-        agent.setName("Client");
+        agent.setName("Minecraft");
         agent.setVersion(1.0);
         authRequest.setAgent(agent);
         authRequest.setRequestUser(true);
