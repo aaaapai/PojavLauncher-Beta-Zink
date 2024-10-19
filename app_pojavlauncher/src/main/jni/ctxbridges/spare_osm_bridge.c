@@ -15,6 +15,7 @@ void* mbuffer;
 static const char* osm_LogTag = "OSMBridge";
 static __thread spare_osm_render_window_t* currentBundle;
 static char spare_no_render_buffer[4];
+static bool hasSetNoRendererBuffer = false;
 
 
 void setNativeWindowSwapInterval(struct ANativeWindow* nativeWindow, int swapInterval);
@@ -154,7 +155,6 @@ void spare_osm_make_current(spare_osm_render_window_t* bundle) {
         return;
     }
 
-    static bool hasSetNoRendererBuffer = false;
     bool hasSetMainWindow = false;
     currentBundle = bundle;
 
