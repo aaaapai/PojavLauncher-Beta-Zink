@@ -2,7 +2,8 @@
 
 <img src="https://github.com/PojavLauncherTeam/PojavLauncher/blob/v3_openjdk/app_pojavlauncher/src/main/assets/pojavlauncher.png" align="left" width="130" height="150" alt="PojavLauncher logo">
 
-[![Android CI](https://github.com/PojavLauncherTeam/PojavLauncher/workflows/Android%20CI/badge.svg)](https://github.com/Vera-Firefly/Pojav-Glow-Worm/actions)
+[![Android CI](https://github.com/Vera-Firefly/Pojav-Glow-Worm/actions/workflows/main.yml/badge.svg)](https://github.com/Vera-Firefly/Pojav-Glow-Worm/actions)
+![Downloads](https://img.shields.io/github/downloads/Vera-Firefly/Pojav-Glow-Worm/total)
 
 * <a href="/README-ZH_CN.md">中文</a>
 
