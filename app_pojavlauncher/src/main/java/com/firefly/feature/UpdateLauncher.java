@@ -4,15 +4,15 @@ import static net.kdt.pojavlaunch.Architecture.ARCH_ARM;
 import static net.kdt.pojavlaunch.Architecture.ARCH_ARM64;
 import static net.kdt.pojavlaunch.Architecture.ARCH_X86;
 import static net.kdt.pojavlaunch.Architecture.ARCH_X86_64;
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.DEFAULT_PREF;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
@@ -26,288 +26,226 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileOutputStream;	
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class UpdateLauncher {
+
     private static final String GITHUB_API = "https://api.github.com/repos/Vera-Firefly/Pojav-Glow-Worm/releases/latest";
     private static final String GITHUB_RELEASE_URL = "github.com/Vera-Firefly/Pojav-Glow-Worm/releases/download/%s/Pojav-Glow-Worm-%s-%s.apk";
-    private Context context;
-    private int localVersionCode;
-    File dir;
+    private static final String CACHE_APK_NAME = "cache.apk";
+    private static final String APK_VERSION_FILE_NAME = "apk_version";
+    private static final String IGNORE_VERSION_FILE_NAME = "ignore_version";
+
+    private final Context context;
+    private final File dir;
+    private final int localVersionCode;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private volatile boolean isCancelled = false;
 
     public UpdateLauncher(Context context) {
         this.context = context;
         this.dir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-        try {
-            String versionCodeString = context.getString(R.string.base_version_code);
-            this.localVersionCode = Integer.parseInt(versionCodeString);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            this.localVersionCode = 0;
-        }
+        this.localVersionCode = getLocalVersionCode();
     }
 
     public void checkForUpdates(boolean ignore) {
-        new GetLatestReleaseTask(ignore).execute(GITHUB_API);
+        executor.execute(() -> {
+            JSONObject releaseInfo = fetchReleaseInfo();
+            if (releaseInfo != null) handleUpdateCheck(releaseInfo, ignore);
+        });
     }
 
-    private class GetLatestReleaseTask extends AsyncTask<String, Void, JSONObject> {
-        private boolean ignore;
-
-        public GetLatestReleaseTask(boolean ignore) {
-            this.ignore = ignore;
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... urls) {
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url(urls[0]).build();
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.isSuccessful()) {
-                    return new JSONObject(response.body().string());
-                }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            if (result != null) {
-                try {
-                    int remoteVersionCode = Integer.parseInt(result.getString("tag_name").replaceAll("[^\\d]", ""));
-                    String version = String.valueOf(localVersionCode);
-                    if (remoteVersionCode > localVersionCode) {
-                        checkCachedApk(result, ignore);
-                    } else if (!ignore) {
-                        Toast.makeText(context, context.getString(R.string.pgw_settings_updatelauncher_updated, version), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private void checkCachedApk(JSONObject releaseInfo, boolean ignore) {
-        boolean INGORE = false;
-        String tagName;
-        String versionName;
-        String releaseNotes;
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File apkFile = new File(dir, "cache.apk");
-        File apkVersionFile = new File(dir, "apk_version");
-        File ignoreVersionFile = new File(dir, "ignore_version");
-
+    private int getLocalVersionCode() {
         try {
-            tagName = releaseInfo.getString("tag_name");
-            versionName = releaseInfo.getString("name");
-            releaseNotes = releaseInfo.getString("body");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
+            return Integer.parseInt(context.getString(R.string.base_version_code));
+        } catch (NumberFormatException e) {
+            return 0;
         }
+    }
 
-        if (ignoreVersionFile.exists()) {
-            try {
-                String savedIgnoreVersion = new String(java.nio.file.Files.readAllBytes(ignoreVersionFile.toPath()));
-                String localIgnoreVersion = DEFAULT_PREF.getString("ignoreVersion", null);
-                if (savedIgnoreVersion.equals(localIgnoreVersion) && savedIgnoreVersion.equals(tagName)) {
-                    if (ignore) INGORE = true;
-                } else {
-                    ignoreVersionFile.delete();
-                }
-            } catch (IOException | NumberFormatException e) {
-                e.printStackTrace();
+    private JSONObject fetchReleaseInfo() {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(GITHUB_API).build();
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                return new JSONObject(response.body().string());
             }
+        } catch (IOException | JSONException e) {
+            handleException(e);
         }
+        return null;
+    }
 
-        if (apkFile.exists() && apkVersionFile.exists()) {
-            try {
-                String savedTagName = new String(java.nio.file.Files.readAllBytes(apkVersionFile.toPath()));
-                int savedVersionCode = Integer.parseInt(savedTagName.replaceAll("[^\\d]", ""));
-                int releaseVersionCode = Integer.parseInt(tagName.replaceAll("[^\\d]", ""));
-                if (savedVersionCode > localVersionCode && savedVersionCode >= releaseVersionCode) {
-                    new CustomDialog.Builder(context)
-                            .setTitle(context.getString(R.string.pgw_settings_updatelauncher_install_prompt_title))
-                            .setMessage(context.getString(R.string.pgw_settings_updatelauncher_install_prompt_message, apkFile.getAbsolutePath()))
-                            .setConfirmListener(R.string.pgw_settings_updatelauncher_install, customView -> {
-                                installApk(apkFile);
-                                return true;
-                            })
-                            .setCancelListener(R.string.alertdialog_cancel, customView -> true)
-                            .setCancelable(false)
-                            .build()
-                            .show();
-                } else {
-                    apkFile.delete();
-                    apkVersionFile.delete();
-                    if (!INGORE) showUpdateDialog(tagName, versionName, releaseNotes);
-                }
-            } catch (IOException | NumberFormatException e) {
-                e.printStackTrace();
+    private void handleUpdateCheck(JSONObject releaseInfo, boolean ignore) {
+        try {
+            int remoteVersionCode = Integer.parseInt(releaseInfo.getString("tag_name").replaceAll("[^\\d]", ""));
+            if (remoteVersionCode > localVersionCode) {
+                handleCachedApk(releaseInfo, ignore, false);
+            } else {
+                if (!ignore) showToast(R.string.pgw_settings_updatelauncher_updated);
+                handleCachedApk(releaseInfo, ignore, true);
             }
-        } else if (apkFile.exists() || apkVersionFile.exists()) {
-            if (apkFile.exists()) apkFile.delete();
-            if (apkVersionFile.exists()) apkVersionFile.delete();
-            if (!INGORE) showUpdateDialog(tagName, versionName, releaseNotes);
+        } catch (IOException | JSONException e) {
+            handleException(e);
+        }
+    }
+
+    private void handleCachedApk(JSONObject releaseInfo, boolean ignore, boolean check) throws JSONException, IOException {
+        String tagName = releaseInfo.getString("tag_name");
+        String versionName = releaseInfo.getString("name");
+        String releaseNotes = releaseInfo.getString("body");
+        File apkFile = new File(dir, CACHE_APK_NAME);
+        File apkVersionFile = new File(dir, APK_VERSION_FILE_NAME);
+        File ignoreVersionFile = new File(dir, IGNORE_VERSION_FILE_NAME);
+
+        if (ignoreVersionFile.exists() && shouldIgnoreVersion(ignoreVersionFile, tagName) && ignore && !check) return;
+
+        if (apkFile.exists() && apkVersionFile.exists() && cachedVersionIsValid(apkVersionFile, tagName) && !check) {
+            new Handler(Looper.getMainLooper()).post(() -> showInstallDialog(apkFile));
         } else {
-            if (!INGORE) showUpdateDialog(tagName, versionName, releaseNotes);
+            deleteFileIfExists(apkFile);
+            deleteFileIfExists(apkVersionFile);
+            if (!check) new Handler(Looper.getMainLooper()).post(() -> showUpdateDialog(tagName, versionName, releaseNotes));
         }
+    }
+
+    private boolean shouldIgnoreVersion(File ignoreVersionFile, String tagName) throws IOException {
+        String savedIgnoreVersion = readFile(ignoreVersionFile);
+        int savedIgnoreVersionCode = Integer.parseInt(savedIgnoreVersion.replaceAll("[^\\d]", ""));
+        int releaseVersionCode = Integer.parseInt(tagName.replaceAll("[^\\d]", ""));
+        if (savedIgnoreVersionCode < releaseVersionCode) deleteFileIfExists(ignoreVersionFile);
+        return savedIgnoreVersionCode >= releaseVersionCode;
+    }
+
+    private boolean cachedVersionIsValid(File apkVersionFile, String tagName) throws IOException {
+        String savedTagName = readFile(apkVersionFile); 
+        int savedVersionCode = Integer.parseInt(savedTagName.replaceAll("[^\\d]", ""));
+        int releaseVersionCode = Integer.parseInt(tagName.replaceAll("[^\\d]", ""));
+        return savedVersionCode >= releaseVersionCode;
     }
 
     private void showUpdateDialog(String tagName, String versionName, String releaseNotes) {
         String archModel = getArchModel();
 
         new CustomDialog.Builder(context)
-                .setTitle(context.getString(R.string.pgw_settings_updatelauncher_new_version, versionName))
-                .setScrollMessage(releaseNotes)
-                .setConfirmListener(R.string.pgw_settings_updatelauncher_update, customView -> {
-                    showDownloadSourceDialog(tagName, versionName, archModel);
-                    return true;
-                })
-                .setButton1Listener(context.getString(R.string.pgw_settings_updatelauncher_cancel), customView -> {
-                    File ignoreVersion = new File(dir, "ignore_version");
-                    try (FileOutputStream OutputStream = new FileOutputStream(ignoreVersion)) {
-                        OutputStream.write(tagName.getBytes());
-                        OutputStream.flush();
-                        DEFAULT_PREF.edit().putString("ignoreVersion", tagName).apply();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                    return true;
-                })
-                .setCancelListener(R.string.alertdialog_cancel, customView -> true)
-                .build()
-                .show();
+            .setTitle(context.getString(R.string.pgw_settings_updatelauncher_new_version, versionName))
+            .setScrollMessage(releaseNotes)
+            .setConfirmListener(R.string.pgw_settings_updatelauncher_update, customView -> {
+                showDownloadSourceDialog(tagName, versionName, archModel);
+                return true;
+            })
+            .setButton1Listener(context.getString(R.string.pgw_settings_updatelauncher_cancel), customView -> {
+                saveIgnoreVersion(tagName);
+                return true;
+            })
+            .setCancelListener(R.string.alertdialog_cancel, customView -> true)
+            .build()
+            .show();
     }
 
     private void showDownloadSourceDialog(String tagName, String versionName, String archModel) {
-        String[] downloadSources = {"GitHub", "GHPROXY"};
         String githubUrl = String.format(GITHUB_RELEASE_URL, tagName, versionName, archModel);
 
         new CustomDialog.Builder(context)
-                .setTitle(context.getString(R.string.pgw_settings_updatelauncher_source))
-                .setCancelable(false)
-                .setItems(downloadSources, selectedSource -> {
-                    String apkUrl;
-                    switch (selectedSource) {
-                        case "GitHub":
-                            apkUrl = "https://" + githubUrl;
-                            break;
-                        case "GHPROXY":
-                            apkUrl = "https://mirror.ghproxy.com/" + githubUrl;
-                            break;
-                        default:
-                            apkUrl = null;
-                    }
-                    if (apkUrl != null) {
-                        startDownload(apkUrl, tagName);
-                    }
-                })
-                .setConfirmListener(R.string.alertdialog_cancel, customView -> true)
-                .build()
-                .show();
+            .setTitle(context.getString(R.string.pgw_settings_updatelauncher_source))
+            .setCancelable(false)
+            .setItems(new String[]{"GitHub", "GHPROXY"}, selectedSource -> {
+                String apkUrl = selectedSource.equals("GitHub") ?
+                        "https://" + githubUrl :
+                        "https://mirror.ghproxy.com/" + githubUrl;
+                startDownload(apkUrl, tagName);
+                isCancelled = false;
+            })
+            .setConfirmListener(R.string.alertdialog_cancel, customView -> true)
+            .build()
+            .show();
     }
 
     private void startDownload(String apkUrl, String tagName) {
-        new DownloadApkTask(tagName).execute(apkUrl);
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setTitle(R.string.pgw_settings_updatelauncher_downloading);
+        progressDialog.setCancelable(false);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(android.R.string.cancel), (dialog, which) -> {
+            isCancelled = true;
+        });
+        progressDialog.setProgress(0);
+        progressDialog.show();
+
+        executor.execute(() -> downloadApk(apkUrl, tagName, progressDialog));
     }
 
-    private class DownloadApkTask extends AsyncTask<String, Integer, File> {
-        private String tagName;
-        ProgressDialog progressDialog;
+    private void downloadApk(String apkUrl, String tagName, ProgressDialog progressDialog) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(apkUrl).build();
+        File apkFile = new File(dir, CACHE_APK_NAME);
+        File apkVersionFile = new File(dir, APK_VERSION_FILE_NAME);
 
-        public DownloadApkTask(String tagName) {
-            this.tagName = tagName;
-        }
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                long totalBytes = response.body().contentLength();
+                byte[] buffer = new byte[8192];
+                long downloadedBytes = 0;
 
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setTitle(R.string.pgw_settings_updatelauncher_downloading);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
+                try (InputStream inputStream = response.body().byteStream();
+                    FileOutputStream outputStream = new FileOutputStream(apkFile)) {
 
-        @Override
-        protected File doInBackground(String... urls) {
-            String apkUrl = urls[0];
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url(apkUrl).build();
-            File apkFile = null;
+                    int read;
+                    while ((read = inputStream.read(buffer)) != -1) {
+                        if (isCancelled) {
+                            outputStream.close();
+                            apkFile.delete();
+                            return;
+                        }
 
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.isSuccessful()) {
-                    apkFile = new File(dir, "cache.apk");
-                    File apkVersionFile = new File(dir, "apk_version");
+                        outputStream.write(buffer, 0, read);
+                        downloadedBytes += read;
 
-                    InputStream inputStream = response.body().byteStream();
-                    FileOutputStream outputStream = new FileOutputStream(apkFile);
-                    byte[] buffer = new byte[1024];
-                    int bytesRead;
-                    long totalBytesRead = 0;
-                    long totalBytes = response.body().contentLength();
-
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        totalBytesRead += bytesRead;
-                        outputStream.write(buffer, 0, bytesRead);
-                        publishProgress((int) ((totalBytesRead * 100) / totalBytes));
+                        int progress = (int) (100 * downloadedBytes / totalBytes);
+                        updateProgressDialog(progressDialog, progress);
                     }
-
-                    FileOutputStream versionOutputStream = new FileOutputStream(apkVersionFile);
-                    versionOutputStream.write(tagName.getBytes());
-                    versionOutputStream.flush();
-                    versionOutputStream.close();
-
-                    outputStream.flush();
-                    outputStream.close();
-                    inputStream.close();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-            return apkFile;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            progressDialog.setProgress(progress[0]);
-        }
-
-        @Override
-        protected void onPostExecute(File apkFile) {
-            progressDialog.dismiss();
-            if (apkFile != null) {
-                new CustomDialog.Builder(context)
-                        .setTitle(context.getString(R.string.pgw_settings_updatelauncher_download_complete))
-                        .setMessage(context.getString(R.string.pgw_settings_updatelauncher_file_location, apkFile.getAbsolutePath()))
-                        .setConfirmListener(R.string.pgw_settings_updatelauncher_install, customView -> {
-                            installApk(apkFile);
-                            return true;
-                        })
-                        .setCancelListener(R.string.alertdialog_cancel, customView -> true)
-                        .setCancelable(false)
-                        .build()
-                        .show();
+                writeFile(apkVersionFile, tagName);
+                new Handler(Looper.getMainLooper()).post(() -> showDownloadCompleteDialog(apkFile));
             } else {
-                Toast.makeText(context, context.getString(R.string.pgw_settings_updatelauncher_download_fail), Toast.LENGTH_SHORT).show();
+                showToast(R.string.pgw_settings_updatelauncher_download_fail);
             }
+        } catch (IOException e) {
+            handleException(e);
+        } finally {
+            new Handler(Looper.getMainLooper()).post(progressDialog::dismiss);
         }
+    }
+
+    private void updateProgressDialog(ProgressDialog progressDialog, int progress) {
+        new Handler(Looper.getMainLooper()).post(() -> {
+            progressDialog.setProgress(progress);
+        });
+    }
+
+    private void showDownloadCompleteDialog(File apkFile) {
+        new CustomDialog.Builder(context)
+            .setTitle(context.getString(R.string.pgw_settings_updatelauncher_download_complete))
+            .setMessage(context.getString(R.string.pgw_settings_updatelauncher_file_location, apkFile.getAbsolutePath()))
+            .setConfirmListener(R.string.pgw_settings_updatelauncher_install, customView -> {
+                installApk(apkFile);
+                return true;
+            })
+            .setCancelListener(R.string.alertdialog_cancel, customView -> true)
+            .setCancelable(false)
+            .build()
+            .show();
     }
 
     private void installApk(File apkFile) {
@@ -326,5 +264,50 @@ public class UpdateLauncher {
         if (arch == ARCH_X86_64) return "x86_64";
         if (arch == ARCH_X86) return "x86";
         return "all";
+    }
+
+    private void saveIgnoreVersion(String tagName) {
+        File ignoreVersionFile = new File(dir, IGNORE_VERSION_FILE_NAME);
+        try {
+            writeFile(ignoreVersionFile, tagName);
+        } catch (IOException e) {
+            handleException(e);
+        }
+    }
+
+    private void handleException(Exception e) {
+        new Handler(Looper.getMainLooper()).post(() ->
+            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    private void showToast(int messageResId) {
+        new Handler(Looper.getMainLooper()).post(() ->
+            Toast.makeText(context, context.getString(messageResId), Toast.LENGTH_SHORT).show());
+    }
+
+    private void deleteFileIfExists(File file) {
+        if (file.exists()) file.delete();
+    }
+
+    private String readFile(File file) throws IOException {
+        return new String(Files.readAllBytes(file.toPath()));
+    }
+
+    private void writeFile(File file, String content) throws IOException {
+        Files.write(file.toPath(), content.getBytes());
+    }
+
+    private void showInstallDialog(File apkFile) {
+        new CustomDialog.Builder(context)
+            .setTitle(context.getString(R.string.pgw_settings_updatelauncher_install_prompt_title))
+            .setMessage(context.getString(R.string.pgw_settings_updatelauncher_install_prompt_message, apkFile.getAbsolutePath()))
+            .setConfirmListener(R.string.pgw_settings_updatelauncher_install, customView -> {
+                installApk(apkFile);
+                return true;
+            })
+            .setCancelListener(R.string.alertdialog_cancel, customView -> true)
+            .setCancelable(false)
+            .build()
+            .show();
     }
 }
