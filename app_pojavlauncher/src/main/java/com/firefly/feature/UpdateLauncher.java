@@ -91,7 +91,7 @@ public class UpdateLauncher {
             if (remoteVersionCode > localVersionCode) {
                 handleCachedApk(releaseInfo, ignore, false);
             } else {
-                if (!ignore) showToast(R.string.pgw_settings_updatelauncher_updated);
+                if (!ignore) showToast(R.string.pgw_settings_updatelauncher_updated, String.valueOf(localVersionCode));
                 handleCachedApk(releaseInfo, ignore, true);
             }
         } catch (IOException | JSONException e) {
@@ -283,6 +283,13 @@ public class UpdateLauncher {
     private void showToast(int messageResId) {
         new Handler(Looper.getMainLooper()).post(() ->
             Toast.makeText(context, context.getString(messageResId), Toast.LENGTH_SHORT).show());
+    }
+
+    private void showToast(int messageResId, Object... formatArgs) {
+        new Handler(Looper.getMainLooper()).post(() -> {
+            String message = context.getString(messageResId, formatArgs);
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void deleteFileIfExists(File file) {
