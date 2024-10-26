@@ -1,15 +1,15 @@
 package com.firefly.utils;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.LinearLayout;
+
+import com.firefly.ui.dialog.CustomDialog;
 
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.R;
@@ -36,7 +36,7 @@ public class ResolutionAdjuster {
         // 因为麻烦
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.HORIZONTAL);  // 设置水平排列
-        layout.setPadding(50, 40, 50, 20);
+        layout.setPadding(50, 8, 50, 8);
         layout.setGravity(Gravity.CENTER);
 
         // 动态创建一个 SeekBar ,用于调整缩放因子
@@ -91,13 +91,14 @@ public class ResolutionAdjuster {
         });
 
         // 创建并显示弹窗
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(R.string.mcl_setting_title_resolution_scaler));
-        builder.setView(layout);
-        builder.setCancelable(false); // 不允许点击外部关闭弹窗,防止进程错误
-        // 设置确认按钮, 点击关闭弹窗
-        builder.setPositiveButton(android.R.string.ok, (d, i) -> d.dismiss());
-        builder.show();
+        new CustomDialog.Builder(context)
+                .setTitle(context.getString(R.string.mcl_setting_title_resolution_scaler))
+                .setCustomView(layout)
+                .setCancelable(false)
+                .setDraggable(true)
+                .setConfirmListener(android.R.string.ok, customView -> true)
+                .build()
+                .show();
     }
 
     private void changeResolutionRatioPreview(int progress, TextView resolutionTextView) {
