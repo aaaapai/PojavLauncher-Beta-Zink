@@ -89,7 +89,7 @@ public class CustomDialog {
             if (button1Text != null) button1.setText(button1Text);
             button1.setOnClickListener(v -> {
                 boolean shouldDismiss = true;
-                if (button1Listener != null) button1Listener.onClick(customView);
+                if (button1Listener != null) shouldDismiss = button1Listener.onClick(customView);
                 if (shouldDismiss) dialog.dismiss();
             });
         }
@@ -99,7 +99,7 @@ public class CustomDialog {
             if (button2Text != null) button2.setText(button2Text);
             button2.setOnClickListener(v -> {
                 boolean shouldDismiss = true;
-                if (button2Listener != null) button2Listener.onClick(customView);
+                if (button2Listener != null) shouldDismiss = button2Listener.onClick(customView);
                 if (shouldDismiss) dialog.dismiss();
             });
         }
@@ -109,7 +109,7 @@ public class CustomDialog {
             if (button3Text != null) button3.setText(button3Text);
             button3.setOnClickListener(v -> {
                 boolean shouldDismiss = true;
-                if (button3Listener != null) button3Listener.onClick(customView);
+                if (button3Listener != null) shouldDismiss = button3Listener.onClick(customView);
                 if (shouldDismiss) dialog.dismiss();
             });
         }
@@ -119,7 +119,7 @@ public class CustomDialog {
             if (button4Text != null) button4.setText(button4Text);
             button4.setOnClickListener(v -> {
                 boolean shouldDismiss = true;
-                if (button4Listener != null) button4Listener.onClick(customView);
+                if (button4Listener != null) shouldDismiss = button4Listener.onClick(customView);
                 if (shouldDismiss) dialog.dismiss();
             });
         }
