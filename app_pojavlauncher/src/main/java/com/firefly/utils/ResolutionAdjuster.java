@@ -36,7 +36,7 @@ public class ResolutionAdjuster {
         // 因为麻烦
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.HORIZONTAL);  // 设置水平排列
-        layout.setPadding(50, 8, 50, 8);
+        layout.setPadding(8, 8, 8, 8);
         layout.setGravity(Gravity.CENTER);
 
         // 动态创建一个 SeekBar ,用于调整缩放因子
