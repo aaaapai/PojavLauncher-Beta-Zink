@@ -156,6 +156,7 @@ public class OtherLoginFragment extends Fragment {
                                     return true;
                                 })
                                 .setCancelListener(R.string.other_login_cancel, customView -> true)
+                                .setDraggable(true)
                                 .build();
                         if (selectedSource.equals(getString(R.string.other_login_external))) {
                             editText.setHint(R.string.other_login_address);
@@ -165,6 +166,7 @@ public class OtherLoginFragment extends Fragment {
                         dialog1.show();
                     })
                     .setConfirmListener(R.string.other_login_cancel, customView -> true)
+                    .setDraggable(true)
                     .build();
             dialog.show();
         });

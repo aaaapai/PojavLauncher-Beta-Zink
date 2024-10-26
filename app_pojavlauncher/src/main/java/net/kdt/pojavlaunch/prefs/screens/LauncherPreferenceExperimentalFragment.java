@@ -171,6 +171,7 @@ public class LauncherPreferenceExperimentalFragment extends LauncherPreferenceFr
                     return true;
                 })
                 .setCancelable(false)
+                .setDraggable(true)
                 .build()
                 .show();
     }
@@ -219,6 +220,7 @@ public class LauncherPreferenceExperimentalFragment extends LauncherPreferenceFr
                     return true;
                 })
                 .setCancelListener(R.string.alertdialog_cancel, customView -> true)
+                .setDraggable(true)
                 .build()
                 .show();
     }

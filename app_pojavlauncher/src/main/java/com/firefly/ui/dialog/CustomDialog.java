@@ -3,7 +3,9 @@ package com.firefly.ui.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -15,6 +17,7 @@ import net.kdt.pojavlaunch.R;
 
 public class CustomDialog {
     private final AlertDialog dialog;
+    private float dX, dY;
     private final String[] items;
     private final OnItemClickListener itemClickListener;
 
@@ -24,7 +27,8 @@ public class CustomDialog {
                          String button1Text, String button2Text, String button3Text, String button4Text,
                          OnButtonClickListener button1Listener, OnButtonClickListener button2Listener,
                          OnButtonClickListener button3Listener, OnButtonClickListener button4Listener,
-                         String[] items, OnItemClickListener itemClickListener, boolean cancelable) {
+                         String[] items, OnItemClickListener itemClickListener,
+                         boolean cancelable, boolean draggable) {
 
         this.items = items;
         this.itemClickListener = itemClickListener;
@@ -76,9 +80,9 @@ public class CustomDialog {
         builder.setView(view);
         dialog = builder.create();
 
-        if (!cancelable) {
-            dialog.setCancelable(false);
-        }
+        if (draggable) dialog.setOnShowListener(dialogInterface -> setDraggable(dialog));
+
+        if (!cancelable) dialog.setCancelable(false);
 
         if (button1Listener != null) {
             button1.setVisibility(View.VISIBLE);
@@ -147,6 +151,28 @@ public class CustomDialog {
 
     }
 
+    private void setDraggable(AlertDialog dialog) {
+        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        View decorView = dialog.getWindow().getDecorView();
+
+        decorView.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    dX = params.x - event.getRawX();
+                    dY = params.y - event.getRawY();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    params.x = (int) (event.getRawX() + dX);
+                    params.y = (int) (event.getRawY() + dY);
+                    dialog.getWindow().setAttributes(params);
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+        });
+    }
+
     public void show() {
         dialog.show();
     }
@@ -188,6 +214,7 @@ public class CustomDialog {
         private String[] items;
         private OnItemClickListener itemClickListener;
         private boolean cancelable = true;
+        private boolean draggable = false;
 
         public Builder(Context context) {
             this.context = context;
@@ -260,12 +287,17 @@ public class CustomDialog {
             return this;
         }
 
+        public Builder setDraggable(boolean draggable) {
+            this.draggable = draggable;
+            return this;
+        }
+
         public CustomDialog build() {
             return new CustomDialog(context, title, message, scrollmessage, customView,
                     confirmButtonText, cancelButtonText, cancelListener, confirmListener,
                     button1Text, button2Text, button3Text, button4Text,
                     button1Listener, button2Listener, button3Listener, button4Listener,
-                    items, itemClickListener, cancelable);
+                    items, itemClickListener, cancelable, draggable);
         }
     }
 }

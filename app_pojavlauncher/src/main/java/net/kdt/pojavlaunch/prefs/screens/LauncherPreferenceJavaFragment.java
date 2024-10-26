@@ -165,6 +165,7 @@ public class LauncherPreferenceJavaFragment extends LauncherPreferenceFragment {
                     return true;
                 })
                 .setCancelListener(R.string.alertdialog_cancel, customView -> true)
+                .setDraggable(true)
                 .build()
                 .show();
     }

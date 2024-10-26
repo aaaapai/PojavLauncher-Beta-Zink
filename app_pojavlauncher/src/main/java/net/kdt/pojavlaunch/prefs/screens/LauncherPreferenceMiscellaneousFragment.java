@@ -43,6 +43,7 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
                 })
                 .setCancelListener(R.string.alertdialog_cancel, customView -> true)
                 .setCancelable(false)
+                .setDraggable(true)
                 .build()
                 .show();
     }
