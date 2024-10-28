@@ -262,6 +262,9 @@ public class JREUtils {
                 envMap.put("LIBGL_ES", "3");
                 envMap.put("POJAVEXEC_EGL", "libltw.so"); // Use ANGLE EGL
             }
+
+            if (LOCAL_RENDERER.equals("opengles?_vkgl"))
+                envMap.put("POJAVEXEC_EGL", "libVKGL32_EGL.so");
         }
 
         File customEnvFile = new File(ProfilePathManager.getCurrentPath(), "custom_env.txt");
@@ -664,7 +667,7 @@ public class JREUtils {
                     break;
                 case "vulkan_zink":
                 case "freedreno":
-                    renderLibrary = "libOSMesa_8.so";
+                    renderLibrary = "libOSMesa_2304.so";
                     break;
                 case "virglrenderer":
                     renderLibrary = "libOSMesa_2205.so";
@@ -674,6 +677,9 @@ public class JREUtils {
                     break;
                 case "opengles3_ltw":
                     renderLibrary = "libltw.so";
+                    break;
+                case "opengles?_vkgl":
+                    renderLibrary = "libVKGL32.so";
                     break;
                 default:
                     Log.w("RENDER_LIBRARY", "No renderer selected, defaulting to opengles2");
