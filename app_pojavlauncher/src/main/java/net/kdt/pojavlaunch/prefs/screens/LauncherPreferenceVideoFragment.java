@@ -139,6 +139,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
             if (isExpRenderer) {
                 onExpRendererDialog(p, rendererListPref);
             } else {
+                ((SwitchPreference) p).setChecked(false);
                 onChangeRenderer(rendererListPref);
                 setListPreference(rendererListPref, "renderer");
                 return true;
