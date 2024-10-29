@@ -4,40 +4,56 @@
 
     <net.kdt.pojavlaunch.prefs.BackButtonPreference/>
 
-    <PreferenceCategory android:title="@string/preference_launcher_title">
+    <PreferenceCategory
+        android:title="@string/preference_launcher_title"
+        app2:iconSpaceReserved="false"
+        >
+
         <Preference
             android:key="update_launcher"
             android:title="@string/preference_update_launcher_title"
-            android:summary="@string/preference_update_launcher_desc" />
+            android:summary="@string/preference_update_launcher_desc"
+            app2:iconSpaceReserved="false"
+            />
 
         <SwitchPreference
             android:title="@string/preference_force_english_title"
             android:key="force_english"
-            android:summary="@string/preference_force_english_description" />
+            android:summary="@string/preference_force_english_description"
+            app2:iconSpaceReserved="false"
+            />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="enableLogOutput"
             android:summary="@string/preference_enable_log_output_desc"
-            android:title="@string/preference_enable_log_output_title" />
+            android:title="@string/preference_enable_log_output_title"
+            app2:iconSpaceReserved="false"
+            />
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="quitLauncher"
             android:summary="@string/preference_quit_launcher"
-            android:title="@string/preference_quit_launcher_title" />
+            android:title="@string/preference_quit_launcher_title"
+            app2:iconSpaceReserved="false"
+            />
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="autoSetGameLanguage"
             android:summary="@string/zh_setting_set_game_language_desc"
-            android:title="@string/zh_setting_set_game_language_title"/>
+            android:title="@string/zh_setting_set_game_language_title"
+            app2:iconSpaceReserved="false"
+            />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="gameLanguageOverridden"
             android:summary="@string/zh_setting_set_game_language_overridden_desc"
-            android:title="@string/zh_setting_set_game_language_overridden_title"/>
+            android:title="@string/zh_setting_set_game_language_overridden_title"
+            app2:iconSpaceReserved="false"
+            />
 
         <androidx.preference.ListPreference
             android:key="setGameLanguage"
@@ -45,17 +61,9 @@
             android:entryValues="@array/all_game_language_value"
             android:title="@string/zh_setting_set_game_language_list"
             android:defaultValue="system"
-            app2:useSimpleSummaryProvider="true"/>
+            app2:useSimpleSummaryProvider="true"
+            app2:iconSpaceReserved="false"/>
 
     </PreferenceCategory>
-    <Preference
-        android:key="control_mouse_setting"
-        android:title="@string/preference_mouse_title"
-        android:summary="@string/preference_mouse_description"
-        android:icon="@drawable/ic_mouse_editor" />
-
-    <Preference
-        android:key="control_mouse_remove"
-        android:title="@string/preference_mouse_title1" />
 
 </PreferenceScreen>

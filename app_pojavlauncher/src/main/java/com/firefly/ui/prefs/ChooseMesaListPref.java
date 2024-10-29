@@ -1,4 +1,4 @@
-package net.kdt.pojavlaunch.prefs;
+package com.firefly.ui.prefs;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -15,12 +15,12 @@ import net.kdt.pojavlaunch.utils.MesaUtils;
 import java.util.Arrays;
 import java.util.List;
 
-public class DeletableListPreference extends ListPreference {
+public class ChooseMesaListPref extends ListPreference {
 
     private List<String> defaultLibs;
     private OnPreferenceChangeListener preferenceChangeListener;
 
-    public DeletableListPreference(Context context, AttributeSet attrs) {
+    public ChooseMesaListPref(Context context, AttributeSet attrs) {
         super(context, attrs);
         loadDefaultLibs(context);
     }
