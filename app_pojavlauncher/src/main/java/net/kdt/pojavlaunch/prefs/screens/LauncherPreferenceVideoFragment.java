@@ -80,19 +80,10 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
                 SwitchPreference.class);
         sustainedPerfSwitch.setVisible(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N);
 
-        final ListPreference rendererListPreference = requirePreference("renderer", ListPreference.class);
-        setListPreference(rendererListPreference, "renderer");
-
-        rendererListPreference.setOnPreferenceChangeListener((pre, obj) -> {
-            Tools.LOCAL_RENDERER = (String) obj;
-            return true;
-        });
-
-        Preference driverPreference = requirePreference("zinkPreferSystemDriver");
-        if (!Tools.checkVulkanSupport(driverPreference.getContext().getPackageManager())) {
-            driverPreference.setVisible(false);
-        }
         SwitchPreference useSystemVulkan = requirePreference("zinkPreferSystemDriver", SwitchPreference.class);
+        if (!Tools.checkVulkanSupport(useSystemVulkan.getContext().getPackageManager())) {
+            useSystemVulkan.setVisible(false);
+        }
         useSystemVulkan.setOnPreferenceChangeListener((p, v) -> {
             boolean set = (boolean) v;
             boolean isAdreno = PGWTools.isAdrenoGPU();
@@ -110,13 +101,20 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
             return true;
         });
 
+        final ListPreference rendererListPref = requirePreference("renderer", ListPreference.class);
         final ChooseMesaListPref CMesaLibP = requirePreference("CMesaLibrary", ChooseMesaListPref.class);
         final ListPreference CDriverModelP = requirePreference("CDriverModels", ListPreference.class);
         final ListPreference CMesaLDOP = requirePreference("ChooseMldo", ListPreference.class);
 
+        setListPreference(rendererListPref, "renderer");
         setListPreference(CMesaLibP, "CMesaLibrary");
         setListPreference(CDriverModelP, "CDriverModels");
         setListPreference(CMesaLDOP, "ChooseMldo");
+
+        rendererListPref.setOnPreferenceChangeListener((pre, obj) -> {
+            Tools.LOCAL_RENDERER = (String) obj;
+            return true;
+        });
 
         CMesaLibP.setOnPreferenceChangeListener((pre, obj) -> {
             Tools.MESA_LIBS = (String) obj;
@@ -137,12 +135,15 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         SwitchPreference expRendererPref = requirePreference("ExperimentalSetup", SwitchPreference.class);
         expRendererPref.setOnPreferenceChangeListener((p, v) -> {
-            onChangeRenderer();
             boolean isExpRenderer = (boolean) v;
             if (isExpRenderer) {
                 onExpRendererDialog(p);
+            } else {
+                setListPreference(rendererListPref, "renderer");
+                onChangeRenderer(rendererListPref);
+                return true;
             }
-            return true;
+            return false;
         });
 
         // Custom GL/GLSL
@@ -294,16 +295,17 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
                 .show();
     }
 
-    private void onExpRendererDialog(Preference pre) {
+    private void onExpRendererDialog(Preference pre, ListPreference rendererListPref) {
         new CustomDialog.Builder(getContext())
                 .setTitle(getString(R.string.preference_rendererexp_alertdialog_warning))
                 .setMessage(getString(R.string.preference_rendererexp_alertdialog_message))
-                .setConfirmListener(R.string.preference_rendererexp_alertdialog_done, customView -> true)
-                .setCancelListener(R.string.preference_rendererexp_alertdialog_cancel, customView -> {
-                    onChangeRenderer();
-                    ((SwitchPreference) pre).setChecked(false);
+                .setConfirmListener(R.string.preference_rendererexp_alertdialog_done, customView -> {
+                    setListPreference(rendererListPref, "renderer");
+                    onChangeRenderer(rendererListPref);
+                    ((SwitchPreference) pre).setChecked(true);
                     return true;
                 })
+                .setCancelListener(R.string.preference_rendererexp_alertdialog_cancel, customView -> true)
                 .setCancelable(false)
                 .setDraggable(true)
                 .build()
@@ -372,16 +374,20 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         }
     }
 
-    private void onChangeRenderer() {
+    private void onChangeRenderer(ListPreference rendererListPref) {
         String rendererValue = LauncherPreferences.DEFAULT_PREF.getString("renderer", null);
         if ("mesa_3d".equals(rendererValue)) {
             LauncherPreferences.DEFAULT_PREF.edit().putString("renderer", expRenderer).apply();
+            if (expRenderer != null) {
+                rendererListPref.setValue(expRenderer);
+            } else rendererListPref.setValueIndex(0);
         } else if ("vulkan_zink".equals(rendererValue)
                 || "virglrenderer".equals(rendererValue)
                 || "freedreno".equals(rendererValue)
                 || "panfrost".equals(rendererValue)) {
-            expRenderer = LauncherPreferences.DEFAULT_PREF.getString("renderer", null);
+            expRenderer = rendererValue;
             LauncherPreferences.DEFAULT_PREF.edit().putString("renderer", "mesa_3d").apply();
+            rendererListPref.setValue("mesa_3d");
         }
     }
 
