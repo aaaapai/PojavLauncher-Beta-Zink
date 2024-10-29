@@ -137,7 +137,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         expRendererPref.setOnPreferenceChangeListener((p, v) -> {
             boolean isExpRenderer = (boolean) v;
             if (isExpRenderer) {
-                onExpRendererDialog(p);
+                onExpRendererDialog(p, rendererListPref);
             } else {
                 setListPreference(rendererListPref, "renderer");
                 onChangeRenderer(rendererListPref);
