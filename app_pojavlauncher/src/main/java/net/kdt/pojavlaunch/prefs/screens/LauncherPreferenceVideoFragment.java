@@ -139,8 +139,8 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
             if (isExpRenderer) {
                 onExpRendererDialog(p, rendererListPref);
             } else {
-                setListPreference(rendererListPref, "renderer");
                 onChangeRenderer(rendererListPref);
+                setListPreference(rendererListPref, "renderer");
                 return true;
             }
             return false;
@@ -300,9 +300,9 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
                 .setTitle(getString(R.string.preference_rendererexp_alertdialog_warning))
                 .setMessage(getString(R.string.preference_rendererexp_alertdialog_message))
                 .setConfirmListener(R.string.preference_rendererexp_alertdialog_done, customView -> {
-                    setListPreference(rendererListPref, "renderer");
-                    onChangeRenderer(rendererListPref);
                     ((SwitchPreference) pre).setChecked(true);
+                    onChangeRenderer(rendererListPref);
+                    setListPreference(rendererListPref, "renderer");
                     return true;
                 })
                 .setCancelListener(R.string.preference_rendererexp_alertdialog_cancel, customView -> true)
