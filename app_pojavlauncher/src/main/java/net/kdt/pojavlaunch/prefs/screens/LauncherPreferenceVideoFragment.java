@@ -138,13 +138,13 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
             boolean isExpRenderer = (boolean) v;
             if (isExpRenderer) {
                 onExpRendererDialog(p, rendererListPref);
+                return false;
             } else {
                 ((SwitchPreference) p).setChecked(false);
                 onChangeRenderer(rendererListPref);
                 setListPreference(rendererListPref, "renderer");
                 return true;
             }
-            return false;
         });
 
         // Custom GL/GLSL
