@@ -46,6 +46,8 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.firefly.utils.TurnipUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.movtery.ui.subassembly.customprofilepath.ProfilePathHome;
@@ -109,6 +111,7 @@ public final class Tools {
     public static String NATIVE_LIB_DIR;
     public static String DIR_DATA; //Initialized later to get context
     public static String MESA_DIR;
+    public static String TURNIP_DIR;
     public static File DIR_CACHE;
     public static File FILE_PROFILE_PATH;
     public static String MULTIRT_HOME;
@@ -129,11 +132,13 @@ public final class Tools {
 
     public static String DRIVER_MODEL = null;
     public static String MESA_LIBS = null;
+    public static String TURNIP_LIBS = null;
     public static String LOADER_OVERRIDE = null;
 
     private static CDriverModelList sCompatibleCDriverModel;
     private static CMesaLibList sCompatibleCMesaLibs;
     private static CMesaLDOList sCompatibleCMesaLDO;
+    private static CTurnipDriverList sCompatibleCTurnipDriver;
     private static RenderersList sCompatibleRenderers;
 
     private static File getPojavStorageRoot(Context ctx) {
@@ -165,6 +170,7 @@ public final class Tools {
         DIR_CACHE = ctx.getCacheDir();
         DIR_DATA = ctx.getFilesDir().getParent();
         MESA_DIR = DIR_DATA + "/mesa";
+        TURNIP_DIR = DIR_DATA + "/turnip";
         FILE_PROFILE_PATH = new File(Tools.DIR_DATA, "/profile_path.json");
         MULTIRT_HOME = DIR_DATA + "/runtimes";
         DIR_GAME_HOME = getPojavStorageRoot(ctx).getAbsolutePath();
@@ -1290,7 +1296,6 @@ public final class Tools {
     }
 
     public static CMesaLibList getCompatibleCMesaLib(Context context) {
-        // if (sCompatibleCMesaLibs != null) return sCompatibleCMesaLibs;
         Resources resources = context.getResources();
         String[] defaultCMesaLib = resources.getStringArray(R.array.osmesa_values);
         String[] defaultCMesaLibNames = resources.getStringArray(R.array.osmesa_library);
@@ -1404,6 +1409,45 @@ public final class Tools {
         sCompatibleCMesaLDO = new CMesaLDOList(CMesaLDOIds,
                 CMesaLDONames.toArray(new String[0]));
         return sCompatibleCMesaLDO;
+    }
+
+    public static class CTurnipDriverList implements IListAndArry {
+        public final List<String> CTurnipDriverIds;
+        public final String[] CTurnipDriver;
+
+        public CTurnipDriverList(List<String> CTurnipDriverIds, String[] CTurnipDriver) {
+            this.CTurnipDriverIds = CTurnipDriverIds;
+            this.CTurnipDriver = CTurnipDriver;
+        }
+
+        @Override
+        public List<String> getList() {
+            return CTurnipDriverIds;
+        }
+
+        @Override
+        public String[] getArray() {
+            return CTurnipDriver;
+        }
+    }
+
+    public static CTurnipDriverList getCompatibleCTurnipDriver(Context context) {
+        Resources resources = context.getResources();
+        String[] defaultCTurnipDriver = resources.getStringArray(R.array.turnip_values);
+        String[] defaultCTurnipDriverNames = resources.getStringArray(R.array.turnip_files);
+        List<String> CTurnipDriverIds = new ArrayList<>(defaultCTurnipDriver.length);
+        List<String> CTurnipDriverNames = new ArrayList<>(defaultCTurnipDriverNames.length);
+        for (int i = 0; i < defaultCTurnipDriver.length; i++) {
+            CTurnipDriverIds.add(defaultCTurnipDriver[i]);
+            CTurnipDriverNames.add(defaultCTurnipDriverNames[i]);
+        }
+        List<String> addTurnipList = TurnipUtils.INSTANCE.getTurnipDriverList();
+        for (String item : addTurnipList) {
+            CTurnipDriverIds.add(item);
+            CTurnipDriverNames.add(item);
+        }
+        sCompatibleCTurnipDriver = new CTurnipDriverList(CTurnipDriverIds, CTurnipDriverNames.toArray(new String[0]));
+        return sCompatibleCTurnipDriver;
     }
 
     @SuppressLint("DefaultLocale")

@@ -6,6 +6,7 @@ import static net.kdt.pojavlaunch.Tools.DRIVER_MODEL;
 import static net.kdt.pojavlaunch.Tools.LOADER_OVERRIDE;
 import static net.kdt.pojavlaunch.Tools.LOCAL_RENDERER;
 import static net.kdt.pojavlaunch.Tools.MESA_LIBS;
+import static net.kdt.pojavlaunch.Tools.TURNIP_LIBS;
 import static net.kdt.pojavlaunch.Tools.NATIVE_LIB_DIR;
 import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 import static net.kdt.pojavlaunch.Tools.shareLog;
@@ -20,6 +21,8 @@ import android.system.Os;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.firefly.utils.TurnipUtils;
 
 import com.movtery.ui.subassembly.customprofilepath.ProfilePathHome;
 import com.movtery.ui.subassembly.customprofilepath.ProfilePathManager;
@@ -440,6 +443,25 @@ public class JREUtils {
         }
     }
 
+    private static void loadCustomTurnip() throws Throwable {
+        if (TURNIP_LIBS == null) return;
+        String folder = null;
+        switch (TURNIP_LIBS) {
+            case "default":
+                // Nothing to do here
+                break;
+            default:
+                folder = TurnipUtils.INSTANCE.getTurnipDriver(TURNIP_LIBS);
+                break;
+        }
+        if (folder == null) return;
+        try {
+            Os.setenv("TURNIP_DIR", folder, true);
+        } catch (Exception e) {
+            System.err.println("Error setting environment variable: " + e.getMessage());
+        }
+    }
+
     public static int launchJavaVM(final Activity activity, final Runtime runtime, File gameDirectory, final List<String> JVMArgs, final String userArgsString) throws Throwable {
         String runtimeHome = MultiRTUtils.getRuntimeHome(runtime.name).getAbsolutePath();
 
@@ -447,6 +469,7 @@ public class JREUtils {
 
         setJavaEnvironment(runtimeHome);
         checkAndUsedJSPH(runtime);
+        loadCustomTurnip();
 
         final String graphicsLib = loadGraphicsLibrary();
         if (LOCAL_RENDERER != null && !LOCAL_RENDERER.startsWith("opengles"))

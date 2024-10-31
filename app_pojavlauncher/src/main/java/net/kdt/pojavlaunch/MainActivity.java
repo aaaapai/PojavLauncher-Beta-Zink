@@ -392,6 +392,9 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         if (Tools.LOADER_OVERRIDE == null) {
             Tools.LOADER_OVERRIDE = LauncherPreferences.PREF_LOCAL_LOADER_OVERRIDE;
         }
+        if (Tools.TURNIP_LIBS == null) {
+            Tools.TURNIP_LIBS = LauncherPreferences.PREF_TURNIP_LIBS;
+        }
         if (!Tools.checkRendererCompatible(this, Tools.LOCAL_RENDERER)) {
             Tools.RenderersList renderersList = Tools.getCompatibleRenderers(this);
             String firstCompatibleRenderer = renderersList.rendererIds.get(0);

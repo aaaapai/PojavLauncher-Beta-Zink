@@ -167,5 +167,14 @@
     <string name="pgw_settings_updatelauncher_install">安装</string>
     <string name="pgw_settings_updatelauncher_install_prompt_title">安装更新</string>
     <string name="pgw_settings_updatelauncher_install_prompt_message">有新的版本已经下载到 %s. 你要安装它吗？</string>
+    <!-- 自定义 Turnip 驱动 -->
+    <string name="pgw_settings_custom_turnip_creat">添加</string>
+    <string name="pgw_settings_ctu_version_name">输入版本名称</string>
+    <string name="pgw_settings_ctu_saved">驱动已成功保存</string>
+    <string name="pgw_settings_ctu_save_fail">驱动保存失败</string>
+    <string name="pgw_settings_ctu_delete_title">删除 Turnip 驱动</string>
+    <string name="pgw_settings_ctu_delete_message">确定要删除 %s 吗？</string>
+    <string name="pgw_settings_ctu">自定义 Turnip 驱动</string>
+    <string name="pgw_settings_ctu_dia">选择 Turnip 驱动（长按删除）</string>
 
 </resources>

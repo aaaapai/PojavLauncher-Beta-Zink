@@ -26,6 +26,7 @@ public class LauncherPreferences {
     public static SharedPreferences DEFAULT_PREF;
     public static String PREF_RENDERER = "opengles2";
     public static String PREF_MESA_LIB = "default";
+    public static String PREF_TURNIP_LIBS = "default";
     public static String PREF_DRIVER_MODEL = "driver_zink";
     public static String PREF_LOCAL_LOADER_OVERRIDE = "kgsl";
 
@@ -149,6 +150,7 @@ public class LauncherPreferences {
 
         PREF_EXP_SETUP = DEFAULT_PREF.getBoolean("ExperimentalSetup", false);
         PREF_MESA_LIB = DEFAULT_PREF.getString("CMesaLibrary", "default");
+        PREF_TURNIP_LIBS = DEFAULT_PREF.getString("chooseTurnipDriver", "default");
         PREF_DRIVER_MODEL = DEFAULT_PREF.getString("CDriverModels", "driver_zink");
         PREF_LOCAL_LOADER_OVERRIDE = DEFAULT_PREF.getString("ChooseMldo", "kgsl");
 

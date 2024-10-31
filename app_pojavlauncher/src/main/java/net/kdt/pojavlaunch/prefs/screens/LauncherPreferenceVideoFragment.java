@@ -2,6 +2,15 @@ package net.kdt.pojavlaunch.prefs.screens;
 
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_NOTCH_SIZE;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.SwitchPreference;
@@ -10,19 +19,18 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
 
 import com.firefly.utils.PGWTools;
+import com.firefly.utils.TurnipUtils;
 import com.firefly.ui.dialog.CustomDialog;
 import com.firefly.ui.prefs.ChooseMesaListPref;
+import com.firefly.ui.prefs.ChooseTurnipListPref;
 
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AlertDialog;
 
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.R;
@@ -38,6 +46,7 @@ import java.util.Set;
  */
 public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment {
 
+    private static final int FILE_SELECT_CODE = 100;
     private EditText mSetVideoResolution;
     private EditText mMesaGLVersion;
     private EditText mMesaGLSLVersion;
@@ -103,11 +112,13 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         final ListPreference rendererListPref = requirePreference("renderer", ListPreference.class);
         final ChooseMesaListPref CMesaLibP = requirePreference("CMesaLibrary", ChooseMesaListPref.class);
+        final ChooseTurnipListPref CTurnipP = requirePreference("chooseTurnipDriver", ChooseTurnipListPref.class);
         final ListPreference CDriverModelP = requirePreference("CDriverModels", ListPreference.class);
         final ListPreference CMesaLDOP = requirePreference("ChooseMldo", ListPreference.class);
 
         setListPreference(rendererListPref, "renderer");
         setListPreference(CMesaLibP, "CMesaLibrary");
+        setListPreference(CTurnipP, "chooseTurnipDriver");
         setListPreference(CDriverModelP, "CDriverModels");
         setListPreference(CMesaLDOP, "ChooseMldo");
 
@@ -122,6 +133,12 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
             CDriverModelP.setValueIndex(0);
             return true;
         });
+
+        CTurnipP.setOnPreferenceChangeListener((pre, obj) -> {
+            Tools.TURNIP_LIBS = (String) obj;
+            return true;
+        });
+        CTurnipP.setConfirmButton(getString(R.string.pgw_settings_custom_turnip_creat), view -> selectTurnipDriverFile());
 
         CDriverModelP.setOnPreferenceChangeListener((pre, obj) -> {
             Tools.DRIVER_MODEL = (String) obj;
@@ -266,6 +283,9 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         } else if (preferenceKey.equals("renderer")) {
             array = Tools.getCompatibleRenderers(getContext());
             Tools.LOCAL_RENDERER = value;
+        } else if (preferenceKey.equals("chooseTurnipDriver")) {
+            array = Tools.getCompatibleCTurnipDriver(getContext());
+            Tools.TURNIP_LIBS = value;
         }
         listPreference.setEntries(array.getArray());
         listPreference.setEntryValues(array.getList().toArray(new String[0]));
@@ -446,6 +466,56 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
                 }
             });
         });
+    }
+
+    private void selectTurnipDriverFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("application/octet-stream");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(Intent.createChooser(intent, "Select .so file"), FILE_SELECT_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == FILE_SELECT_CODE && resultCode == getActivity().RESULT_OK && data != null) {
+            Uri fileUri = data.getData();
+            if (fileUri != null) {
+                showFolderNameDialog(fileUri);
+            }
+        }
+    }
+
+    private void showFolderNameDialog(Uri fileUri) {
+        EditText input = new EditText(getActivity());
+        input.setFilters(new InputFilter[]{(source, start, end, dest, dstart, dend) -> {
+            for (int i = start; i < end; i++) {
+                char c = source.charAt(i);
+                if (!Character.isLetterOrDigit(c) && c != '.') {
+                    return "";
+                }
+            }
+            return null;
+        }});
+        new CustomDialog.Builder(getActivity())
+            .setTitle(getString(R.string.pgw_settings_ctu_version_name))
+            .setCustomView(input)
+            .setConfirmListener(android.R.string.ok, customView -> {
+                String folderName = input.getText().toString().trim();
+                if (!folderName.isEmpty()) {
+                    boolean success = TurnipUtils.INSTANCE.saveTurnipDriver(getActivity(), fileUri, folderName);
+                    setListPreference(requirePreference("chooseTurnipDriver", ChooseTurnipListPref.class), "chooseTurnipDriver");
+                    String message = getString(success ? R.string.pgw_settings_ctu_saved : R.string.pgw_settings_ctu_save_fail);
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                } else {
+                    input.setError(getString(R.string.global_error_field_empty));
+                    return false;
+                }
+                return true;
+            })
+            .setCancelListener(android.R.string.cancel, customView -> true)
+            .build()
+            .show();
     }
 
 }
