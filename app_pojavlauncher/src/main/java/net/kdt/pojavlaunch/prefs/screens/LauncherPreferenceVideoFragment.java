@@ -152,8 +152,8 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         SwitchPreference expRendererPref = requirePreference("ExperimentalSetup", SwitchPreference.class);
         expRendererPref.setOnPreferenceChangeListener((p, v) -> {
-            boolean isExpRenderer = (boolean) v;
-            if (isExpRenderer) {
+            boolean set = (boolean) v;
+            if (set) {
                 onExpRendererDialog(p, rendererListPref);
                 return false;
             } else {
@@ -204,7 +204,8 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
     }
 
     private void computeVisibility() {
-        requirePreference("force_vsync", SwitchPreferenceCompat.class).setVisible(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
+        requirePreference("force_vsync").setVisible(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
+        requirePreference("chooseTurnipDriver").setVisible(PGWTools.isAdrenoGPU() && !PREF_ZINK_PREFER_SYSTEM_DRIVER);
         requirePreference("SpareFrameBuffer").setVisible(LauncherPreferences.PREF_EXP_SETUP);
         requirePreference("MesaRendererChoose").setVisible(LauncherPreferences.PREF_EXP_SETUP);
         requirePreference("customMesaVersionPref").setVisible(LauncherPreferences.PREF_EXP_SETUP);
