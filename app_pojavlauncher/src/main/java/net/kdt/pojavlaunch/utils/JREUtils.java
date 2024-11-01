@@ -310,8 +310,6 @@ public class JREUtils {
         Log.d("DynamicLoader", "Base LD_LIBRARY_PATH: " + LD_LIBRARY_PATH);
         Log.d("DynamicLoader", "Internal LD_LIBRARY_PATH: " + jvmLibraryPath + ":" + LD_LIBRARY_PATH);
         setLdLibraryPath(jvmLibraryPath + ":" + LD_LIBRARY_PATH);
-
-        // return ldLibraryPath;
     }
 
     public static void setRendererConfig(String localLibrary) throws Throwable {

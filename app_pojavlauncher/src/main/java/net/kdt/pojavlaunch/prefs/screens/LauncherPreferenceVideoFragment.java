@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch.prefs.screens;
 
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_NOTCH_SIZE;
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER;
 
 import android.app.Activity;
 import android.content.Intent;
