@@ -43,26 +43,57 @@ public class TurnipUtils {
         return Tools.TURNIP_DIR + "/" + version;
     }
 
+    /** 首先我们有考虑过在启动器内下载
+     * 但启动器内下载的不一定满足所有用户
+     * 经过慎重考虑,还是决定让用户自己选择,并非在启动器内下载
+     * 也许后面会出一个在启动器内下载的方法
+     * 但直觉告诉我,这将止步于此,启动器内下载要重新考虑方案
+     * 而且满足不了所有用户
+     */
     public boolean saveTurnipDriver(Context context, Uri fileUri, String folderName) {
-        try {
+        try (InputStream inputStream = context.getContentResolver().openInputStream(fileUri)) {
+            if (inputStream == null || !isELFFile(inputStream)) {
+                return false;
+            }
+        
+            inputStream.close(); // Close an open validation file stream
+            InputStream newInputStream = context.getContentResolver().openInputStream(fileUri);
+       
             File targetDir = new File(turnipDir, folderName);
             if (!targetDir.exists() && !targetDir.mkdirs()) {
                 return false;
             }
 
             File targetFile = new File(targetDir, "libvulkan_freedreno.so");
-
-            try (InputStream inputStream = context.getContentResolver().openInputStream(fileUri);
-                 OutputStream outputStream = new FileOutputStream(targetFile)) {
-                if (inputStream == null) return false;
-
+            try (OutputStream outputStream = new FileOutputStream(targetFile)) {
                 byte[] buffer = new byte[4096];
                 int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                while ((bytesRead = newInputStream.read(buffer)) != -1) {
                     outputStream.write(buffer, 0, bytesRead);
                 }
             }
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /** Why is there a verification here?
+     * MovTery: 没有,哪怕是不是被小白用的,你都得检查用户导入了什么东西,检查它能不能用才是关键
+     * Vera-Firefly: 总不能真有唐完的人不会用硬用它吧?
+     * 最终我检查了一下代码…所以…这个是遗漏的验证…
+     */
+    private boolean isELFFile(InputStream inputStream) {
+        try {
+            byte[] elfMagic = new byte[4];
+            int bytesRead = inputStream.read(elfMagic);
+
+            return bytesRead == 4 &&
+                   elfMagic[0] == 0x7F &&
+                   elfMagic[1] == 'E' &&
+                   elfMagic[2] == 'L' &&
+                   elfMagic[3] == 'F';
         } catch (Exception e) {
             e.printStackTrace();
             return false;

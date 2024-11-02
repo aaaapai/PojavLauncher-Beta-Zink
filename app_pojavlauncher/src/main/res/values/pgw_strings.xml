@@ -145,7 +145,7 @@
     <string name="pgw_settings_custom_turnip_creat">Add</string>
     <string name="pgw_settings_ctu_version_name">Enter Version Name</string>
     <string name="pgw_settings_ctu_saved">Driver saved successfully</string>
-    <string name="pgw_settings_ctu_save_fail">Failed to save driver</string>
+    <string name="pgw_settings_ctu_save_fail">Failed to save driver, file is corrupt or not executable</string>
     <string name="pgw_settings_ctu_delete_title">Delete Turnip Driver</string>
     <string name="pgw_settings_ctu_delete_message">Are you sure you want to delete %s ?</string>
     <string name="pgw_settings_ctu">Custom Turnip Driver</string>
