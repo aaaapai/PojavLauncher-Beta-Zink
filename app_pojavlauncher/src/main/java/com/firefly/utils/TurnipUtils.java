@@ -58,7 +58,7 @@ public class TurnipUtils {
         
             inputStream.close(); // Close an open validation file stream
             InputStream newInputStream = context.getContentResolver().openInputStream(fileUri);
-       
+
             File targetDir = new File(turnipDir, folderName);
             if (!targetDir.exists() && !targetDir.mkdirs()) {
                 return false;

@@ -145,6 +145,10 @@
     <string name="preference_rendererexp_mesa_delete_message">您確定要刪除 Mesa %s 庫嗎？</string>
     <string name="preference_rendererexp_mesa_deleted">刪除成功</string>
     <string name="preference_rendererexp_mesa_delete_fail">刪除失敗</string>
+    <string name="pgw_settings_cml_saved">儲存成功</string>
+    <string name="pgw_settings_cml_save_fail">儲存 Mesa 庫失敗，檔案已損毀或不可執行</string>
+    <string name="pgw_settings_cml_Illegitimate">格式錯誤，預期格式為 XX.X.X</string>
+    <string name="pgw_settings_cml_format">請輸入 XX.X.X 格式的文字</string>
     <!-- Custom Mesa Loader Driver Override -->
     <string name="preference_extra_osm_cmldo_categ">自訂Mesa圖形驅動程序</string>
     <string name="osm_enable_cmldo">允許自訂Mesa圖形驅動程序（目前僅Freedreno）</string>

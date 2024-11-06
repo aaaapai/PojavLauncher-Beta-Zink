@@ -1,6 +1,9 @@
 package net.kdt.pojavlaunch.utils;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -27,7 +30,7 @@ public class MesaUtils {
     private final File mesaDir;
 
     private MesaUtils() {
-        mesaDir = new File(Tools.MESA_DIR);
+        this.mesaDir = new File(Tools.MESA_DIR);
         if (!mesaDir.exists() && !mesaDir.mkdirs()) {
             throw new RuntimeException("Failed to create mesa directory");
         }
@@ -61,6 +64,35 @@ public class MesaUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean saveMesaVersion(Context context, Uri fileUri, String folderName) {
+        try (InputStream inputStream = context.getContentResolver().openInputStream(fileUri)) {
+            if (inputStream == null || !isELFFile(inputStream)) {
+                return false;
+            }
+        
+            inputStream.close(); // Close an open validation file stream
+            InputStream newInputStream = context.getContentResolver().openInputStream(fileUri);
+       
+            File targetDir = new File(mesaDir, folderName);
+            if (!targetDir.exists() && !targetDir.mkdirs()) {
+                return false;
+            }
+
+            File targetFile = new File(targetDir, "libOSMesa_8.so");
+            try (OutputStream outputStream = new FileOutputStream(targetFile)) {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = newInputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean downloadMesa(String version) {
@@ -120,6 +152,22 @@ public class MesaUtils {
         public String aarch64;
         public String arm32;
         public String x86_64;
+    }
+
+    private boolean isELFFile(InputStream inputStream) {
+        try {
+            byte[] elfMagic = new byte[4];
+            int bytesRead = inputStream.read(elfMagic);
+
+            return bytesRead == 4 &&
+                   elfMagic[0] == 0x7F &&
+                   elfMagic[1] == 'E' &&
+                   elfMagic[2] == 'L' &&
+                   elfMagic[3] == 'F';
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean deleteMesaLib(String version) {

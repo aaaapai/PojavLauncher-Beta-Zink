@@ -119,6 +119,10 @@
     <string name="preference_rendererexp_mesa_delete_message">Are you sure you want to delete the Mesa%s library?</string>
     <string name="preference_rendererexp_mesa_deleted">Deleted successfully</string>
     <string name="preference_rendererexp_mesa_delete_fail">Delete failed</string>
+    <string name="pgw_settings_cml_saved">Saved successfully</string>
+    <string name="pgw_settings_cml_save_fail">Failed to save Mesa lib, file is corrupt or not executable</string>
+    <string name="pgw_settings_cml_Illegitimate">Bad format, expected format is XX.X.X</string>
+    <string name="pgw_settings_cml_format">Please enter text in XX.X.X format</string>
     <!-- Custom Mesa Loader Driver Override -->
     <string name="preference_extra_osm_cmldo_categ">Custom Mesa Loader Driver Override</string>
     <string name="osm_enable_cmldo">Enable Custom Mesa Load Driver Override(Only for Freedreno)</string>
