@@ -13,9 +13,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.ListPreference;
 
+import com.firefly.ui.dialog.CustomDialog;
+import com.firefly.utils.MesaUtils;
+
 import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.utils.MesaUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -133,10 +135,10 @@ public class ChooseMesaListPref extends ListPreference {
     }
 
     private void showDeleteConfirmationDialog(String version) {
-        new AlertDialog.Builder(getContext())
-                .setTitle(R.string.preference_rendererexp_mesa_delete_title)
+        new CustomDialog.Builder(getContext())
+                .setTitle(getContext().getString(R.string.preference_rendererexp_mesa_delete_title))
                 .setMessage(getContext().getString(R.string.preference_rendererexp_mesa_delete_message, version))
-                .setPositiveButton(R.string.alertdialog_done, (dialog, which) -> {
+                .setConfirmListener(android.R.string.ok, customView -> {
                     boolean success = MesaUtils.INSTANCE.deleteMesaLib(version);
                     if (success) {
                         Toast.makeText(getContext(), R.string.preference_rendererexp_mesa_deleted, Toast.LENGTH_SHORT).show();
@@ -144,8 +146,10 @@ public class ChooseMesaListPref extends ListPreference {
                     } else {
                         Toast.makeText(getContext(), R.string.preference_rendererexp_mesa_delete_fail, Toast.LENGTH_SHORT).show();
                     }
+                    return true;
                 })
-                .setNegativeButton(R.string.alertdialog_cancel, null)
+                .setCancelListener(android.R.string.cancel, customView -> true)
+                .build()
                 .show();
     }
 

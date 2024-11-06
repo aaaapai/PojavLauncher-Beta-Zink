@@ -1,4 +1,4 @@
-package net.kdt.pojavlaunch.utils;
+package com.firefly.utils;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.utils.DownloadUtils;
+import net.kdt.pojavlaunch.utils.FileUtils;
 
 import org.apache.commons.io.IOUtils;
 

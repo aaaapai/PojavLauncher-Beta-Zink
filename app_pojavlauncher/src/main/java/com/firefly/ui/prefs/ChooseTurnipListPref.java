@@ -15,6 +15,7 @@ import androidx.preference.ListPreference;
 
 import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
+import com.firefly.ui.dialog.CustomDialog;
 import com.firefly.utils.TurnipUtils;
 
 import java.util.Arrays;
@@ -116,10 +117,10 @@ public class ChooseTurnipListPref extends ListPreference {
     }
 
     private void showDeleteConfirmationDialog(String version) {
-        new AlertDialog.Builder(getContext())
-                .setTitle(R.string.pgw_settings_ctu_delete_title)
+        new CustomDialog.Builder(getContext())
+                .setTitle(getContext().getString(R.string.pgw_settings_ctu_delete_title))
                 .setMessage(getContext().getString(R.string.pgw_settings_ctu_delete_message, version))
-                .setPositiveButton(R.string.alertdialog_done, (dialog, which) -> {
+                .setConfirmListener(android.R.string.ok, customView -> {
                     boolean success = TurnipUtils.INSTANCE.deleteTurnipDriver(version);
                     if (success) {
                         Toast.makeText(getContext(), R.string.preference_rendererexp_mesa_deleted, Toast.LENGTH_SHORT).show();
@@ -127,8 +128,10 @@ public class ChooseTurnipListPref extends ListPreference {
                     } else {
                         Toast.makeText(getContext(), R.string.preference_rendererexp_mesa_delete_fail, Toast.LENGTH_SHORT).show();
                     }
+                    return true;
                 })
-                .setNegativeButton(R.string.alertdialog_cancel, null)
+                .setCancelListener(android.R.string.cancel, customView -> true)
+                .build()
                 .show();
     }
 
