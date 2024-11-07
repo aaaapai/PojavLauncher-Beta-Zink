@@ -52,10 +52,10 @@ public class TurnipUtils {
      */
     public boolean saveTurnipDriver(Context context, Uri fileUri, String folderName) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(fileUri)) {
-            if (inputStream == null || !isELFFile(inputStream)) {
+            if (inputStream == null || !PGWTools.isELFFile(inputStream)) {
                 return false;
             }
-        
+
             inputStream.close(); // Close an open validation file stream
             InputStream newInputStream = context.getContentResolver().openInputStream(fileUri);
 
@@ -73,27 +73,6 @@ public class TurnipUtils {
                 }
             }
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /** Why is there a verification here?
-     * MovTery: 没有,哪怕是不是被小白用的,你都得检查用户导入了什么东西,检查它能不能用才是关键
-     * Vera-Firefly: 总不能真有唐完的人不会用硬用它吧?
-     * 最终我检查了一下代码…所以…这个是遗漏的验证…
-     */
-    private boolean isELFFile(InputStream inputStream) {
-        try {
-            byte[] elfMagic = new byte[4];
-            int bytesRead = inputStream.read(elfMagic);
-
-            return bytesRead == 4 &&
-                   elfMagic[0] == 0x7F &&
-                   elfMagic[1] == 'E' &&
-                   elfMagic[2] == 'L' &&
-                   elfMagic[3] == 'F';
         } catch (Exception e) {
             e.printStackTrace();
             return false;

@@ -7,6 +7,9 @@ import android.opengl.EGLDisplay;
 import android.opengl.GLES20;
 import android.util.Log;
 
+import java.io.InputStream;
+import java.io.IOException;
+
 public class PGWTools {
 
     public static boolean isAdrenoGPU() {
@@ -66,6 +69,22 @@ public class PGWTools {
 
         Log.d("CheckVendor", "Running on Adreno GPU: " + isAdreno);
         return isAdreno;
+    }
+
+    public static boolean isELFFile(InputStream inputStream) {
+        try {
+            byte[] elfMagic = new byte[4];
+            int bytesRead = inputStream.read(elfMagic);
+
+            return bytesRead == 4 &&
+                   elfMagic[0] == 0x7F &&
+                   elfMagic[1] == 'E' &&
+                   elfMagic[2] == 'L' &&
+                   elfMagic[3] == 'F';
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }
