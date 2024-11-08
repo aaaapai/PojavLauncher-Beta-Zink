@@ -172,7 +172,6 @@ int pojavInitOpenGL() {
     if (!strncmp("opengles", renderer, 8))
     {
         pojav_environ->config_renderer = RENDERER_GL4ES;
-        setenv("MESA_LOADER_DRIVER_OVERRIDE", "zink", 1);
         if (!SpareBridge()) set_gl_bridge_tbl();
     }
 
@@ -182,6 +181,7 @@ int pojavInitOpenGL() {
         if (!strcmp(ldrivermodel, "driver_zink"))
         {
             setenv("GALLIUM_DRIVER", "zink", 1);
+            setenv("MESA_LOADER_DRIVER_OVERRIDE", "zink", 1);
             renderer_load_config();
             load_vulkan();
         }
