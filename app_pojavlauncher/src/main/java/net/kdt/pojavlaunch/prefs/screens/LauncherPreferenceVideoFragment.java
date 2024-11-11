@@ -531,6 +531,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
                 return true;
             })
             .setCancelListener(android.R.string.cancel, customView -> true)
+            .setCancelable(false)
             .build()
             .show();
     }
@@ -565,6 +566,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
                 return true;
             })
             .setCancelListener(android.R.string.cancel, customView -> true)
+            .setCancelable(false)
             .build()
             .show();
     }
