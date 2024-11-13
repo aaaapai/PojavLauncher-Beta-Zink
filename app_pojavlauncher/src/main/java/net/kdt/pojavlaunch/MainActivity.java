@@ -380,21 +380,24 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     }
 
     private void runCraft(String versionId, JMinecraftVersionList.Version version) throws Throwable {
-        if (Tools.LOCAL_RENDERER == null) {
+        if (Tools.LOCAL_RENDERER == null)
             Tools.LOCAL_RENDERER = LauncherPreferences.PREF_RENDERER;
-        }
-        if (Tools.MESA_LIBS == null) {
+
+        if (Tools.MESA_LIBS == null)
             Tools.MESA_LIBS = LauncherPreferences.PREF_MESA_LIB;
-        }
-        if (Tools.DRIVER_MODEL == null) {
+
+        if (Tools.DRIVER_MODEL == null)
             Tools.DRIVER_MODEL = LauncherPreferences.PREF_DRIVER_MODEL;
-        }
-        if (Tools.LOADER_OVERRIDE == null) {
+
+        if (Tools.LOADER_OVERRIDE == null)
             Tools.LOADER_OVERRIDE = LauncherPreferences.PREF_LOCAL_LOADER_OVERRIDE;
-        }
-        if (Tools.TURNIP_LIBS == null) {
+
+        if (Tools.TURNIP_LIBS == null)
             Tools.TURNIP_LIBS = LauncherPreferences.PREF_TURNIP_LIBS;
-        }
+
+        if (Tools.CONFIG_BRIDGE == null)
+            Tools.CONFIG_BRIDGE = LauncherPreferences.PREF_CONFIG_BRIDGE;
+
         if (!Tools.checkRendererCompatible(this, Tools.LOCAL_RENDERER)) {
             Tools.RenderersList renderersList = Tools.getCompatibleRenderers(this);
             String firstCompatibleRenderer = renderersList.rendererIds.get(0);

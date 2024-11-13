@@ -15,7 +15,6 @@
 #include "egl_loader.h"
 #include "osmesa_loader.h"
 #include "renderer_config.h"
-#include "spare_renderer_config.h"
 
 int (*vtest_main_p)(int argc, char **argv);
 void (*vtest_swap_buffers_p)(void);

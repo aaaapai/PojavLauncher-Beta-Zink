@@ -52,8 +52,6 @@
     <string name="preference_category_renderer_experimental_settings">Impostazioni sperimentali del renderer</string>
     <string name="preference_renderer_setup_title">Abilita le Impostazioni Sperimentali del Renderer</string>
     <string name="preference_renderer_setup">Usa più impostazioni specifiche del renderer</string>
-    <string name="preference_spare_bridge_title">Ponte di riserva</string>
-    <string name="preference_spare_bridge">Usa lo schema alternativo del ponte, chiudi se il lancio fallisce</string>
     <string name="preference_spare_framebuffer_title">Frame buffer di riserva</string>
     <string name="preference_spare_framebuffer">Usa il frame buffer dello schema alternativo, chiudi se il lancio fallisce</string>
     <string name="preference_renderer_setup_extra">Renderer (Extra)</string>

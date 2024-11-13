@@ -52,8 +52,6 @@
     <string name="preference_category_renderer_experimental_settings">Експериментальні налаштування рендерера</string>
     <string name="preference_renderer_setup_title">Увімкнути експериментальні налаштування рендерера</string>
     <string name="preference_renderer_setup">Використовувати додаткові налаштування рендерера</string>
-    <string name="preference_spare_bridge_title">Резервний міст</string>
-    <string name="preference_spare_bridge">Використовувати другий мостовий план, закрити, якщо запуск не вдався</string>
     <string name="preference_spare_framebuffer_title">Резервний буфер кадру</string>
     <string name="preference_spare_framebuffer">Використовувати буфер кадру другого плану, закрити, якщо запуск не вдався</string>
     <string name="preference_renderer_setup_extra">Рендерер (Додатково)</string>

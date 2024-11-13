@@ -107,12 +107,14 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         });
 
         final ListPreference rendererListPref = requirePreference("renderer", ListPreference.class);
+        final ListPreference configBridgePref = requirePreference("configBridge", ListPreference.class);
         final ChooseMesaListPref CMesaLibP = requirePreference("CMesaLibrary", ChooseMesaListPref.class);
         final ChooseTurnipListPref CTurnipP = requirePreference("chooseTurnipDriver", ChooseTurnipListPref.class);
         final ListPreference CDriverModelP = requirePreference("CDriverModels", ListPreference.class);
         final ListPreference CMesaLDOP = requirePreference("ChooseMldo", ListPreference.class);
 
         setListPreference(rendererListPref, "renderer");
+        setListPreference(configBridgePref, "configBridge");
         setListPreference(CMesaLibP, "CMesaLibrary");
         setListPreference(CTurnipP, "chooseTurnipDriver");
         setListPreference(CDriverModelP, "CDriverModels");
@@ -120,6 +122,11 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         rendererListPref.setOnPreferenceChangeListener((pre, obj) -> {
             Tools.LOCAL_RENDERER = (String) obj;
+            return true;
+        });
+
+        configBridgePref.setOnPreferenceChangeListener((pre, obj) -> {
+            Tools.CONFIG_BRIDGE = (String) obj;
             return true;
         });
 
@@ -273,16 +280,29 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
                 listPreference.setValue(value);
             }
             Tools.MESA_LIBS = value;
-        } else if (preferenceKey.equals("CDriverModels")) {
-            array = Tools.getCompatibleCDriverModel(getContext());
-            Tools.DRIVER_MODEL = value;
-        } else if (preferenceKey.equals("ChooseMldo")) {
-            array = Tools.getCompatibleCMesaLDO(getContext());
-            Tools.LOADER_OVERRIDE = value;
-        } else if (preferenceKey.equals("renderer")) {
+        }
+
+        if (preferenceKey.equals("renderer")) {
             array = Tools.getCompatibleRenderers(getContext());
             Tools.LOCAL_RENDERER = value;
-        } else if (preferenceKey.equals("chooseTurnipDriver")) {
+        }
+
+        if (preferenceKey.equals("configBridge")) {
+            array = Tools.getCompatibleConfigBridge(getContext());
+            Tools.CONFIG_BRIDGE = value;
+        }
+
+        if (preferenceKey.equals("CDriverModels")) {
+            array = Tools.getCompatibleCDriverModel(getContext());
+            Tools.DRIVER_MODEL = value;
+        }
+
+        if (preferenceKey.equals("ChooseMldo")) {
+            array = Tools.getCompatibleCMesaLDO(getContext());
+            Tools.LOADER_OVERRIDE = value;
+        }
+
+        if (preferenceKey.equals("chooseTurnipDriver")) {
             array = Tools.getCompatibleCTurnipDriver(getContext());
             Tools.TURNIP_LIBS = value;
         }

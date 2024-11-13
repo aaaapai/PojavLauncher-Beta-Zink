@@ -28,6 +28,7 @@ public class LauncherPreferences {
     public static String PREF_MESA_LIB = "default";
     public static String PREF_TURNIP_LIBS = "default";
     public static String PREF_DRIVER_MODEL = "driver_zink";
+    public static String PREF_CONFIG_BRIDGE = "default";
     public static String PREF_LOCAL_LOADER_OVERRIDE = "kgsl";
 
     public static boolean PREF_VERTYPE_RELEASE = true;
@@ -74,7 +75,6 @@ public class LauncherPreferences {
 
     public static boolean PREF_EXP_SETUP = false;
 
-    public static boolean PREF_SPARE_BRIDGE = false;
     public static boolean PREF_SPARE_FRAME_BUFFER = false;
     public static boolean PREF_EXP_ENABLE_SYSTEM = true;
     public static boolean PREF_EXP_ENABLE_SPECIFIC = false;
@@ -140,7 +140,7 @@ public class LauncherPreferences {
         PREF_SKIP_NOTIFICATION_PERMISSION_CHECK = DEFAULT_PREF.getBoolean(PREF_KEY_SKIP_NOTIFICATION_CHECK, false);
         PREF_VSYNC_IN_ZINK = DEFAULT_PREF.getBoolean("vsync_in_zink", true);
 
-        PREF_SPARE_BRIDGE = DEFAULT_PREF.getBoolean("spareBridge", false);
+        PREF_CONFIG_BRIDGE = DEFAULT_PREF.getString("configBridge", "default");
         PREF_SPARE_FRAME_BUFFER = DEFAULT_PREF.getBoolean("SpareFrameBuffer", false);
         PREF_EXP_ENABLE_SYSTEM = DEFAULT_PREF.getBoolean("ebSystem", true);
         PREF_EXP_ENABLE_SPECIFIC = DEFAULT_PREF.getBoolean("ebSpecific", false);

@@ -8,6 +8,7 @@
 #include <ctxbridges/common.h>
 #include <ctxbridges/gl_bridge.h>
 #include <ctxbridges/osm_bridge.h>
+#include <ctxbridges/osm_bridge_xxx1.h>
 
 typedef basic_render_window_t* (*br_init_context_t)(basic_render_window_t* share);
 typedef void (*br_make_current_t)(basic_render_window_t* bundle);
@@ -30,6 +31,16 @@ void set_osm_bridge_tbl() {
     br_swap_buffers = osm_swap_buffers;
     br_setup_window = osm_setup_window;
     br_swap_interval = osm_swap_interval;
+}
+
+void osm_bridge_xxx1() {
+    br_init = xxx1_osm_init;
+    br_init_context = (br_init_context_t) xxx1_osm_init_context;
+    br_make_current = (br_make_current_t) xxx1_osm_make_current;
+    br_get_current = (br_get_current_t) xxx1_osm_get_current;
+    br_swap_buffers = xxx1_osm_swap_buffers;
+    br_setup_window = xxx1_osm_setup_window;
+    br_swap_interval = xxx1_osm_swap_interval;
 }
 
 void set_gl_bridge_tbl() {

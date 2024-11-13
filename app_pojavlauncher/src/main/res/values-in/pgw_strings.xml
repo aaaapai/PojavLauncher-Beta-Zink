@@ -52,8 +52,6 @@
     <string name="preference_category_renderer_experimental_settings">Pengaturan eksperimen renderer</string>
     <string name="preference_renderer_setup_title">Aktifkan Pengaturan Eksperimen Renderer</string>
     <string name="preference_renderer_setup">Gunakan lebih banyak pengaturan khusus renderer</string>
-    <string name="preference_spare_bridge_title">Cadangan Jembatan</string>
-    <string name="preference_spare_bridge">Gunakan skema jembatan kedua, tutup jika peluncuran gagal</string>
     <string name="preference_spare_framebuffer_title">Cadangan framebuffer</string>
     <string name="preference_spare_framebuffer">Gunakan framebuffer skema kedua, tutup jika peluncuran gagal</string>
     <string name="preference_renderer_setup_extra">Renderer (Tambahan)</string>

@@ -116,6 +116,7 @@ public final class Tools {
     public static File FILE_PROFILE_PATH;
     public static String MULTIRT_HOME;
     public static String LOCAL_RENDERER = null;
+    public static String CONFIG_BRIDGE;
     public static int DEVICE_ARCHITECTURE;
     public static final String LAUNCHERPROFILES_RTPREFIX = "pojav://";
 
@@ -140,6 +141,7 @@ public final class Tools {
     private static CMesaLDOList sCompatibleCMesaLDO;
     private static CTurnipDriverList sCompatibleCTurnipDriver;
     private static RenderersList sCompatibleRenderers;
+    private static ConfigBridgeList sCompatibleConfigBridge;
 
     private static File getPojavStorageRoot(Context ctx) {
         if (SDK_INT >= 29) {
@@ -1273,6 +1275,40 @@ public final class Tools {
      */
     public static void releaseRenderersCache() {
         System.gc();
+    }
+
+    public static class ConfigBridgeList implements IListAndArry {
+        public final List<String> configIds;
+        public final String[] configNames;
+
+        public ConfigBridgeList(List<String> configIds, String[] configNames) {
+            this.configIds = configIds;
+            this.configNames = configNames;
+        }
+
+        @Override
+        public List<String> getList() {
+            return configIds;
+        }
+
+        @Override
+        public String[] getArray() {
+            return configNames;
+        }
+    }
+
+    public static ConfigBridgeList getCompatibleConfigBridge(Context context) {
+        Resources resources = context.getResources();
+        String[] defaultIds = resources.getStringArray(R.array.config_bridge_values);
+        String[] defaultNames = resources.getStringArray(R.array.config_bridge_names);
+        List<String> Ids = new ArrayList<>(defaultIds.length);
+        List<String> Names = new ArrayList<>(defaultNames.length);
+        for (int i = 0; i < defaultIds.length; i++) {
+            Ids.add(defaultIds[i]);
+            Names.add(defaultNames[i]);
+        }
+        sCompatibleConfigBridge = new ConfigBridgeList(Ids, Names.toArray(new String[0]));
+        return sCompatibleConfigBridge;
     }
 
     public static class CMesaLibList implements IListAndArry {

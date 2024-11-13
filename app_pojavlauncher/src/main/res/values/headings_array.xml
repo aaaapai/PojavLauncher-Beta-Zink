@@ -13,6 +13,19 @@
         <item name="9">@string/mcl_setting_renderer_ltw</item>
     </string-array>
 
+    <string-array name="renderer_values">
+        <item>opengles2</item> <!-- gl4es_extra 1.1.4 with OpenGL ES 2/"3" -->
+        <item>opengles2_ptitseb</item> <!-- gl4es ptitseb with OpenGL ES 2 -->
+        <item>opengles2_vgpu</item> <!-- Vgpu renderer with OpenGL ES 2 OpenGL 4.4 -->
+        <item>opengles2_vgpu_1</item> <!-- Vgpu renderer with OpenGL ES2 OpenGL 3.0 -->
+        <item>mesa_3d</item> <!-- Mesa3D Library -->
+        <item>vulkan_zink</item> <!-- Zink renderer with Vulkan OpenGL4.6 -->
+        <item>virglrenderer</item> <!-- virglrenderer with OpenGL ES 3 -->
+        <item>freedreno</item> <!-- Gallium Freedreno with Adreno GPU -->
+        <item>panfrost</item> <!-- Gallium Panfrost with Mali GPU -->
+        <item>opengles3_ltw</item> <!-- Unknown -->
+    </string-array>
+
     <string-array name="menu_customcontrol">
         <item name="0">@string/customctrl_addbutton</item>
         <item name="1">@string/customctrl_addbutton_drawer</item>
@@ -41,19 +54,6 @@
         <item>@string/preference_gyro_sensitivity_title</item>
         <item>@string/mcl_option_customcontrol</item>
         <item>@string/mcl_setting_title_resolution_scaler</item>
-    </string-array>
-    
-    <string-array name="renderer_values">
-        <item>opengles2</item> <!-- gl4es_extra 1.1.4 with OpenGL ES 2/"3" -->
-        <item>opengles2_ptitseb</item> <!-- gl4es ptitseb with OpenGL ES 2 -->
-        <item>opengles2_vgpu</item> <!-- Vgpu renderer with OpenGL ES 2 OpenGL 4.4 -->
-        <item>opengles2_vgpu_1</item> <!-- Vgpu renderer with OpenGL ES2 OpenGL 3.0 -->
-        <item>mesa_3d</item> <!-- Mesa3D Library -->
-        <item>vulkan_zink</item> <!-- Zink renderer with Vulkan OpenGL4.6 -->
-        <item>virglrenderer</item> <!-- virglrenderer with OpenGL ES 3 -->
-        <item>freedreno</item> <!-- Gallium Freedreno with Adreno GPU -->
-        <item>panfrost</item> <!-- Gallium Panfrost with Mali GPU -->
-        <item>opengles3_ltw</item> <!-- Unknown -->
     </string-array>
 
     <string-array name="download_source_names">
