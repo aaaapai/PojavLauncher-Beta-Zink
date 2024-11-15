@@ -123,6 +123,9 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeWindow(JNIEnv* env, ABI_COMPA
     if (pojav_environ->config_bridge != 0 && pojav_environ->config_renderer == RENDERER_GL4ES)
         gl_setup_window();
 
+    if (pojav_environ->config_bridge == RENDERER_VK_ZINK_XXX2)
+        xxx2_osm_setup_window();
+
     if (br_setup_window) br_setup_window();
 
 }
@@ -295,6 +298,9 @@ int pojavInitOpenGL() {
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX1)
         if (br_init()) br_setup_window();
+
+    if (pojav_environ->config_bridge == RENDERER_VK_ZINK_XXX2)
+        xxx2_osm_setup_window();
 
     return 0;
 }

@@ -15,11 +15,21 @@
 #include "osmesa_loader.h"
 #include "renderer_config.h"
 
-ANativeWindow_Buffer buf;
+ANativeWindow *nativeSurface;
+ANativeWindow_Buffer buff;
 int32_t stride;
 
 static bool hasCleaned = false;
+static bool hasSetNoRendererBuffer = false;
+static char xxx2_no_render_buffer[4];
 void *abuffer;
+
+void xxx2_osm_set_no_render_buffer(ANativeWindow_Buffer* buf) {
+    buf->bits = &xxx2_no_render_buffer;
+    buf->width = pojav_environ->savedWidth;
+    buf->height = pojav_environ->savedHeight;
+    buf->stride = 0;
+}
 
 void *xxx2OsmGetCurrentContext() {
     return (void *)OSMesaGetCurrentContext_p();
@@ -29,47 +39,67 @@ void xxx2OsmloadSymbols() {
     dlsym_OSMesa();
 }
 
-void xxx2OsmSwapBuffers() {
+void xxx2_osm_apply_current_l(ANativeWindow_Buffer* buf) {
     OSMesaContext ctx = OSMesaGetCurrentContext_p();
     if (ctx == NULL)
         printf("Zink: attempted to swap buffers without context!");
 
-    ANativeWindow_lock(pojav_environ->pojavWindow, &buf, NULL);
-    OSMesaMakeCurrent_p(ctx, buf.bits, GL_UNSIGNED_BYTE, pojav_environ->savedWidth, pojav_environ->savedHeight);
-    glFinish_p();
-
-    if (buf.stride != stride)
-        OSMesaPixelStore_p(OSMESA_ROW_LENGTH, buf.stride);
-    stride = buf.stride;
-
-    ANativeWindow_unlockAndPost(pojav_environ->pojavWindow);
+    OSMesaMakeCurrent_p(ctx, buf->bits, GL_UNSIGNED_BYTE, buf->width, buf->height);
+    if (buf->stride != stride)
+        OSMesaPixelStore_p(OSMESA_ROW_LENGTH, buf->stride);
+    stride = buf->stride;
 }
 
-void xxx2OsmMakeCurrent(void *window) {
-    printf("OSMDroid: making current\n");
+void xxx2_osm_apply_current_ll(void* window, ANativeWindow_Buffer* buf) {
     if (SpareBuffer())
     {
     #ifdef FRAME_BUFFER_SUPPOST
         OSMesaMakeCurrent_p((OSMesaContext)window,
                                 abuffer,
                                 GL_UNSIGNED_BYTE,
-                                pojav_environ->savedWidth,
-                                pojav_environ->savedHeight);
+                                buf->width,
+                                buf->height);
     #else
         printf("[ERROR]: Macro FRAME_BUFFER_SUPPOST is undefined\n");
     #endif
     } else OSMesaMakeCurrent_p((OSMesaContext)window,
                                    setbuffer,
                                    GL_UNSIGNED_BYTE,
-                                   pojav_environ->savedWidth,
-                                   pojav_environ->savedHeight);
+                                   buf->width,
+                                   buf->height);
 
+    if (buf->stride != stride)
+        OSMesaPixelStore_p(OSMESA_ROW_LENGTH, buf->stride);
+    stride = buf->stride;
+
+}
+
+void xxx2OsmSwapBuffers() {
+    ANativeWindow_lock(nativeSurface, &buff, NULL);
+    xxx2_osm_apply_current_l(&buff);
+    glFinish_p();
+    ANativeWindow_unlockAndPost(nativeSurface);
+}
+
+void xxx2OsmMakeCurrent(void *window) {
+    printf("OSMDroid: making current\n");
+
+    if (!hasCleaned)
+    {
+        nativeSurface = pojav_environ->pojavWindow;
+        ANativeWindow_acquire(nativeSurface);
+        ANativeWindow_setBuffersGeometry(nativeSurface, 0, 0, WINDOW_FORMAT_RGBX_8888);
+        ANativeWindow_lock(nativeSurface, &buff, NULL);
+    }
+
+    if (!hasSetNoRendererBuffer)
+    {
+        hasSetNoRendererBuffer = true;
+        xxx2_osm_set_no_render_buffer(&buff);
+    }
+
+    xxx2_osm_apply_current_ll(window, &buff);
     OSMesaPixelStore_p(OSMESA_Y_UP, 0);
-    if (!hasCleaned) ANativeWindow_lock(pojav_environ->pojavWindow, &buf, NULL);
-
-    if (buf.stride != stride)
-        OSMesaPixelStore_p(OSMESA_ROW_LENGTH, buf.stride);
-    stride = buf.stride;
 
     printf("OSMDroid: vendor: %s\n", glGetString_p(GL_VENDOR));
     printf("OSMDroid: renderer: %s\n", glGetString_p(GL_RENDERER));
@@ -78,7 +108,7 @@ void xxx2OsmMakeCurrent(void *window) {
         hasCleaned = true;
         glClear_p(GL_COLOR_BUFFER_BIT);
         glClearColor_p(0.4f, 0.4f, 0.4f, 1.0f);
-        ANativeWindow_unlockAndPost(pojav_environ->pojavWindow);
+        ANativeWindow_unlockAndPost(nativeSurface);
     }
 }
 
@@ -87,6 +117,9 @@ void *xxx2OsmCreateContext(void *contextSrc) {
     void *ctx = OSMesaCreateContext_p(OSMESA_RGBA, contextSrc);
     printf("OSMDroid: context=%p\n", ctx);
     return ctx;
+}
+
+void xxx2_osm_setup_window() {
 }
 
 void xxx2OsmSwapInterval(int interval) {

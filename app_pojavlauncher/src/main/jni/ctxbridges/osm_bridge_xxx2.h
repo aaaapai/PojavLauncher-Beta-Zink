@@ -8,6 +8,7 @@
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
 
+void xxx2_osm_setup_window();
 void* xxx2OsmGetCurrentContext();
 void xxx2OsmloadSymbols();
 int xxx2OsmInit();
