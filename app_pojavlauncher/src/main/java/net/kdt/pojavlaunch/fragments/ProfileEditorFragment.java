@@ -183,7 +183,10 @@ public class ProfileEditorFragment extends Fragment implements CropperUtils.Crop
     private MinecraftProfile getProfile(@NonNull String profile) {
         MinecraftProfile minecraftProfile;
         if (getArguments() == null) {
-            minecraftProfile = new MinecraftProfile(LauncherProfiles.mainProfileJson.profiles.get(profile));
+            LauncherProfiles.load(ProfilePathManager.getCurrentProfile());
+            MinecraftProfile originalProfile = LauncherProfiles.mainProfileJson.profiles.get(profile);
+            if (originalProfile != null) minecraftProfile = new MinecraftProfile(originalProfile);
+            else minecraftProfile = MinecraftProfile.createTemplate();
             mProfileKey = profile;
         } else {
             minecraftProfile = MinecraftProfile.createTemplate();

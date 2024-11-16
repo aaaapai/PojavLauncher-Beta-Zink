@@ -39,6 +39,37 @@ gl_render_window_t* gl_get_current() {
     return currentBundle;
 }
 
+static void gl4esi_get_display_dimensions(int* width, int* height) {
+    if (currentBundle == NULL) goto zero;
+    EGLSurface surface = currentBundle->surface;
+    EGLBoolean result_width = eglQuerySurface_p(g_EglDisplay, surface, EGL_WIDTH, width);
+    EGLBoolean result_height = eglQuerySurface_p(g_EglDisplay, surface, EGL_HEIGHT, height);
+    if (!result_width || !result_height) goto zero;
+    return;
+
+    zero:
+    *width = 0;
+    *height = 0;
+}
+
+static bool already_initialized = false;
+static void gl_init_gl4es_internals() {
+    if (already_initialized) return;
+    already_initialized = true;
+
+    void* gl4es = dlopen("libgl4es_114.so", RTLD_NOLOAD);
+    if (gl4es == NULL) return;
+
+    void (*set_getmainfbsize)(void (*new_getMainFBSize)(int* width, int* height));
+    set_getmainfbsize = dlsym(gl4es, "set_getmainfbsize");
+
+    if (set_getmainfbsize == NULL)
+        printf("gl4esinternals warning: gl4es was found but internals not initialized. expect rendering issues.\n");
+    else set_getmainfbsize(gl4esi_get_display_dimensions);
+
+    dlclose(gl4es);
+}
+
 gl_render_window_t* gl_init_context(gl_render_window_t *share) {
     gl_render_window_t* bundle = malloc(sizeof(gl_render_window_t));
     memset(bundle, 0, sizeof(gl_render_window_t));
@@ -58,7 +89,6 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
         return NULL;
     }
 
-    // Get the first matching config
     eglChooseConfig_p(g_EglDisplay, egl_attributes, &bundle->config, 1, &num_configs);
     eglGetConfigAttrib_p(g_EglDisplay, bundle->config, EGL_NATIVE_VISUAL_ID, &bundle->format);
 
@@ -74,7 +104,8 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
     const EGLint egl_context_attributes[] = { EGL_CONTEXT_CLIENT_VERSION, libgl_es, EGL_NONE };
     bundle->context = eglCreateContext_p(g_EglDisplay, bundle->config, share == NULL ? EGL_NO_CONTEXT : share->context, egl_context_attributes);
 
-    if (bundle->context == EGL_NO_CONTEXT) {
+    if (bundle->context == EGL_NO_CONTEXT)
+    {
         __android_log_print(ANDROID_LOG_ERROR, g_LogTag, "eglCreateContext_p() finished with error: %04x",
                             eglGetError_p());
         free(bundle);
@@ -84,58 +115,63 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
 }
 
 void gl_swap_surface(gl_render_window_t* bundle) {
-    if(bundle->nativeSurface != NULL) {
+    if (bundle->nativeSurface != NULL)
         ANativeWindow_release(bundle->nativeSurface);
-    }
-    if(bundle->surface != NULL) eglDestroySurface_p(g_EglDisplay, bundle->surface);
-    if(bundle->newNativeSurface != NULL) {
+
+    if (bundle->surface != NULL)
+        eglDestroySurface_p(g_EglDisplay, bundle->surface);
+
+    if (bundle->newNativeSurface != NULL)
+    {
         __android_log_print(ANDROID_LOG_ERROR, g_LogTag, "Switching to new native surface");
         bundle->nativeSurface = bundle->newNativeSurface;
         bundle->newNativeSurface = NULL;
         ANativeWindow_acquire(bundle->nativeSurface);
         ANativeWindow_setBuffersGeometry(bundle->nativeSurface, 0, 0, bundle->format);
         bundle->surface = eglCreateWindowSurface_p(g_EglDisplay, bundle->config, bundle->nativeSurface, NULL);
-    }else{
+    } else {
         __android_log_print(ANDROID_LOG_ERROR, g_LogTag, "No new native surface, switching to 1x1 pbuffer");
         bundle->nativeSurface = NULL;
         const EGLint pbuffer_attrs[] = {EGL_WIDTH, 1 , EGL_HEIGHT, 1, EGL_NONE};
         bundle->surface = eglCreatePbufferSurface_p(g_EglDisplay, bundle->config, pbuffer_attrs);
     }
-    //eglMakeCurrent_p(g_EglDisplay, bundle->surface, bundle->surface, bundle->context);
 }
 
 void gl_make_current(gl_render_window_t* bundle) {
-    if(bundle == NULL) {
-        if(eglMakeCurrent_p(g_EglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT)) {
+    gl_init_gl4es_internals();
+    if (bundle == NULL)
+    {
+        if (eglMakeCurrent_p(g_EglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT))
+        {
             currentBundle = NULL;
         }
         return;
     }
     bool hasSetMainWindow = false;
-    if(pojav_environ->mainWindowBundle == NULL) {
-        if(getenv("POJAV_CONFIG_BRIDGE") != NULL) {
-            pojav_environ->mainWindowBundle = bundle;
-        } else {
-            pojav_environ->mainWindowBundle = (basic_render_window_t*)bundle;
-        }
+
+    if (pojav_environ->mainWindowBundle == NULL)
+    {
+        if (getenv("POJAV_CONFIG_BRIDGE") != NULL) pojav_environ->mainWindowBundle = bundle;
+        else pojav_environ->mainWindowBundle = (basic_render_window_t*)bundle;
+
         __android_log_print(ANDROID_LOG_INFO, g_LogTag, "Main window bundle is now %p", pojav_environ->mainWindowBundle);
         pojav_environ->mainWindowBundle->newNativeSurface = pojav_environ->pojavWindow;
         hasSetMainWindow = true;
     }
-    __android_log_print(ANDROID_LOG_INFO, g_LogTag, "Making current, surface=%p, nativeSurface=%p, newNativeSurface=%p", bundle->surface, bundle->nativeSurface, bundle->newNativeSurface);
-    if(bundle->surface == NULL) { //it likely will be on the first run
+
+    if (bundle->surface == NULL)
         gl_swap_surface(bundle);
-    }
-    if(eglMakeCurrent_p(g_EglDisplay, bundle->surface, bundle->surface, bundle->context)) {
+
+    if (eglMakeCurrent_p(g_EglDisplay, bundle->surface, bundle->surface, bundle->context))
+    {
         currentBundle = bundle;
-    }else {
-        if(hasSetMainWindow) {
+    } else {
+        if (hasSetMainWindow) {
             pojav_environ->mainWindowBundle->newNativeSurface = NULL;
-            if(getenv("POJAV_CONFIG_BRIDGE") != NULL) {
-                gl_swap_surface(pojav_environ->mainWindowBundle);
-            } else {
-                gl_swap_surface((gl_render_window_t*)pojav_environ->mainWindowBundle);
-            }
+
+            if (getenv("POJAV_CONFIG_BRIDGE") != NULL) gl_swap_surface(pojav_environ->mainWindowBundle);
+            else gl_swap_surface((gl_render_window_t*)pojav_environ->mainWindowBundle);
+
             pojav_environ->mainWindowBundle = NULL;
         }
         __android_log_print(ANDROID_LOG_ERROR, g_LogTag, "eglMakeCurrent returned with error: %04x", eglGetError_p());
@@ -144,8 +180,9 @@ void gl_make_current(gl_render_window_t* bundle) {
 }
 
 void gl_swap_buffers() {
-    if(currentBundle->state == STATE_RENDERER_NEW_WINDOW) {
-        eglMakeCurrent_p(g_EglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT); //detach everything to destroy the old EGLSurface
+    if (currentBundle->state == STATE_RENDERER_NEW_WINDOW)
+    {
+        eglMakeCurrent_p(g_EglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         gl_swap_surface(currentBundle);
         eglMakeCurrent_p(g_EglDisplay, currentBundle->surface, currentBundle->surface, currentBundle->context);
         currentBundle->state = STATE_RENDERER_ALIVE;
@@ -162,7 +199,8 @@ void gl_swap_buffers() {
 }
 
 void gl_setup_window() {
-    if(pojav_environ->mainWindowBundle != NULL) {
+    if (pojav_environ->mainWindowBundle != NULL)
+    {
         __android_log_print(ANDROID_LOG_INFO, g_LogTag, "Main window bundle is not NULL, changing state");
         pojav_environ->mainWindowBundle->state = STATE_RENDERER_NEW_WINDOW;
         pojav_environ->mainWindowBundle->newNativeSurface = pojav_environ->pojavWindow;
@@ -170,7 +208,7 @@ void gl_setup_window() {
 }
 
 void gl_swap_interval(int swapInterval) {
-    if(pojav_environ->force_vsync) swapInterval = 1;
+    if (pojav_environ->force_vsync) swapInterval = 1;
 
     eglSwapInterval_p(g_EglDisplay, swapInterval);
 }
