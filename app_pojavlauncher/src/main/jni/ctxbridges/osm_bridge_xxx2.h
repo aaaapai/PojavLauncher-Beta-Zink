@@ -8,7 +8,14 @@
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
 
-void xxx2_osm_setup_window();
+struct xxx2_osm_render_window_t {
+    struct ANativeWindow *nativeSurface;
+    ANativeWindow_Buffer buffer;
+    int32_t last_stride;
+    void* window;
+};
+
+
 void* xxx2OsmGetCurrentContext();
 void xxx2OsmloadSymbols();
 int xxx2OsmInit();
