@@ -1,5 +1,5 @@
 //
-// Created by Vera-Firefly on 20.08.2024.
+// Created by Vera-Firefly on 20.11.2024.
 //
 
 #include <android/native_window.h>
@@ -21,6 +21,8 @@ static bool hasSetNoRendererBuffer = false;
 static char xxx2_no_render_buffer[4];
 
 void *abuffer;
+
+void setNativeWindowSwapInterval(struct ANativeWindow* nativeWindow, int swapInterval);
 
 void xxx2_osm_set_no_render_buffer(ANativeWindow_Buffer* buf) {
     buf->bits = &xxx2_no_render_buffer;
@@ -119,7 +121,8 @@ void *xxx2OsmCreateContext(void *contextSrc) {
 }
 
 void xxx2OsmSwapInterval(int interval) {
-    // Nothing to do here
+    if (xxx2_osm->nativeSurface != NULL)
+        setNativeWindowSwapInterval(xxx2_osm->nativeSurface, interval);
 }
 
 int xxx2OsmInit() {
