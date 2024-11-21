@@ -143,6 +143,7 @@ void xxx1_osm_make_current(xxx1_osm_render_window_t* bundle) {
 
     if (pojav_environ->mainWindowBundle == NULL)
     {
+        printf("%s: making current\n", osm_LogTag);
         pojav_environ->mainWindowBundle = (basic_render_window_t*) bundle;
         printf("%s: Main window bundle is now %p\n", osm_LogTag, pojav_environ->mainWindowBundle);
         pojav_environ->mainWindowBundle->newNativeSurface = pojav_environ->pojavWindow;
@@ -152,18 +153,19 @@ void xxx1_osm_make_current(xxx1_osm_render_window_t* bundle) {
     if (bundle->nativeSurface == NULL)
     {
         xxx1_osm_swap_surfaces(bundle);
-        if(hasSetMainWindow) pojav_environ->mainWindowBundle->state = STATE_RENDERER_ALIVE;
+        if (hasSetMainWindow) pojav_environ->mainWindowBundle->state = STATE_RENDERER_ALIVE;
     }
 
     if (!hasSetNoRendererBuffer)
     {
         xxx1_osm_set_no_render_buffer(&bundle->buffer);
         printf("%s: Has set no renderer buffer!\n", osm_LogTag);
+        printf("%s: bundle buffer = %d\n", osm_LogTag, bundle->buffer);
+
+        printf("OSMDroid: vendor: %s\n", glGetString_p(GL_VENDOR));
+        printf("OSMDroid: renderer: %s\n", glGetString_p(GL_RENDERER));
         hasSetNoRendererBuffer = true;
     }
-
-    printf("%s: making current\n", osm_LogTag);
-    printf("%s: bundle buffer = %d\n", osm_LogTag, bundle->buffer);
 
     xxx1_osm_apply_current_ll(&currentBundle->buffer);
     OSMesaPixelStore_p(OSMESA_Y_UP, 0);
