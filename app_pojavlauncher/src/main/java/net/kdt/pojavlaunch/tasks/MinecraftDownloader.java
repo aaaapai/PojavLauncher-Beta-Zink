@@ -218,8 +218,6 @@ public class MinecraftDownloader {
 
         if (verInfo.libraries != null) scheduleLibraryDownloads(verInfo.libraries);
 
-        if (verInfo.logging != null) scheduleLoggingAssetDownloadIfNeeded(verInfo.logging);
-
         if (Tools.isValidString(verInfo.inheritsFrom)) {
             JMinecraftVersionList.Version inheritedVersion = AsyncMinecraftDownloader.getListedVersion(verInfo.inheritsFrom);
             // Infinite inheritance !?! :noway:
@@ -302,21 +300,6 @@ public class MinecraftDownloader {
                     assetInfo.size,
                     false);
         }
-    }
-
-    private void scheduleLoggingAssetDownloadIfNeeded(JMinecraftVersionList.LoggingConfig loggingConfig) throws IOException {
-        if (loggingConfig.client == null || loggingConfig.client.file == null) return;
-        JMinecraftVersionList.FileProperties loggingFileProperties = loggingConfig.client.file;
-        File internalLoggingConfig = new File(Tools.DIR_DATA + File.separator + "security",
-                loggingFileProperties.id.replace("client", "log4j-rce-patch"));
-        if (internalLoggingConfig.exists()) return;
-        File destination = new File(ProfilePathHome.getGameHome(), loggingFileProperties.id);
-        scheduleDownload(destination,
-                DownloadMirror.DOWNLOAD_CLASS_LIBRARIES,
-                loggingFileProperties.url,
-                loggingFileProperties.sha1,
-                loggingFileProperties.size,
-                false);
     }
 
     private void scheduleGameJarDownload(MinecraftClientInfo minecraftClientInfo, String versionName) throws IOException {

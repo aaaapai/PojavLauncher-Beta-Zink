@@ -77,6 +77,7 @@ import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
+import org.jackhuang.hmcl.util.versioning.VersionNumber;
 import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
@@ -236,13 +237,10 @@ public final class Tools {
 
         getCacioJavaArgs(javaArgList, runtime.javaVersion == 8, runtime.javaVersion == 11);
 
-        if (versionInfo.logging != null) {
-            String configFile = Tools.DIR_DATA + "/security/" + versionInfo.logging.client.file.id.replace("client", "log4j-rce-patch");
-            if (!new File(configFile).exists()) {
-                configFile = ProfilePathHome.getGameHome() + "/" + versionInfo.logging.client.file.id;
-            }
-            javaArgList.add("-Dlog4j.configurationFile=" + configFile);
-        }
+        boolean is7 = VersionNumber.compare(VersionNumber.asVersion(versionInfo.id != null ? versionInfo.id : "0.0").getCanonical(), "1.12") < 0;
+        String configFilePath = Tools.DIR_DATA + "/security/log4j-rce-patch-" + (is7 ? "1.7" : "1.12") + ".xml";
+        javaArgList.add("-Dlog4j.configurationFile=" + configFilePath);
+
         javaArgList.addAll(Arrays.asList(getMinecraftJVMArgs(versionId, gamedir)));
         javaArgList.add("-cp");
         javaArgList.add(getLWJGL3ClassPath() + ":" + launchClassPath);
