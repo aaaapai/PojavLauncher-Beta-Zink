@@ -39,54 +39,80 @@ public class ResolutionAdjuster {
         layout.setPadding(8, 8, 8, 8);
         layout.setGravity(Gravity.CENTER);
 
-        // 动态创建一个 SeekBar ,用于调整缩放因子
+        // 动态创建 "-" 按钮
+        final TextView minusButton = new TextView(context);
+        minusButton.setText("-");
+        minusButton.setTextSize(18);
+        minusButton.setGravity(Gravity.CENTER);
+        minusButton.setPadding(16, 16, 16, 16);
+        layout.addView(minusButton);
+
+        // 动态创建一个 SeekBar 用于调整缩放因子
         final SeekBar scaleSeekBar = new SeekBar(context);
-        scaleSeekBar.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)); // 设置权重1, 充满剩余空间
+        scaleSeekBar.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)); // 设置权重 1, 用于充满剩余空间
+
         // 获取当前设置的最大缩放因子,并设置为滑动条的最大值
         int maxScaleFactor = Math.max(LauncherPreferences.PREF_SCALE_FACTOR, 100);
         scaleSeekBar.setMax(maxScaleFactor - 25);
+
         // 根据当前获取的缩放因子,设置滑动条初始值
         scaleSeekBar.setProgress((int) (mScaleFactor * 100) - 25);
         layout.addView(scaleSeekBar);
 
-        // 动态创建一个TextView,用于显示当前分辨率
+        // 动态创建 "+" 按钮
+        final TextView plusButton = new TextView(context);
+        plusButton.setText("+");
+        plusButton.setTextSize(18);
+        plusButton.setGravity(Gravity.CENTER);
+        plusButton.setPadding(16, 16, 16, 16);
+        layout.addView(plusButton);
+
+        // 动态创建一个TextView用于显示当前分辨率
         final TextView resolutionTextView = new TextView(context);
         changeResolutionRatioPreview(percentage, resolutionTextView);  // 获取当前分辨率
         resolutionTextView.setTextSize(14);
         resolutionTextView.setPadding(10, 0, 0, 0);  // 添加一些左侧间距
         layout.addView(resolutionTextView);
 
-        // 动态创建一个TextView,用于显示缩放百分数
+        // 动态创建一个TextView用于显示缩放百分数
         final TextView scaleTextView = new TextView(context);
         scaleTextView.setText(percentage + "%");
         scaleTextView.setTextSize(14);
         scaleTextView.setPadding(10, 0, 0, 0);  // 添加一些左侧间距
         layout.addView(scaleTextView);
 
-        // 设置滑动条监听器
+        // 设置滑动条监听器, 用于实时处理
         scaleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int scaleFactor = progress + 25;
                 // 更新缩放因子
-                mScaleFactor = (progress + 25) / 100f;
+                mScaleFactor = scaleFactor / 100f;
                 listener.onChange(mScaleFactor);
-                // 将缩放因子转换为整数
-                int scaleFactor = Math.round(mScaleFactor * 100);
                 // 动态更新显示的缩放百分数
                 scaleTextView.setText(scaleFactor + "%");
-
                 // 动态更新分辨率TextView,根据缩放因子调整分辨率显示
                 changeResolutionRatioPreview(scaleFactor, resolutionTextView);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // Nothing to do here
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) { }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // Nothing to do here
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+
+        minusButton.setOnClickListener(v -> {
+            int currentProgress = scaleSeekBar.getProgress();
+            if (currentProgress > 0) {
+                scaleSeekBar.setProgress(currentProgress - 1); // 微调 -1
+            }
+        });
+
+        plusButton.setOnClickListener(v -> {
+            int currentProgress = scaleSeekBar.getProgress();
+            if (currentProgress < scaleSeekBar.getMax()) {
+                scaleSeekBar.setProgress(currentProgress + 1); // 微调 +1
             }
         });
 
@@ -107,10 +133,10 @@ public class ResolutionAdjuster {
         int height = metrics.heightPixels;
         boolean isLandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE || width > height;
 
-        double progressDouble = (double) progress / 100;
+        float progressDouble = progress / 100f;
         // 计算要显示的宽高,用Tools现有的方案getDisplayFriendlyRes()确保是偶数
-        int previewWidth = Tools.getDisplayFriendlyRes(isLandscape ? width : height, (float) progressDouble);
-        int previewHeight = Tools.getDisplayFriendlyRes(isLandscape ? height : width, (float) progressDouble);
+        int previewWidth = Tools.getDisplayFriendlyRes(isLandscape ? width : height, progressDouble);
+        int previewHeight = Tools.getDisplayFriendlyRes(isLandscape ? height : width, progressDouble);
 
         String preview = previewWidth + " x " + previewHeight;
         resolutionTextView.setText(preview);  // 实时更新TextView中的分辨率
