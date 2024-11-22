@@ -3,6 +3,7 @@ package com.firefly.utils;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
@@ -39,12 +40,16 @@ public class ResolutionAdjuster {
         layout.setPadding(8, 8, 8, 8);
         layout.setGravity(Gravity.CENTER);
 
+        TypedValue typedValue = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true);
+
         // 动态创建 "-" 按钮
         final TextView minusButton = new TextView(context);
         minusButton.setText("-");
         minusButton.setTextSize(18);
         minusButton.setGravity(Gravity.CENTER);
         minusButton.setPadding(16, 16, 16, 16);
+        minusButton.setBackgroundResource(typedValue.resourceId);
         layout.addView(minusButton);
 
         // 动态创建一个 SeekBar 用于调整缩放因子
@@ -65,6 +70,7 @@ public class ResolutionAdjuster {
         plusButton.setTextSize(18);
         plusButton.setGravity(Gravity.CENTER);
         plusButton.setPadding(16, 16, 16, 16);
+        plusButton.setBackgroundResource(typedValue.resourceId);
         layout.addView(plusButton);
 
         // 动态创建一个TextView用于显示当前分辨率
