@@ -96,14 +96,11 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
             useSystemVulkan.setVisible(false);
         }
         useSystemVulkan.setOnPreferenceChangeListener((p, v) -> {
-            boolean set = (boolean) v;
-            boolean isAdreno = PGWTools.isAdrenoGPU();
-            if (set && isAdreno) {
+            if ((boolean) v && PGWTools.isAdrenoGPU()) {
                 onCheckGPUDialog(p);
-            } else {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         });
 
         final ListPreference rendererListPref = requirePreference("renderer", ListPreference.class);
@@ -157,40 +154,35 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         SwitchPreference expRendererPref = requirePreference("ExperimentalSetup", SwitchPreference.class);
         expRendererPref.setOnPreferenceChangeListener((p, v) -> {
-            boolean set = (boolean) v;
-            if (set) {
+            if ((boolean) v) {
                 onExpRendererDialog(p, rendererListPref);
                 return false;
-            } else {
-                ((SwitchPreference) p).setChecked(false);
-                onChangeRenderer(rendererListPref);
-                setListPreference(rendererListPref, "renderer");
-                return true;
             }
+            ((SwitchPreference) p).setChecked(false);
+            onChangeRenderer(rendererListPref);
+            setListPreference(rendererListPref, "renderer");
+            return true;
         });
 
         // Custom GL/GLSL
         final PreferenceCategory customMesaVersionPref = requirePreference("customMesaVersionPref", PreferenceCategory.class);
         SwitchPreference setSystemVersion = requirePreference("ebSystem", SwitchPreference.class);
         setSystemVersion.setOnPreferenceChangeListener((p, v) -> {
-            boolean set = (boolean) v;
-            if (!set) return false;
+            if (!(boolean) v) return false;
             closeOtherCustomMesaPref(customMesaVersionPref);
             return true;
         });
 
         SwitchPreference setSpecificVersion = requirePreference("ebSpecific", SwitchPreference.class);
         setSpecificVersion.setOnPreferenceChangeListener((p, v) -> {
-            boolean set = (boolean) v;
-            if (!set) return false;
+            if (!(boolean) v) return false;
             closeOtherCustomMesaPref(customMesaVersionPref);
             return true;
         });
 
         SwitchPreference setGLVersion = requirePreference("ebCustom", SwitchPreference.class);
         setGLVersion.setOnPreferenceChangeListener((p, v) -> {
-            boolean set = (boolean) v;
-            if (!set) return false;
+            if (!(boolean) v) return false;
             closeOtherCustomMesaPref(customMesaVersionPref);
             return true;
         });
@@ -417,8 +409,8 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
     private void onChangeRenderer(ListPreference rendererListPref) {
         String rendererValue = LauncherPreferences.DEFAULT_PREF.getString("renderer", null);
         if ("mesa_3d".equals(rendererValue)) {
-            LauncherPreferences.DEFAULT_PREF.edit().putString("renderer", expRenderer).apply();
             if (expRenderer != null) {
+                LauncherPreferences.DEFAULT_PREF.edit().putString("renderer", expRenderer).apply();
                 rendererListPref.setValue(expRenderer);
             } else rendererListPref.setValueIndex(0);
         } else if ("vulkan_zink".equals(rendererValue)
@@ -504,20 +496,19 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FILE_SELECT_CODE && resultCode == getActivity().RESULT_OK && data != null) {
             Uri fileUri = data.getData();
-            if (fileUri != null && FILE_SELECT != null) {
-                switch (FILE_SELECT) {
-                    case "ADD_MESA":
-                        setMesaNameDialog(fileUri);
-                        break;
-                    case "ADD_TURNIP":
-                        setTurnipNameDialog(fileUri);
-                        break;
-                    default:
-                        // Nothing to do here
-                        break;
-                }
-                FILE_SELECT = "NONE";
+            if (fileUri == null || FILE_SELECT == null) return;
+            switch (FILE_SELECT) {
+                case "ADD_MESA":
+                    setMesaNameDialog(fileUri);
+                    break;
+                case "ADD_TURNIP":
+                    setTurnipNameDialog(fileUri);
+                    break;
+                default:
+                    // Nothing to do here
+                    break;
             }
+            FILE_SELECT = "NONE";
         }
     }
 
@@ -542,11 +533,12 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
                 } else if (!folderName.matches("(\\d{2}|xx)\\.(\\d|x)\\.(\\d|x)")) {
                     input.setError(getString(R.string.pgw_settings_cml_Illegitimate));
                     return false;
-                } else {
-                    boolean success = MesaUtils.INSTANCE.saveMesaVersion(getActivity(), fileUri, folderName);
+                }
+                boolean success = MesaUtils.INSTANCE.saveMesaVersion(getActivity(), fileUri, folderName);
+                String message = getString(success ? R.string.pgw_settings_cml_saved : R.string.pgw_settings_cml_save_fail);
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                if (success) {
                     setListPreference(requirePreference("CMesaLibrary", ChooseMesaListPref.class), "CMesaLibrary");
-                    String message = getString(success ? R.string.pgw_settings_cml_saved : R.string.pgw_settings_cml_save_fail);
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 }
                 return true;
             })
@@ -574,14 +566,15 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
             .setCustomView(input)
             .setConfirmListener(android.R.string.ok, customView -> {
                 String folderName = input.getText().toString().trim();
-                if (!folderName.isEmpty()) {
-                    boolean success = TurnipUtils.INSTANCE.saveTurnipDriver(getActivity(), fileUri, folderName);
-                    setListPreference(requirePreference("chooseTurnipDriver", ChooseTurnipListPref.class), "chooseTurnipDriver");
-                    String message = getString(success ? R.string.pgw_settings_ctu_saved : R.string.pgw_settings_ctu_save_fail);
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-                } else {
+                if (folderName.isEmpty()) {
                     input.setError(getString(R.string.global_error_field_empty));
                     return false;
+                }
+                boolean success = TurnipUtils.INSTANCE.saveTurnipDriver(getActivity(), fileUri, folderName);
+                String message = getString(success ? R.string.pgw_settings_ctu_saved : R.string.pgw_settings_ctu_save_fail);
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                if (success) {
+                    setListPreference(requirePreference("chooseTurnipDriver", ChooseTurnipListPref.class), "chooseTurnipDriver");
                 }
                 return true;
             })
