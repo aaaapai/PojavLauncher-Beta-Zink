@@ -152,6 +152,9 @@
     <string name="pgw_settings_cml_format">請輸入 XX.X.X 格式的文字</string>
     <!-- Custom Mesa Loader Driver Override -->
     <string name="preference_extra_osm_cmldo_categ">自訂Mesa圖形驅動程序</string>
+    <string name="osm_enable_drm_shim">使用 DRM Shim</string>  
+    <string name="osm_enable_drm_shim_desc">模擬 DRM 驅動行為</string>  
+    <string name="drm_shim_warning">DRM Shim 的主要用途是為開發者提供一個無需硬體的環境，用於調試 Mesa 驅動的行為和功能。\n\n您確定要啟用它嗎？</string>
     <string name="osm_enable_cmldo">允許自訂Mesa圖形驅動程序（目前僅Freedreno）</string>
     <string name="osm_enable_cmldo_desc">如果需要，您可以自由選擇處理方法</string>
     <string name="osm_choose_cmldo">選擇Mesa圖形驅動程序</string>

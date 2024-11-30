@@ -124,6 +124,9 @@
     <string name="pgw_settings_cml_format">Please enter text in XX.X.X format</string>
     <!-- Custom Mesa Loader Driver Override -->
     <string name="preference_extra_osm_cmldo_categ">Custom Mesa Loader Driver Override</string>
+    <string name="osm_enable_drm_shim">Using DRM Shim</string>
+    <string name="osm_enable_drm_shim_desc">Simulates DRM driven behavior</string>
+    <string name="drm_shim_warning">The main purpose of DRM Shim is to provide developers with a hardware-free environment for debugging Mesa driver behavior and functionality\n\nAre you sure you want to turn it on?</string>
     <string name="osm_enable_cmldo">Enable Custom Mesa Load Driver Override(Only for Freedreno)</string>
     <string name="osm_enable_cmldo_desc">If need, you can freely choose processing method</string>
     <string name="osm_choose_cmldo">Choose Mesa Loader Driver Override</string>

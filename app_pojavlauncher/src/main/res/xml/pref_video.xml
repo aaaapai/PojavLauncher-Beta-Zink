@@ -214,6 +214,14 @@
         >
 
         <SwitchPreference
+            android:key="ebDrmShim"
+            android:title="@string/osm_enable_drm_shim"
+            android:summary="@string/osm_enable_drm_shim_desc"
+            android:defaultValue="false"
+            app2:iconSpaceReserved="false"
+            />
+
+        <SwitchPreference
             android:key="ebChooseMldo"
             android:title="@string/osm_enable_cmldo"
             android:summary="@string/osm_enable_cmldo_desc"

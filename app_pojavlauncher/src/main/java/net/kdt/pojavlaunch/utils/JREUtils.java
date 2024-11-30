@@ -24,6 +24,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.firefly.utils.MesaUtils;
+import com.firefly.utils.PGWTools;
 import com.firefly.utils.TurnipUtils;
 
 import com.movtery.ui.subassembly.customprofilepath.ProfilePathHome;
@@ -351,6 +352,9 @@ public class JREUtils {
                 }
             }
 
+            if (PREF_USE_DRM_SHIM)
+                envMap.put("LD_PRELOAD", NATIVE_LIB_DIR + getDrmShimPath(PGWTools.isAdrenoGPU()));
+
             if (DRIVER_MODEL.equals("driver_virgl")) {
                 envMap.put("DCLAT_FRAMEBUFFER", "1");
                 envMap.put("VTEST_SOCKET_NAME", new File(Tools.DIR_CACHE, ".virgl_test").getAbsolutePath());
@@ -458,7 +462,7 @@ public class JREUtils {
         setJavaEnv(runtimeHome);
         setCustomEnv();
         checkAndUsedJSPH(runtime);
-        if (TURNIP_LIBS != null) loadCustomTurnip();
+        if (PGWTools.isAdrenoGPU() && TURNIP_LIBS != null) loadCustomTurnip();
         if (LOCAL_RENDERER != null) setRendererEnv();
 
         List<String> userArgs = getJavaArgs(activity, runtimeHome, userArgsString);
@@ -701,6 +705,10 @@ public class JREUtils {
             dlopen(NATIVE_LIB_DIR + "/libgl4es_114.so");
         }
         return renderLibrary;
+    }
+
+    private static String getDrmShimPath(boolean isAdreno) {
+        return isAdreno ? "/libfreedreno_noop_drm_shim.so" : "/libpanfrost_noop_drm_shim.so";
     }
 
     /**
