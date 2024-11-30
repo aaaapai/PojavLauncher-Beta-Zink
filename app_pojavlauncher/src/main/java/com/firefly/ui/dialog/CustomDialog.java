@@ -3,9 +3,8 @@ package com.firefly.ui.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -13,11 +12,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.movtery.ui.dialog.DraggableDialog;
+
 import net.kdt.pojavlaunch.R;
 
-public class CustomDialog {
+public class CustomDialog implements DraggableDialog.DialogInitializationListener {
     private final AlertDialog dialog;
-    private float dX, dY;
     private final String[] items;
     private final OnItemClickListener itemClickListener;
 
@@ -80,7 +80,7 @@ public class CustomDialog {
         builder.setView(view);
         dialog = builder.create();
 
-        if (draggable) dialog.setOnShowListener(dialogInterface -> setDraggable(dialog));
+        if (draggable) dialog.setOnShowListener(dialogInterface -> DraggableDialog.initDialog(this));
 
         if (!cancelable) dialog.setCancelable(false);
 
@@ -88,8 +88,7 @@ public class CustomDialog {
             button1.setVisibility(View.VISIBLE);
             if (button1Text != null) button1.setText(button1Text);
             button1.setOnClickListener(v -> {
-                boolean shouldDismiss = true;
-                if (button1Listener != null) shouldDismiss = button1Listener.onClick(customView);
+                boolean shouldDismiss = button1Listener.onClick(customView);
                 if (shouldDismiss) dialog.dismiss();
             });
         }
@@ -98,8 +97,7 @@ public class CustomDialog {
             button2.setVisibility(View.VISIBLE);
             if (button2Text != null) button2.setText(button2Text);
             button2.setOnClickListener(v -> {
-                boolean shouldDismiss = true;
-                if (button2Listener != null) shouldDismiss = button2Listener.onClick(customView);
+                boolean shouldDismiss = button2Listener.onClick(customView);
                 if (shouldDismiss) dialog.dismiss();
             });
         }
@@ -108,8 +106,7 @@ public class CustomDialog {
             button3.setVisibility(View.VISIBLE);
             if (button3Text != null) button3.setText(button3Text);
             button3.setOnClickListener(v -> {
-                boolean shouldDismiss = true;
-                if (button3Listener != null) shouldDismiss = button3Listener.onClick(customView);
+                boolean shouldDismiss = button3Listener.onClick(customView);
                 if (shouldDismiss) dialog.dismiss();
             });
         }
@@ -118,8 +115,7 @@ public class CustomDialog {
             button4.setVisibility(View.VISIBLE);
             if (button4Text != null) button4.setText(button4Text);
             button4.setOnClickListener(v -> {
-                boolean shouldDismiss = true;
-                if (button4Listener != null) shouldDismiss = button4Listener.onClick(customView);
+                boolean shouldDismiss = button4Listener.onClick(customView);
                 if (shouldDismiss) dialog.dismiss();
             });
         }
@@ -128,8 +124,7 @@ public class CustomDialog {
             cancelButton.setVisibility(View.VISIBLE);
             if (cancelButtonText != null) cancelButton.setText(cancelButtonText);
             cancelButton.setOnClickListener(v -> {
-                boolean shouldDismiss = true;
-                if (cancelListener != null) shouldDismiss = cancelListener.onCancel(customView);
+                boolean shouldDismiss = cancelListener.onCancel(customView);
                 if (shouldDismiss) dialog.dismiss();
             });
         }
@@ -144,37 +139,19 @@ public class CustomDialog {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, items);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener((parent, view1, position, id) -> {
-                if (itemClickListener != null) itemClickListener.onItemClick(items[position]);
+                itemClickListener.onItemClick(items[position]);
                 dialog.dismiss();
             });
         }
-
-    }
-
-    private void setDraggable(AlertDialog dialog) {
-        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-        View decorView = dialog.getWindow().getDecorView();
-
-        decorView.setOnTouchListener((v, event) -> {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    dX = params.x - event.getRawX();
-                    dY = params.y - event.getRawY();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    params.x = (int) (event.getRawX() + dX);
-                    params.y = (int) (event.getRawY() + dY);
-                    dialog.getWindow().setAttributes(params);
-                    break;
-                default:
-                    return false;
-            }
-            return true;
-        });
     }
 
     public void show() {
         dialog.show();
+    }
+
+    @Override
+    public Window onInit() {
+        return dialog.getWindow();
     }
 
     public interface OnButtonClickListener {
