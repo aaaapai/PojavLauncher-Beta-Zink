@@ -124,7 +124,7 @@ cd ../
 - 可能更多,这就是为什么我们有一个错误追踪器
 
 ## 许可证
-- [GNU GPLv3](https://github.com/Vera-Firefly/Pojav-Glow-Worm/blob/v3_openjdk/LICENSE).
+- [GNU GPLv3](https://github.com/Vera-Firefly/Pojav-Glow-Worm/blob/main_v3/LICENSE).
 
 ## 贡献
 欢迎投稿!我们欢迎任何类型的贡献,不仅仅是代码.例如,您可以帮忙翻译!
@@ -148,4 +148,4 @@ cd ../
 - 感谢[MCHeads](https://mc-heads.net)提供Minecraft头像组件
 
 ## 更多
-* 如果你想要一种不同的体验,试试其它的优秀魔改版:[Pojav ZH](https://github.com/HopiHopy/PojavZH)
+* 如果你想要一种不同的体验,试试其它的优秀魔改版:[ZalithLauncher](https://github.com/ZalithLauncher/ZalithLauncher)

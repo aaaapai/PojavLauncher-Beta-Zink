@@ -343,8 +343,8 @@ public class JREUtils {
                     case "msm":
                         envMap.put("LOCAL_LOADER_OVERRIDE", "msm");
                         break;
-                    case "virtio":
-                        envMap.put("LOCAL_LOADER_OVERRIDE", "virtio");
+                    case "virtio_gpu":
+                        envMap.put("LOCAL_LOADER_OVERRIDE", "virtio_gpu");
                         break;
                     default:
                         envMap.put("LOCAL_LOADER_OVERRIDE", "kgsl");

@@ -122,7 +122,7 @@ cd ../
 - Probably more, that's why we have a bug tracker
 
 ## License
-- PojavLauncher is licensed under [GNU GPLv3](https://github.com/Vera-Firefly/Pojav-Glow-Worm/blob/v3_openjdk/LICENSE).
+- Pojav Glow·Worm is licensed under [GNU GPLv3](https://github.com/Vera-Firefly/Pojav-Glow-Worm/blob/main_v3/LICENSE).
 
 ## Contributing
 Contributions are welcome! We welcome any type of contribution, not only code. For example, you can help the wiki shape up. You can help the translation too!
@@ -147,5 +147,5 @@ Any code change to this repository should be submitted as a pull request. The de
 - Thanks to [MCHeads](https://mc-heads.net) for providing Minecraft avatars.
 
 ## More
-* If you want a different experience, try some of the other good ones:[Pojav ZH](https://github.com/HopiHopy/PojavZH)
+* If you want a different experience, try some of the other good ones:[ZalithLauncher](https://github.com/ZalithLauncher/ZalithLauncher)
 
