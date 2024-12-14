@@ -282,6 +282,7 @@ public class JREUtils {
                 case "vulkan_zink": {
                     envMap.put("POJAV_BETA_RENDERER", "mesa_3d");
                     envMap.put("LOCAL_DRIVER_MODEL", "driver_zink");
+                    envMap.put("mesa_glthread", "true");
                 }
                 break;
                 case "virglrenderer": {
@@ -289,6 +290,7 @@ public class JREUtils {
                     envMap.put("LOCAL_DRIVER_MODEL", "driver_virgl");
                     envMap.put("MESA_GL_VERSION_OVERRIDE", "4.3");
                     envMap.put("MESA_GLSL_VERSION_OVERRIDE", "430");
+                    envMap.put("mesa_glthread", "true");
                     envMap.put("VTEST_SOCKET_NAME", new File(Tools.DIR_CACHE, ".virgl_test").getAbsolutePath());
                 }
                 break;
