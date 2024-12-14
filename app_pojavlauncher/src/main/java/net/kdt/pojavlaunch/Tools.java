@@ -46,6 +46,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.fifthLight.touchController.ControllerProxy;
 import com.firefly.utils.MesaUtils;
 import com.firefly.utils.TurnipUtils;
 
@@ -251,6 +252,7 @@ public final class Tools {
         String args = LauncherPreferences.PREF_CUSTOM_JAVA_ARGS;
         if (Tools.isValidString(minecraftProfile.javaArgs)) args = minecraftProfile.javaArgs;
         FFmpegPlugin.discover(activity);
+        ControllerProxy.startProxy();
         JREUtils.launchJavaVM(activity, runtime, gamedir, javaArgList, args);
         // If we returned, this means that the JVM exit dialog has been shown and we don't need to be active anymore.
         // We never return otherwise. The process will be killed anyway, and thus we will become inactive
