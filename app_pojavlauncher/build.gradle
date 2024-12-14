@@ -264,6 +264,7 @@ dependencies {
     implementation 'com.github.Mathias-Boulay:ExtendedView:1.0.0'
     implementation 'com.github.Mathias-Boulay:android_gamepad_remapper:2.0.3'
     implementation 'com.github.Mathias-Boulay:virtual-joystick-android:2e7aa25e50'
+    implementation 'top.fifthlight.touchcontroller:proxy-client:0.0.1'
 
 
     // implementation 'com.intuit.sdp:sdp-android:1.0.5'
