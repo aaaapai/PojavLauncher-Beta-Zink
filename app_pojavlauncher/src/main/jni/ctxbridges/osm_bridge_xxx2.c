@@ -4,6 +4,7 @@
 
 #include <android/native_window.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <dlfcn.h>

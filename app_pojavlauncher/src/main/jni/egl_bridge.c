@@ -200,9 +200,10 @@ void renderer_load_config() {
         case BRIDGE_TBL_XXX4:
             // Nothing to do here
             break;
-        default:
+        default: {
+            pojav_environ->config_renderer = RENDERER_VK_ZINK;
             set_osm_bridge_tbl();
-            break;
+        } break;
     }
 }
 
