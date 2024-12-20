@@ -66,17 +66,6 @@
                 app:layout_constraintTop_toBottomOf="@id/custom_control_button" />
             
             <com.kdt.mcgui.LauncherMenuButton
-                android:id="@+id/start_terminal_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:drawableStart="@drawable/ic_terminal"
-                android:text="@string/main_terminal"
-                app:layout_constraintTop_toBottomOf="@id/install_jar_button" />
-
-            <com.kdt.mcgui.LauncherMenuButton
                 android:id="@+id/share_logs_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -85,7 +74,7 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:drawableStart="@android:drawable/ic_menu_share"
                 android:text="@string/main_share_logs"
-                app:layout_constraintTop_toBottomOf="@id/start_terminal_button" />
+                app:layout_constraintTop_toBottomOf="@id/install_jar_button" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
