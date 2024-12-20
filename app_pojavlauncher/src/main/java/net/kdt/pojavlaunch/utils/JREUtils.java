@@ -214,7 +214,7 @@ public class JREUtils {
         envMap.put("AWTSTUB_HEIGHT", Integer.toString(CallbackBridge.windowHeight > 0 ? CallbackBridge.windowHeight : CallbackBridge.physicalHeight));
 
         if (Tools.CONFIG_BRIDGE != null)
-            envMap.put("POJAV_CONFIG_BRIDGE", Tools.CONFIG_BRIDGE);
+            envMap.put("POJAV_CONFIG_BRIDGE", CONFIG_BRIDGE);
         if (PREF_BIG_CORE_AFFINITY)
             envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
         if (PREF_DUMP_SHADERS)
@@ -225,7 +225,7 @@ public class JREUtils {
             envMap.put("POJAV_VSYNC_IN_ZINK", "1");
         if (PREF_EXP_SETUP)
             envMap.put("POJAV_EXP_SETUP", "1");
-        if (PREF_SPARE_FRAME_BUFFER)
+        if (PREF_SPARE_FRAME_BUFFER && !CONFIG_BRIDGE.equals("xxx3"))
             envMap.put("POJAV_SPARE_FRAME_BUFFER", "1");
         if (FIX_Q3_BEHAVIOR)
             envMap.put("FD_DEV_FEATURES", "enable_tp_ubwc_flag_hint=1");

@@ -71,6 +71,7 @@ EXTERNAL_API void pojavTerminate() {
         case RENDERER_VK_ZINK:
         case RENDERER_VK_ZINK_XXX1:
         case RENDERER_VK_ZINK_XXX2:
+        case RENDERER_VK_ZINK_XXX3:
             // Nothing to do here
             break;
     }
@@ -147,6 +148,9 @@ EXTERNAL_API void* pojavGetCurrentContext() {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         return xxx2OsmGetCurrentContext();
 
+    if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX3)
+        return xxx3OsmGetCurrentContext();
+
     return br_get_current();
 }
 
@@ -194,9 +198,10 @@ void renderer_load_config() {
             xxx2OsmInit();
             xxx2OsmloadSymbols();
         } break;
-        case BRIDGE_TBL_XXX3:
-            // Nothing to do here
-            break;
+        case BRIDGE_TBL_XXX3: {
+            pojav_environ->config_renderer = RENDERER_VK_ZINK_XXX3;
+            xxx3OsmloadSymbols();
+        } break;
         case BRIDGE_TBL_XXX4:
             // Nothing to do here
             break;
@@ -342,6 +347,9 @@ EXTERNAL_API void pojavSwapBuffers() {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         xxx2OsmSwapBuffers();
 
+    if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX3)
+        xxx3OsmSwapBuffers();
+
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX1)
         br_swap_buffers();
 }
@@ -366,6 +374,9 @@ EXTERNAL_API void pojavMakeCurrent(void* window) {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         xxx2OsmMakeCurrent(window);
 
+    if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX3)
+        xxx3OsmMakeCurrent(window);
+
 }
 
 EXTERNAL_API void* pojavCreateContext(void* contextSrc) {
@@ -380,6 +391,9 @@ EXTERNAL_API void* pojavCreateContext(void* contextSrc) {
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         return xxx2OsmCreateContext(contextSrc);
+
+    if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX3)
+        return xxx3OsmCreateContext(contextSrc);
 
     return br_init_context((basic_render_window_t*)contextSrc);
 }
@@ -451,6 +465,9 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         xxx2OsmSwapInterval(interval);
+
+    if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX3)
+        xxx3OsmSwapInterval(interval);
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX1)
     {
