@@ -52,10 +52,6 @@
     <string name="preference_fix_q3_behavior_title">修复 Q3 行为</string>
     <string name="preference_fix_q3_behavior_desc">修复 740v3 上的 Q3 行为</string>
     <string name="worning_system_vulkan_adreno">我们检测到您的设备为 AdrenoGPU ,打开该选项可能会导致 Zink 渲染器无法正常使用\n你真的确定你要开启这个选项?</string>
-    <!-- Terminal -->
-    <string name="main_terminal">Terminal</string>
-    <string name="main_termianl_init">初始化</string>
-    <string name="main_terminal_loading">加载中...</string>
     <!-- Other login -->
     <string name="other_login_api">外置登录</string>
     <string name="other_login_authentication_server">身份验证服务器</string>
