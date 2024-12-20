@@ -26,7 +26,6 @@ import androidx.fragment.app.Fragment;
 
 import com.kdt.mcgui.mcVersionSpinner;
 import com.movtery.ui.fragment.ProfilePathManagerFragment;
-import com.qz.terminal2.ConsoleActivity;
 
 import net.kdt.pojavlaunch.CustomControlsActivity;
 import net.kdt.pojavlaunch.R;
@@ -51,7 +50,6 @@ public class MainMenuFragment extends Fragment implements TaskCountListener {
         Button mAboutLauncherButton = view.findViewById(R.id.about_launcher_button);
         Button mCustomControlButton = view.findViewById(R.id.custom_control_button);
         Button mInstallJarButton = view.findViewById(R.id.install_jar_button);
-        Button mStartTerminalButton = view.findViewById(R.id.start_terminal_button);
         Button mShareLogsButton = view.findViewById(R.id.share_logs_button);
 
         ImageButton mPathManagerButton = view.findViewById(R.id.path_manager_button);
@@ -70,7 +68,6 @@ public class MainMenuFragment extends Fragment implements TaskCountListener {
             runInstallerWithConfirmation(true);
             return true;
         });
-        mStartTerminalButton.setOnClickListener(v -> startActivity(new Intent(requireContext(), ConsoleActivity.class)));
         mShareLogsButton.setOnClickListener((v) -> shareLog(requireContext()));
 
         mPathManagerButton.setOnClickListener(v -> {
