@@ -24,10 +24,6 @@
     <string name="notif_mouse1">تم الحذف</string>
     <string name="preference_quit_launcher_title">الخروج من المشغل</string>
     <string name="preference_quit_launcher">الخروج من المشغل عند تشغيل اللعبة</string>
-    <!-- المحطة -->
-    <string name="main_terminal">المحطة</string>
-    <string name="main_termianl_init">التهيئة</string>
-    <string name="main_terminal_loading">جاري التحميل...</string>
     <!-- تسجيل الدخول الآخر -->
     <string name="other_login_api">تسجيل الدخول الآخر</string>
     <string name="other_login_authentication_server">خادم المصادقة</string>
