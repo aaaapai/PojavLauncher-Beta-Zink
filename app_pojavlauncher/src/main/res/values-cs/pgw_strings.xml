@@ -24,10 +24,6 @@
     <string name="notif_mouse1">Odstraněno</string>
     <string name="preference_quit_launcher_title">Ukončit spouštěč</string>
     <string name="preference_quit_launcher">Ukončit spouštěč při spuštění hry</string>
-    <!-- Terminál -->
-    <string name="main_terminal">Terminál</string>
-    <string name="main_termianl_init">Inicializace</string>
-    <string name="main_terminal_loading">Načítání...</string>
     <!-- Jiné přihlášení -->
     <string name="other_login_api">Jiné přihlášení</string>
     <string name="other_login_authentication_server">Autentizační server</string>
