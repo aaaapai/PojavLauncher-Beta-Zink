@@ -24,10 +24,6 @@
     <string name="notif_mouse1">Silindi</string>
     <string name="preference_quit_launcher_title">Başlatıcıdan çıx</string>
     <string name="preference_quit_launcher">Oyun başladıqda başlatıcıdan çıx</string>
-    <!-- Terminal -->
-    <string name="main_terminal">Terminal</string>
-    <string name="main_termianl_init">Başlanğıc</string>
-    <string name="main_terminal_loading">Yüklənir...</string>
     <!-- Digər daxil olma -->
     <string name="other_login_api">Digər daxil olma</string>
     <string name="other_login_authentication_server">Doğrulama serveri</string>
