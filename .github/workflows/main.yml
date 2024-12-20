@@ -6,10 +6,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: [ "all", "arm", "arm64", "x86", "x86_64" ]
+        arch: ["arm64"]
       fail-fast: false
 
     env:
@@ -18,112 +18,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set IS_OFFICIAL if in the Creator Repository
-        if: github.repository_owner == 'Vera-Firefly'
-        run: echo "IS_OFFICIAL=true" >> $GITHUB_ENV
-
-      - name: Get Jre
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          workflow: jrepush.yml
-          path: app_pojavlauncher/src/main/assets/components
-          workflow_conclusion: success
-          repo: Vera-Firefly/android-openjdk-autobuild
-          branch: main
-          name: jre-pojav
-
-      - name: Get JSPH
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          workflow: jrepush.yml
-          path: app_pojavlauncher/src/main/jniLibs/arm64-v8a
-          workflow_conclusion: success
-          repo: Vera-Firefly/android-openjdk-autobuild
-          branch: main
-          name: libjsph
-
-      - name: Get LWJGL3
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          workflow: main.yml
-          path: app_pojavlauncher/src/main/assets/components/lwjgl3
-          workflow_conclusion: success
-          repo: Vera-Firefly/lwjgl3-build
-          branch: main
-          name: lwjgl
-
-      - name: Build Release ${{matrix.arch}} .apk
-        if: github.repository_owner == 'Vera-Firefly' && github.ref_name == 'main_v3'
-        run: |
-          chmod +x gradlew
-          ./gradlew app_pojavlauncher:assemblerelease -Darch=${{matrix.arch}}
+        uses: actions/checkout@main
 
       - name: Build Debug ${{matrix.arch}} .apk
         run: |
           chmod +x gradlew
           ./gradlew app_pojavlauncher:assembleDebug -Darch=${{matrix.arch}}
 
-      - name: Upload Release
-        if: github.repository_owner == 'Vera-Firefly' && github.ref_name == 'main_v3'
-        uses: actions/upload-artifact@v4
-        with:
-          name: PGW-release-${{matrix.arch}}
-          path: app_pojavlauncher/build/outputs/apk/release/*
-
       - name: Upload Debug
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@main
         with:
           name: PGW-debug-${{matrix.arch}}
-          path: app_pojavlauncher/build/outputs/apk/debug/*
-
-  buildnoruntime:
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        arch: [ "all", "arm", "arm64", "x86", "x86_64" ]
-      fail-fast: false
-
-    env:
-      CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-      VERA_KEYSTORE_PASSWORD: ${{ secrets.VERA_KEYSTORE_PASSWORD }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set IS_OFFICIAL if in the Creator Repository
-        if: github.repository_owner == 'Vera-Firefly'
-        run: echo "IS_OFFICIAL=true" >> $GITHUB_ENV
-
-      - name: Get JSPH
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          workflow: jrepush.yml
-          path: app_pojavlauncher/src/main/jniLibs/arm64-v8a
-          workflow_conclusion: success
-          repo: Vera-Firefly/android-openjdk-autobuild
-          branch: main
-          name: libjsph
-
-      - name: Get LWJGL3
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          workflow: main.yml
-          path: app_pojavlauncher/src/main/assets/components/lwjgl3
-          workflow_conclusion: success
-          repo: Vera-Firefly/lwjgl3-build
-          branch: main
-          name: lwjgl
-
-      - name: Build Debug-noruntime ${{matrix.arch}} .apk
-        run: |
-          chmod +x gradlew
-          ./gradlew app_pojavlauncher:assembleDebug -Darch=${{matrix.arch}}
-
-      - name: Upload Debug
-        uses: actions/upload-artifact@v4
-        with:
-          name: PGW-debug-${{matrix.arch}}-noruntime
           path: app_pojavlauncher/build/outputs/apk/debug/*
