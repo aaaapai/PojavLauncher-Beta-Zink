@@ -24,10 +24,6 @@
     <string name="notif_mouse1">Penghapusan selesai</string>
     <string name="preference_quit_launcher_title">Keluar dari Launcher</string>
     <string name="preference_quit_launcher">Keluar dari launcher saat menjalankan game</string>
-    <!-- Terminal -->
-    <string name="main_terminal">Terminal</string>
-    <string name="main_termianl_init">Inisialisasi</string>
-    <string name="main_terminal_loading">Memuat...</string>
     <!-- Other login -->
     <string name="other_login_api">Login Lainnya</string>
     <string name="other_login_authentication_server">Server otentikasi</string>
