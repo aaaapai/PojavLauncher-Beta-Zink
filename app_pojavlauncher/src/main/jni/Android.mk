@@ -18,7 +18,7 @@ LOCAL_LDLIBS := -ldl -llog -landroid
 # -lGLESv2
 LOCAL_MODULE := pojavexec
 LOCAL_SHARED_LIBRARIES := bytehook
-LOCAL_CFLAGS += -g -rdynamic
+# LOCAL_CFLAGS += -g -rdynamic
 # LOCAL_CFLAGS += -DDEBUG
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
@@ -42,7 +42,9 @@ LOCAL_SRC_FILES := \
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
 LOCAL_CFLAGS += -DADRENO_POSSIBLE
-LOCAL_LDLIBS += -lEGL -lGLESv2
+LOCAL_CFLAGS += -Ofast -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -Wall -Weverything -std=c2x
+LOCAL_LDLAGS += -flto=thin -fuse-ld=lld
+LOCAL_LDLIBS += -lEGL -lGLESv3
 endif
 include $(BUILD_SHARED_LIBRARY)
 
@@ -51,6 +53,8 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := linkerhook
 LOCAL_SRC_FILES := driver_helper/hook.c
 LOCAL_LDFLAGS := -z global
+LOCAL_CFLAGS += -Ofast -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -Wall -Weverything -std=c2x
+LOCAL_LDLAGS += -flto=thin -fuse-ld=lld
 include $(BUILD_SHARED_LIBRARY)
 #endif
 
@@ -58,6 +62,8 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := pojavexec_awt
 LOCAL_SRC_FILES := \
     awt_bridge.c
+LOCAL_CFLAGS += -Ofast -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -Wall -Weverything -std=c2x
+LOCAL_LDLAGS += -flto=thin -fuse-ld=lld
 include $(BUILD_SHARED_LIBRARY)
 
 # Helper to get current thread
@@ -79,6 +85,8 @@ LOCAL_MODULE := awt_xawt
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SHARED_LIBRARIES := awt_headless
 LOCAL_SRC_FILES := xawt_fake.c
+LOCAL_CFLAGS += -Ofast -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -Wall -Weverything -std=c2x
+LOCAL_LDLAGS += -flto=thin -fuse-ld=lld
 include $(BUILD_SHARED_LIBRARY)
 
 # delete fake libs after linked
