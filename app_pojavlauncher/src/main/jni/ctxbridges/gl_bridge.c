@@ -114,7 +114,7 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
     return bundle;
 }
 
-static void gl_swap_surface(gl_render_window_t* bundle) {
+void gl_swap_surface(gl_render_window_t* bundle) {
     if (bundle->nativeSurface != NULL)
         ANativeWindow_release(bundle->nativeSurface);
 
