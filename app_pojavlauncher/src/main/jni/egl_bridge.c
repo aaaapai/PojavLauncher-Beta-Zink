@@ -48,12 +48,36 @@
 // This means that you are forced to have this function/variable for ABI compatibility
 #define ABI_COMPAT __attribute__((unused))
 
+#define RENDERER_GL4ES 1
+#define RENDERER_VK_ZINK 2
+#define RENDERER_VIRGL 3
+#define RENDERER_VULKAN 4
+#define RENDERER_VK_WARLIP 5
+
+#define BRIDGE_TBL_DEFAULT 0
+#define BRIDGE_TBL_XXX1 1
+#define BRIDGE_TBL_XXX2 2
+#define BRIDGE_TBL_XXX3 3
+#define BRIDGE_TBL_XXX4 4
+
+static void gbuffer;
+static void mbuffer;
+static void abuffer;
+
+struct PotatoBridge {
+    void* eglContext;    // EGLContext
+    void* eglDisplay;    // EGLDisplay
+    void* eglSurface;    // EGLSurface
+    // void* eglSurfaceRead;
+    // void* eglSurfaceDraw;
+};
+
 EGLConfig config;
 struct PotatoBridge potatoBridge;
 
-void bigcore_set_affinity();
+static void bigcore_set_affinity(void);
 
-EXTERNAL_API void pojavTerminate() {
+EXTERNAL_API void pojavTerminate(void) {
     printf("EGLBridge: Terminating\n");
 
     switch (pojav_environ->config_renderer) {
@@ -76,7 +100,7 @@ EXTERNAL_API void pojavTerminate() {
     }
 }
 
-void ConfigBridgeTbl() {
+static void ConfigBridgeTbl(void) {
     const char* bridge_tbl = getenv("POJAV_CONFIG_BRIDGE");
     if (bridge_tbl == NULL)
     {
@@ -111,7 +135,7 @@ void ConfigBridgeTbl() {
     }
 }
 
-int SpareBuffer() {
+int SpareBuffer(void) {
     if (getenv("POJAV_SPARE_FRAME_BUFFER") != NULL) return 1;
     return 0;
 }
@@ -136,7 +160,7 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_releaseBridgeWindow(ABI_COMPAT JNIEnv *e
 the Mesa class to crash in your launcher
 don't touch the code here
 */
-EXTERNAL_API void* pojavGetCurrentContext() {
+EXTERNAL_API void* pojavGetCurrentContext(void) {
 
     if (pojav_environ->config_bridge != 0 && pojav_environ->config_renderer == RENDERER_GL4ES)
         return (void *)eglGetCurrentContext_p();
@@ -156,7 +180,7 @@ static void set_vulkan_ptr(void* ptr) {
     setenv("VULKAN_PTR", envval, 1);
 }
 
-void load_vulkan() {
+static void load_vulkan(void) {
     if(getenv("POJAV_ZINK_PREFER_SYSTEM_DRIVER") == NULL && android_get_device_api_level() >= 28) {
     // the loader does not support below that
 #ifdef ADRENO_POSSIBLE
@@ -175,7 +199,7 @@ void load_vulkan() {
     set_vulkan_ptr(vulkan_ptr);
 }
 
-void renderer_load_config() {
+static void renderer_load_config(void) {
     ConfigBridgeTbl();
     if (pojav_environ->config_bridge == 0)
     {
@@ -207,7 +231,7 @@ void renderer_load_config() {
     }
 }
 
-int pojavInitOpenGL() {
+static int pojavInitOpenGL(void) {
     // Only affects GL4ES as of now
     const char *forceVsync = getenv("FORCE_VSYNC");
     if (!strcmp(forceVsync, "true"))
@@ -300,7 +324,7 @@ int pojavInitOpenGL() {
     return 0;
 }
 
-EXTERNAL_API int pojavInit() {
+EXTERNAL_API int pojavInit(void) {
     ANativeWindow_acquire(pojav_environ->pojavWindow);
     pojav_environ->savedWidth = ANativeWindow_getWidth(pojav_environ->pojavWindow);
     pojav_environ->savedHeight = ANativeWindow_getHeight(pojav_environ->pojavWindow);
@@ -327,7 +351,7 @@ EXTERNAL_API void pojavSetWindowHint(int hint, int value) {
     }
 }
 
-EXTERNAL_API void pojavSwapBuffers() {
+EXTERNAL_API void pojavSwapBuffers(void) {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK
      || pojav_environ->config_renderer == RENDERER_GL4ES)
     {
@@ -415,11 +439,11 @@ EXTERNAL_API JNIEXPORT jlong JNICALL
 Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr(JNIEnv *env, jobject thiz) {
     if (SpareBuffer() && pojav_environ->config_renderer == RENDERER_VIRGL)
     {
-        return &gbuffer;
+        return (jlong)&gbuffer;
     } else if (SpareBuffer() && pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX1) {
-        return &mbuffer;
+        return (jlong)&mbuffer;
     } else if (SpareBuffer() && pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2) {
-        return &abuffer;
+        return (jlong)&abuffer;
     }
 }
 
