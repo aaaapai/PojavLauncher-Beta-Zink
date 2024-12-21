@@ -57,7 +57,6 @@
 #define BRIDGE_TBL_XXX3 3
 #define BRIDGE_TBL_XXX4 4
 
-static void *gbuffer;
 static void *mbuffer;
 static void *abuffer;
 
@@ -431,7 +430,7 @@ static void renderer_load_config(void) {
     }
 }
 
-static int pojavInitOpenGL(void) {
+int pojavInitOpenGL(void) {
     // Only affects GL4ES as of now
     const char *forceVsync = getenv("FORCE_VSYNC");
     if (!strcmp(forceVsync, "true"))
