@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <dlfcn.h>
 
+#include <pthread.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -59,9 +60,9 @@
 #define BRIDGE_TBL_XXX3 3
 #define BRIDGE_TBL_XXX4 4
 
-static void gbuffer;
-static void mbuffer;
-static void abuffer;
+static void *gbuffer;
+static void *mbuffer;
+static void *abuffer;
 
 struct PotatoBridge {
     void* eglContext;    // EGLContext
@@ -673,7 +674,7 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
     }
 
     if (pojav_environ->config_renderer == RENDERER_VIRGL)
-        virglSwapInterval(interval);
+        eglSwapInterval_p(potatoBridge.eglDisplay, interval);
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         xxx2OsmSwapInterval(interval);
