@@ -59,6 +59,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := pojavexec_awt
 LOCAL_SRC_FILES := \
     awt_bridge.c
+LOCAL_CFLAGS += -DADRENO_POSSIBLE -Wno-error=implicit-function-declaration -Wno-int-conversion
 include $(BUILD_SHARED_LIBRARY)
 
 # Helper to get current thread
