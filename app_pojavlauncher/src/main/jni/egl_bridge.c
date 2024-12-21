@@ -13,7 +13,7 @@
 #include <unistd.h>
 
 #include <EGL/egl.h>
-#include <GL/osmesa.h>
+#include "GL/osmesa.h"
 #include "ctxbridges/egl_loader.h"
 #include "ctxbridges/osmesa_loader.h"
 
