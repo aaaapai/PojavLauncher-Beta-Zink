@@ -3,56 +3,16 @@
 // Definitions specific to the renderer
 //
 
-
-#define RENDERER_GL4ES 1
-#define RENDERER_VK_ZINK 2
-#define RENDERER_VIRGL 3
-#define RENDERER_VULKAN 4
-#define RENDERER_VK_WARLIP 5
 #define RENDERER_VK_ZINK_XXX1 6
 #define RENDERER_VK_ZINK_XXX2 7
 #define RENDERER_VK_ZINK_XXX3 8
 #define RENDERER_VK_ZINK_XXX4 9
 
-#define BRIDGE_TBL_DEFAULT 0
-#define BRIDGE_TBL_XXX1 1
-#define BRIDGE_TBL_XXX2 2
-#define BRIDGE_TBL_XXX3 3
-#define BRIDGE_TBL_XXX4 4
 
+#ifndef __SPARE_RENDERER_CONFIG_H_
+#define __SPARE_RENDERER_CONFIG_H_
 
-
-#ifndef POTATOBRIDGE_H
-#define POTATOBRIDGE_H
-#include <EGL/egl.h>
-
-struct PotatoBridge {
-    void* eglContext;    // EGLContext
-    void* eglDisplay;    // EGLDisplay
-    void* eglSurface;    // EGLSurface
-    // void* eglSurfaceRead;
-    // void* eglSurfaceDraw;
-};
-
-extern struct PotatoBridge potatoBridge;
-extern EGLConfig config;
-
-#endif // POTATOBRIDGE_H
-
-#ifndef SPARE_RENDERER_CONFIG_H
-#define SPARE_RENDERER_CONFIG_H
-
-int SpareBuffer();
-
-#endif
-
-#ifndef FRAME_BUFFER_SUPPOST
-#define FRAME_BUFFER_SUPPOST
-
-extern void *abuffer;
-extern void *gbuffer;
-extern void *mbuffer;
-
+int SpareBuffer(void);
 
 #endif
 
