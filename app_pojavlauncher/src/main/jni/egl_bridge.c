@@ -75,7 +75,7 @@ static int (*vtest_main_p)(int argc, char **argv);
 static void (*vtest_swap_buffers_p)(void);
 void *gbuffer;
 
-static void loadSymbolsVirGL(void) {
+static void loadSymbolsVirGL() {
     dlsym_OSMesa();
     dlsym_EGL();
 
@@ -93,7 +93,7 @@ static void loadSymbolsVirGL(void) {
     free(fileName);
 }
 
-static void virglSwapBuffers(void) {
+static void virglSwapBuffers() {
     glFinish_p();
     vtest_swap_buffers_p();
 }
@@ -274,9 +274,9 @@ static int virglInit() {
     return 0;
 }
 
-void bigcore_set_affinity(void);
+void bigcore_set_affinity();
 
-EXTERNAL_API void pojavTerminate(void) {
+EXTERNAL_API void pojavTerminate() {
     printf("EGLBridge: Terminating\n");
 
     switch (pojav_environ->config_renderer) {
@@ -299,7 +299,7 @@ EXTERNAL_API void pojavTerminate(void) {
     }
 }
 
-void ConfigBridgeTbl(void) {
+void ConfigBridgeTbl() {
     const char* bridge_tbl = getenv("POJAV_CONFIG_BRIDGE");
     if (bridge_tbl == NULL)
     {
@@ -334,7 +334,7 @@ void ConfigBridgeTbl(void) {
     }
 }
 
-int SpareBuffer(void) {
+int SpareBuffer() {
     if (getenv("POJAV_SPARE_FRAME_BUFFER") != NULL) return 1;
     return 0;
 }
@@ -359,7 +359,7 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_releaseBridgeWindow(ABI_COMPAT JNIEnv *e
 the Mesa class to crash in your launcher
 don't touch the code here
 */
-EXTERNAL_API void* pojavGetCurrentContext(void) {
+EXTERNAL_API void* pojavGetCurrentContext() {
 
     if (pojav_environ->config_bridge != 0 && pojav_environ->config_renderer == RENDERER_GL4ES)
         return (void *)eglGetCurrentContext_p();
@@ -379,7 +379,7 @@ static void set_vulkan_ptr(void* ptr) {
     setenv("VULKAN_PTR", envval, 1);
 }
 
-static void load_vulkan(void) {
+static void load_vulkan() {
     if(getenv("POJAV_ZINK_PREFER_SYSTEM_DRIVER") == NULL && android_get_device_api_level() >= 28) {
     // the loader does not support below that
 #ifdef ADRENO_POSSIBLE
@@ -398,7 +398,7 @@ static void load_vulkan(void) {
     set_vulkan_ptr(vulkan_ptr);
 }
 
-void renderer_load_config(void) {
+void renderer_load_config() {
     ConfigBridgeTbl();
     if (pojav_environ->config_bridge == 0)
     {
@@ -430,7 +430,7 @@ void renderer_load_config(void) {
     }
 }
 
-int pojavInitOpenGL(void) {
+int pojavInitOpenGL() {
     // Only affects GL4ES as of now
     const char *forceVsync = getenv("FORCE_VSYNC");
     if (!strcmp(forceVsync, "true"))
@@ -523,7 +523,7 @@ int pojavInitOpenGL(void) {
     return 0;
 }
 
-EXTERNAL_API int pojavInit(void) {
+EXTERNAL_API int pojavInit() {
     ANativeWindow_acquire(pojav_environ->pojavWindow);
     pojav_environ->savedWidth = ANativeWindow_getWidth(pojav_environ->pojavWindow);
     pojav_environ->savedHeight = ANativeWindow_getHeight(pojav_environ->pojavWindow);
@@ -550,7 +550,7 @@ EXTERNAL_API void pojavSetWindowHint(int hint, int value) {
     }
 }
 
-EXTERNAL_API void pojavSwapBuffers(void) {
+EXTERNAL_API void pojavSwapBuffers() {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK
      || pojav_environ->config_renderer == RENDERER_GL4ES)
     {
