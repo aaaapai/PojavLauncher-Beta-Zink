@@ -105,7 +105,7 @@ configurations {
 android {
     namespace 'net.kdt.pojavlaunch'
 
-    compileSdk = 35
+    compileSdk = 28
 
     lintOptions {
         abortOnError false
@@ -130,7 +130,7 @@ android {
     defaultConfig {
         applicationId "net.kdt.pojavlaunch.firefly"
         minSdkVersion 21 //设置为21可减小安装包体积
-        targetSdkVersion 35
+        targetSdkVersion 28
         versionCode getDateSeconds()
         versionName getVersionName()
         multiDexEnabled true //important
