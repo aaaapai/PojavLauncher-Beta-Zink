@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <dlfcn.h>
 
-#include <pthread.h>
+#include <pthread.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
