@@ -9,7 +9,7 @@
 #include "osm_bridge_xxx1.h"
 #include "renderer_config.h"
 
-void* mbuffer;
+static void* mbuffer;
 
 
 static const char* osm_LogTag = "OSMBridge";
@@ -18,14 +18,14 @@ static char xxx1_no_render_buffer[4];
 static bool hasSetNoRendererBuffer = false;
 
 
-void setNativeWindowSwapInterval(struct ANativeWindow* nativeWindow, int swapInterval);
+static void setNativeWindowSwapInterval(struct ANativeWindow* nativeWindow, int swapInterval);
 
-bool xxx1_osm_init() {
+bool xxx1_osm_init(void) {
     dlsym_OSMesa();
     return true;
 }
 
-xxx1_osm_render_window_t* xxx1_osm_get_current() {
+xxx1_osm_render_window_t* xxx1_osm_get_current(void) {
     return currentBundle;
 }
 
@@ -89,7 +89,7 @@ void xxx1_osm_swap_surfaces(xxx1_osm_render_window_t* bundle) {
 
 }
 
-void xxx1_osm_release_window() {
+void xxx1_osm_release_window(void) {
     currentBundle->newNativeSurface = NULL;
     xxx1_osm_swap_surfaces(currentBundle);
 }
@@ -172,7 +172,7 @@ void xxx1_osm_make_current(xxx1_osm_render_window_t* bundle) {
 
 }
 
-void xxx1_osm_swap_buffers() {
+void xxx1_osm_swap_buffers(void) {
 
     if (currentBundle->state == STATE_RENDERER_NEW_WINDOW)
     {
@@ -193,7 +193,7 @@ void xxx1_osm_swap_buffers() {
 
 }
 
-void xxx1_osm_setup_window() {
+void xxx1_osm_setup_window(void) {
 
     if (pojav_environ->mainWindowBundle != NULL)
     {
