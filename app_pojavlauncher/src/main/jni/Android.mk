@@ -18,7 +18,7 @@ LOCAL_LDLIBS := -ldl -llog -landroid
 # -lGLESv2
 LOCAL_MODULE := pojavexec
 LOCAL_SHARED_LIBRARIES := bytehook
-# LOCAL_CFLAGS += -g -rdynamic
+LOCAL_CFLAGS += -g -rdynamic
 # LOCAL_CFLAGS += -DDEBUG
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
@@ -41,9 +41,9 @@ LOCAL_SRC_FILES := \
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
 LOCAL_CFLAGS += -DADRENO_POSSIBLE
-LOCAL_CFLAGS += -Ofast -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -Wall -Weverything -std=c2x
-LOCAL_LDLAGS += -flto=thin -fuse-ld=lld
-LOCAL_LDLIBS += -lEGL -lGLESv3
+# LOCAL_CFLAGS += -Ofast -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -Wall -Weverything -std=c2x
+# LOCAL_LDLAGS += -flto=thin -fuse-ld=lld
+LOCAL_LDLIBS += -lEGL -lGLESv2
 endif
 include $(BUILD_SHARED_LIBRARY)
 
