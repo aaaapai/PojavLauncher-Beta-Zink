@@ -73,7 +73,7 @@ struct PotatoBridge potatoBridge;
 
 static int (*vtest_main_p)(int argc, char **argv);
 static void (*vtest_swap_buffers_p)(void);
-static void *gbuffer;
+void *gbuffer;
 
 static void loadSymbolsVirGL(void) {
     dlsym_OSMesa();
@@ -274,7 +274,7 @@ static int virglInit() {
     return 0;
 }
 
-static void bigcore_set_affinity(void);
+void bigcore_set_affinity(void);
 
 EXTERNAL_API void pojavTerminate(void) {
     printf("EGLBridge: Terminating\n");
@@ -299,7 +299,7 @@ EXTERNAL_API void pojavTerminate(void) {
     }
 }
 
-static void ConfigBridgeTbl(void) {
+void ConfigBridgeTbl(void) {
     const char* bridge_tbl = getenv("POJAV_CONFIG_BRIDGE");
     if (bridge_tbl == NULL)
     {
@@ -398,7 +398,7 @@ static void load_vulkan(void) {
     set_vulkan_ptr(vulkan_ptr);
 }
 
-static void renderer_load_config(void) {
+void renderer_load_config(void) {
     ConfigBridgeTbl();
     if (pojav_environ->config_bridge == 0)
     {
@@ -430,7 +430,7 @@ static void renderer_load_config(void) {
     }
 }
 
-static int pojavInitOpenGL(void) {
+int pojavInitOpenGL(void) {
     // Only affects GL4ES as of now
     const char *forceVsync = getenv("FORCE_VSYNC");
     if (!strcmp(forceVsync, "true"))
