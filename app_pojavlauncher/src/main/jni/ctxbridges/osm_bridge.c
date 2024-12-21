@@ -14,14 +14,14 @@ static char no_render_buffer[4];
 static bool hasSetNoRendererBuffer = false;
 
 // Its not in a .h file because it is not supposed to be used outsife of this file.
-void setNativeWindowSwapInterval(struct ANativeWindow* nativeWindow, int swapInterval);
+static void setNativeWindowSwapInterval(struct ANativeWindow* nativeWindow, int swapInterval);
 
-bool osm_init() {
+bool osm_init(void) {
     dlsym_OSMesa();
     return true; // no more specific initialization required
 }
 
-osm_render_window_t* osm_get_current() {
+osm_render_window_t* osm_get_current(void) {
     return currentBundle;
 }
 
@@ -73,12 +73,12 @@ void osm_swap_surfaces(osm_render_window_t* bundle) {
 
 }
 
-void osm_release_window() {
+void osm_release_window(void) {
     currentBundle->newNativeSurface = NULL;
     osm_swap_surfaces(currentBundle);
 }
 
-void osm_apply_current_ll() {
+void osm_apply_current_ll(void) {
     ANativeWindow_Buffer* buffer = &currentBundle->buffer;
     OSMesaMakeCurrent_p(currentBundle->context, buffer->bits, GL_UNSIGNED_BYTE, buffer->width, buffer->height);
     if(buffer->stride != currentBundle->last_stride)
@@ -115,7 +115,7 @@ void osm_make_current(osm_render_window_t* bundle) {
     OSMesaPixelStore_p(OSMESA_Y_UP,0);
 }
 
-void osm_swap_buffers() {
+void osm_swap_buffers(void) {
     if(currentBundle->state == STATE_RENDERER_NEW_WINDOW) {
         osm_swap_surfaces(currentBundle);
         currentBundle->state = STATE_RENDERER_ALIVE;
@@ -133,7 +133,7 @@ void osm_swap_buffers() {
             osm_release_window();
 }
 
-void osm_setup_window() {
+void osm_setup_window(void) {
     if(pojav_environ->mainWindowBundle != NULL) {
         __android_log_print(ANDROID_LOG_INFO, g_LogTag, "Main window bundle is not NULL, changing state");
         pojav_environ->mainWindowBundle->state = STATE_RENDERER_NEW_WINDOW;
