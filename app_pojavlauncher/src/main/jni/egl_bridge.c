@@ -49,7 +49,7 @@
 #define ABI_COMPAT __attribute__((unused))
 
 #define RENDERER_GL4ES 1
-#define RENDERER_VK_ZINK 2
+#define RENDERER_VULKAN 4
 #define RENDERER_VK_WARLIP 5
 
 #define BRIDGE_TBL_DEFAULT 0
