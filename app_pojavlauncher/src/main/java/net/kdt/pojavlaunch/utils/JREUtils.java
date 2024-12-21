@@ -253,8 +253,9 @@ public class JREUtils {
     private static void setRendererEnv() throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
 
-        if (LOCAL_RENDERER.startsWith("opengles2")) {
-            envMap.put("LIBGL_ES", "2");
+        if (LOCAL_RENDERER.startsWith("opengles3")) {
+            envMap.put("LIBGL_ES", "3");
+            envMap.put("LIBGL_FB", "3");
             envMap.put("LIBGL_MIPMAP", "3");
             envMap.put("LIBGL_NOERROR", "1");
             envMap.put("LIBGL_NOINTOVLHACK", "1");
@@ -468,27 +469,10 @@ public class JREUtils {
 
         List<String> userArgs = getJavaArgs(activity, runtimeHome, userArgsString);
 
-        //Remove arguments that can interfere with the good working of the launcher
-        purgeArg(userArgs, "-Xms");
-        purgeArg(userArgs, "-Xmx");
-        purgeArg(userArgs, "-d32");
-        purgeArg(userArgs, "-d64");
-        purgeArg(userArgs, "-Xint");
-        purgeArg(userArgs, "-XX:+UseTransparentHugePages");
-        purgeArg(userArgs, "-XX:+UseLargePagesInMetaspace");
-        purgeArg(userArgs, "-XX:+UseLargePages");
-        purgeArg(userArgs, "-Dorg.lwjgl.opengl.libname");
-        // Don't let the user specify a custom Freetype library (as the user is unlikely to specify a version compiled for Android)
-        purgeArg(userArgs, "-Dorg.lwjgl.freetype.libname");
-
         //Add automatically generated args
         userArgs.add("-Xms" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
         userArgs.add("-Xmx" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
         if (LOCAL_RENDERER != null) userArgs.add("-Dorg.lwjgl.opengl.libname=" + loadGraphicsLibrary());
-
-        // Force LWJGL to use the Freetype library intended for it, instead of using the one
-        // that we ship with Java (since it may be older than what's needed)
-        userArgs.add("-Dorg.lwjgl.freetype.libname="+ NATIVE_LIB_DIR+"/libfreetype.so");
 
         userArgs.addAll(JVMArgs);
         activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg, LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());
@@ -499,7 +483,7 @@ public class JREUtils {
         chdir(gameDirectory == null ? ProfilePathHome.getGameHome() : gameDirectory.getAbsolutePath());
         userArgs.add(0, "java"); //argv[0] is the program name according to C standard.
 
-        final int exitCode = VMLauncher.launchJVM(userArgs.toArray(new String[0]));
+        int exitCode = VMLauncher.launchJVM(userArgs.toArray(new String[0]));
         Logger.appendToLog("Java Exit code: " + exitCode);
         if (exitCode != 0) {
             activity.runOnUiThread(() -> {
@@ -667,10 +651,10 @@ public class JREUtils {
             }
         } else {
             switch (LOCAL_RENDERER) {
-                case "opengles2":
+                case "opengles3":
                     renderLibrary = "libgl4es_114.so";
                     break;
-                case "opengles2_ptitseb":
+                case "opengles3_ptitseb":
                     renderLibrary = "libgl4es_ptitseb.so";
                     break;
                 case "opengles2_vgpu":
