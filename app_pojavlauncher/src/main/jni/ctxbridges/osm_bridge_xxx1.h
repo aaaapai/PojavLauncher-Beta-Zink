@@ -3,8 +3,8 @@
 //
 #include <android/native_window.h>
 #include <stdbool.h>
-#ifndef POJAVLAUNCHER_OSM_BRIDGE_XXX1_H
-#define POJAVLAUNCHER_OSM_BRIDGE_XXX1_H
+#ifndef __POJAVLAUNCHER_OSM_BRIDGE_XXX1_H_
+#define __POJAVLAUNCHER_OSM_BRIDGE_XXX1_H_
 #include "osmesa_loader.h"
 
 
@@ -18,12 +18,12 @@ typedef struct {
     OSMesaContext context;
 } xxx1_osm_render_window_t;
 
-bool xxx1_osm_init();
-xxx1_osm_render_window_t* xxx1_osm_get_current();
+bool xxx1_osm_init(void);
+xxx1_osm_render_window_t* xxx1_osm_get_current(void);
 xxx1_osm_render_window_t* xxx1_osm_init_context(xxx1_osm_render_window_t* share);
 void xxx1_osm_make_current(xxx1_osm_render_window_t* bundle);
-void xxx1_osm_swap_buffers();
-void xxx1_osm_setup_window();
+void xxx1_osm_swap_buffers(void);
+void xxx1_osm_setup_window(void);
 void xxx1_osm_swap_interval(int swapInterval);
 
 #endif //POJAVLAUNCHER_OSM_BRIDGE_XXX1_H
