@@ -56,7 +56,6 @@
 
 #define BRIDGE_TBL_DEFAULT 0
 #define BRIDGE_TBL_XXX1 1
-#define BRIDGE_TBL_XXX2 2
 #define BRIDGE_TBL_XXX3 3
 #define BRIDGE_TBL_XXX4 4
 
