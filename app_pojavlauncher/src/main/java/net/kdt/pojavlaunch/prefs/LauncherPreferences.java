@@ -24,7 +24,7 @@ public class LauncherPreferences {
     public static final String PREF_KEY_SKIP_NOTIFICATION_CHECK = "skipNotificationPermissionCheck";
 
     public static SharedPreferences DEFAULT_PREF;
-    public static String PREF_RENDERER = "opengles2";
+    public static String PREF_RENDERER = "opengles3";
     public static String PREF_MESA_LIB = "default";
     public static String PREF_TURNIP_LIBS = "default";
     public static String PREF_DRIVER_MODEL = "driver_zink";
@@ -100,7 +100,7 @@ public class LauncherPreferences {
         //Required for the data folder.
         Tools.initContextConstants(ctx);
 
-        PREF_RENDERER = DEFAULT_PREF.getString("renderer", "opengles2");
+        PREF_RENDERER = DEFAULT_PREF.getString("renderer", "opengles3");
         PREF_BUTTONSIZE = DEFAULT_PREF.getInt("buttonscale", 100);
         PREF_MOUSESCALE = DEFAULT_PREF.getInt("mousescale", 100);
         PREF_MOUSESPEED = ((float) DEFAULT_PREF.getInt("mousespeed", 100)) / 100f;
