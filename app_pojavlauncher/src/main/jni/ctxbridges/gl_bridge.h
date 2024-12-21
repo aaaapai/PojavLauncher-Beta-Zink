@@ -3,8 +3,8 @@
 //
 #include <EGL/egl.h>
 #include <stdbool.h>
-#ifndef __POJAVLAUNCHER_GL_BRIDGE_H_
-#define __POJAVLAUNCHER_GL_BRIDGE_H_
+#ifndef POJAVLAUNCHER_GL_BRIDGE_H
+#define POJAVLAUNCHER_GL_BRIDGE_H
 
 typedef struct {
     char       state;
