@@ -19,7 +19,7 @@ static const char* g_LogTag = "GLBridge";
 static __thread gl_render_window_t* currentBundle;
 static EGLDisplay g_EglDisplay;
 
-bool gl_init(void) {
+bool gl_init() {
     dlsym_EGL();
     g_EglDisplay = eglGetDisplay_p(EGL_DEFAULT_DISPLAY);
     if (g_EglDisplay == EGL_NO_DISPLAY) {
@@ -53,7 +53,7 @@ static void gl4esi_get_display_dimensions(int* width, int* height) {
 }
 
 static bool already_initialized = false;
-static void gl_init_gl4es_internals(void) {
+static void gl_init_gl4es_internals() {
     if (already_initialized) return;
     already_initialized = true;
 
