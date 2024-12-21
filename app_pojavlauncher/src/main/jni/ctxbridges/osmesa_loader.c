@@ -23,7 +23,7 @@ void (*glClear_p) (GLbitfield mask);
 void (*glReadPixels_p) (GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void * data);
 void (*glReadBuffer_p) (GLenum mode);
 
-void dlsym_OSMesa() {
+void dlsym_OSMesa(void) {
     char* main_path = NULL;
     char* mesa_library = getenv("MESA_LIBRARY");
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK
