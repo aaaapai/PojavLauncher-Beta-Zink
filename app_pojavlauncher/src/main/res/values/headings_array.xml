@@ -14,8 +14,8 @@
     </string-array>
 
     <string-array name="renderer_values">
-        <item>opengles2</item> <!-- gl4es_extra 1.1.4 with OpenGL ES 2/"3" -->
-        <item>opengles2_ptitseb</item> <!-- gl4es ptitseb with OpenGL ES 2 -->
+        <item>opengles3</item> <!-- gl4es_extra 1.1.4 with OpenGL ES 2/"3" -->
+        <item>opengles3_ptitseb</item> <!-- gl4es ptitseb with OpenGL ES 2 -->
         <item>opengles2_vgpu</item> <!-- Vgpu renderer with OpenGL ES 2 OpenGL 4.4 -->
         <item>opengles2_vgpu_1</item> <!-- Vgpu renderer with OpenGL ES2 OpenGL 3.0 -->
         <item>mesa_3d</item> <!-- Mesa3D Library -->
