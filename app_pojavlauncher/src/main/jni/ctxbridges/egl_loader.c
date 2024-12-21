@@ -26,7 +26,7 @@ EGLBoolean (*eglSwapInterval_p) (EGLDisplay dpy, EGLint interval);
 EGLSurface (*eglGetCurrentSurface_p) (EGLint readdraw);
 EGLBoolean (*eglQuerySurface_p)(EGLDisplay display, EGLSurface surface, EGLint attribute, EGLint * value);
 
-void dlsym_EGL() {
+void dlsym_EGL(void) {
     void* dl_handle = NULL;
     if(getenv("POJAVEXEC_EGL")) dl_handle = dlopen(getenv("POJAVEXEC_EGL"), RTLD_LAZY);
     if(dl_handle == NULL) dl_handle = dlopen("libEGL.so", RTLD_LAZY);
