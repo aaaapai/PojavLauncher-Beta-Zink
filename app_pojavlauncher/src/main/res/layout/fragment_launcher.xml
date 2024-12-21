@@ -65,6 +65,7 @@
 				android:background="?android:attr/selectableItemBackground"
 				android:drawableStart="@android:drawable/ic_menu_share"
 				android:text="@string/main_share_logs"
+				app:layout_constraintTop_toBottomOf="@id/install_jar_button"
 				/>
 		</androidx.constraintlayout.widget.ConstraintLayout>
 	</ScrollView>
