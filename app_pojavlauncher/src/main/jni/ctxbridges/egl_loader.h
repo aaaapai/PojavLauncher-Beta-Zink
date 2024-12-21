@@ -25,6 +25,6 @@ extern EGLBoolean (*eglSwapInterval_p) (EGLDisplay dpy, EGLint interval);
 extern EGLSurface (*eglGetCurrentSurface_p) (EGLint readdraw);
 extern EGLBoolean (*eglQuerySurface_p)(EGLDisplay display, EGLSurface surface, EGLint attribute, EGLint * value);
 
-void dlsym_EGL(void);
+void dlsym_EGL();
 
 #endif //POJAVLAUNCHER_EGL_LOADER_H
