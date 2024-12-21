@@ -79,10 +79,6 @@ static int (*vtest_main_p)(int argc, char **argv);
 static void (*vtest_swap_buffers_p)(void);
 static void *gbuffer;
 
-static void *virglGetCurrentContext(void) {
-    return (void *)OSMesaGetCurrentContext_p();
-}
-
 static void loadSymbolsVirGL(void) {
     dlsym_OSMesa();
     dlsym_EGL();
@@ -373,7 +369,7 @@ EXTERNAL_API void* pojavGetCurrentContext(void) {
         return (void *)eglGetCurrentContext_p();
 
     if (pojav_environ->config_renderer == RENDERER_VIRGL)
-        return virglGetCurrentContext();
+        return (void *)OSMesaGetCurrentContext_p();
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         return xxx2OsmGetCurrentContext();
