@@ -19,7 +19,7 @@ static const char* g_LogTag = "GLBridge";
 static __thread gl_render_window_t* currentBundle;
 static EGLDisplay g_EglDisplay;
 
-bool gl_init() {
+bool gl_init(void) {
     dlsym_EGL();
     g_EglDisplay = eglGetDisplay_p(EGL_DEFAULT_DISPLAY);
     if (g_EglDisplay == EGL_NO_DISPLAY) {
@@ -35,7 +35,7 @@ bool gl_init() {
     return true;
 }
 
-gl_render_window_t* gl_get_current() {
+gl_render_window_t* gl_get_current(void) {
     return currentBundle;
 }
 
@@ -53,7 +53,7 @@ static void gl4esi_get_display_dimensions(int* width, int* height) {
 }
 
 static bool already_initialized = false;
-static void gl_init_gl4es_internals() {
+static void gl_init_gl4es_internals(void) {
     if (already_initialized) return;
     already_initialized = true;
 
@@ -114,7 +114,7 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
     return bundle;
 }
 
-void gl_swap_surface(gl_render_window_t* bundle) {
+static void gl_swap_surface(gl_render_window_t* bundle) {
     if (bundle->nativeSurface != NULL)
         ANativeWindow_release(bundle->nativeSurface);
 
@@ -179,7 +179,7 @@ void gl_make_current(gl_render_window_t* bundle) {
 
 }
 
-void gl_swap_buffers() {
+void gl_swap_buffers(void) {
     if (currentBundle->state == STATE_RENDERER_NEW_WINDOW)
     {
         eglMakeCurrent_p(g_EglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
@@ -198,7 +198,7 @@ void gl_swap_buffers() {
 
 }
 
-void gl_setup_window() {
+void gl_setup_window(void) {
     if (pojav_environ->mainWindowBundle != NULL)
     {
         __android_log_print(ANDROID_LOG_INFO, g_LogTag, "Main window bundle is not NULL, changing state");
