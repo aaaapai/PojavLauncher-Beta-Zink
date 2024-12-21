@@ -113,6 +113,8 @@ void xxx3OsmSwapBuffers() {
 }
 
 void xxx3OsmSwapInterval(int interval) {
+    if (!getenv("POJAV_VSYNC_IN_ZINK")) return;
+
     if (xxx3_osm->nativeSurface != NULL)
         setNativeWindowSwapInterval(xxx3_osm->nativeSurface, interval);
 }
