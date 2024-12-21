@@ -18,7 +18,7 @@
 #include "ctxbridges/osmesa_loader.h"
 
 #ifdef GLES_TEST
-#include <GLES2/gl2.h>
+#include <GLES3/gl32.h>
 #endif
 
 #include <android/native_window.h>
@@ -34,7 +34,6 @@
 #include "ctxbridges/osm_bridge_xxx1.h"
 #include "ctxbridges/osm_bridge_xxx2.h"
 #include "ctxbridges/renderer_config.h"
-#include "ctxbridges/virgl_bridge.h"
 #include "driver_helper/nsbypass.h"
 
 #define GLFW_CLIENT_API 0x22001
