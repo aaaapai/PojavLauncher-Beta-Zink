@@ -1,7 +1,7 @@
 //
 // Created by maks on 17.09.2022.
 //
-#include <EGL//egl.h>
+#include <EGL/egl.h>
 #include <stdbool.h>
 #ifndef __POJAVLAUNCHER_GL_BRIDGE_H_
 #define __POJAVLAUNCHER_GL_BRIDGE_H_
@@ -16,7 +16,7 @@ typedef struct {
     EGLSurface surface;
 } gl_render_window_t;
 
-bool gl_init(void);
+bool gl_init();
 gl_render_window_t* gl_get_current(void);
 gl_render_window_t* gl_init_context(gl_render_window_t* share);
 void gl_make_current(gl_render_window_t* bundle);
