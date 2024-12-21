@@ -430,7 +430,7 @@ static void renderer_load_config(void) {
     }
 }
 
-int pojavInitOpenGL(void) {
+static int pojavInitOpenGL(void) {
     // Only affects GL4ES as of now
     const char *forceVsync = getenv("FORCE_VSYNC");
     if (!strcmp(forceVsync, "true"))
