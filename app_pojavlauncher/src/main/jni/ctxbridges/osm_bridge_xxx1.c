@@ -59,7 +59,7 @@ void xxx1_osm_set_no_render_buffer(ANativeWindow_Buffer* buffer) {
     buffer->stride = 0;
 }
 
-void xxx1_osm_swap_surfaces(xxx1_osm_render_window_t* bundle) {
+static void xxx1_osm_swap_surfaces(xxx1_osm_render_window_t* bundle) {
 
     if (bundle->nativeSurface != NULL && bundle->newNativeSurface != bundle->nativeSurface)
     {
