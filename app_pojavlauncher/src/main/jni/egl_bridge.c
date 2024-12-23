@@ -57,9 +57,6 @@
 #define BRIDGE_TBL_XXX3 3
 #define BRIDGE_TBL_XXX4 4
 
-static void *mbuffer;
-static void *abuffer;
-
 struct PotatoBridge {
     void* eglContext;    // EGLContext
     void* eglDisplay;    // EGLDisplay
@@ -276,7 +273,7 @@ static int virglInit() {
 
 void bigcore_set_affinity();
 
-EXTERNAL_API void pojavTerminate() {
+EXTERNAL_API void pojavTerminate(void) {
     printf("EGLBridge: Terminating\n");
 
     switch (pojav_environ->config_renderer) {
@@ -299,7 +296,7 @@ EXTERNAL_API void pojavTerminate() {
     }
 }
 
-void ConfigBridgeTbl() {
+static void ConfigBridgeTbl(void) {
     const char* bridge_tbl = getenv("POJAV_CONFIG_BRIDGE");
     if (bridge_tbl == NULL)
     {
@@ -398,7 +395,7 @@ static void load_vulkan() {
     set_vulkan_ptr(vulkan_ptr);
 }
 
-void renderer_load_config() {
+static void renderer_load_config(void) {
     ConfigBridgeTbl();
     if (pojav_environ->config_bridge == 0)
     {
@@ -430,7 +427,7 @@ void renderer_load_config() {
     }
 }
 
-int pojavInitOpenGL() {
+static int pojavInitOpenGL(void) {
     // Only affects GL4ES as of now
     const char *forceVsync = getenv("FORCE_VSYNC");
     if (!strcmp(forceVsync, "true"))
