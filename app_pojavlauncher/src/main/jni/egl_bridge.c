@@ -72,7 +72,7 @@ static int (*vtest_main_p)(int argc, char **argv);
 static void (*vtest_swap_buffers_p)(void);
 void *gbuffer;
 
-static void loadSymbolsVirGL() {
+static void loadSymbolsVirGL(void) {
     dlsym_OSMesa();
     dlsym_EGL();
 
@@ -90,7 +90,7 @@ static void loadSymbolsVirGL() {
     free(fileName);
 }
 
-static void virglSwapBuffers() {
+static void virglSwapBuffers(void) {
     glFinish_p();
     vtest_swap_buffers_p();
 }
@@ -154,7 +154,7 @@ static void *egl_make_current(void *window) {
     }
 }
 
-static int virglInit() {
+static int virglInit(void) {
     if (pojav_environ->config_renderer != RENDERER_VIRGL)
         return 0;
 
@@ -167,7 +167,7 @@ static int virglInit() {
     }
 
     printf("EGLBridge: Initializing\n");
-    // printf("EGLBridge: ANativeWindow pointer = %p\n", pojav_environ->pojavWindow);
+    printf("EGLBridge: ANativeWindow pointer = %p\n", pojav_environ->pojavWindow);
     //(*env)->ThrowNew(env,(*env)->FindClass(env,"java/lang/Exception"),"Trace exception");
     if (!eglInitialize_p(potatoBridge.eglDisplay, NULL, NULL)) {
         printf("EGLBridge: Error eglInitialize() failed: %s\n", eglGetError_p());
@@ -181,7 +181,7 @@ static int virglInit() {
             EGL_ALPHA_SIZE, 8,
             // Minecraft required on initial 24
             EGL_DEPTH_SIZE, 24,
-            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
             EGL_NONE
     };
 
@@ -271,7 +271,7 @@ static int virglInit() {
     return 0;
 }
 
-void bigcore_set_affinity();
+void bigcore_set_affinity(void);
 
 EXTERNAL_API void pojavTerminate(void) {
     printf("EGLBridge: Terminating\n");
@@ -547,7 +547,7 @@ EXTERNAL_API void pojavSetWindowHint(int hint, int value) {
     }
 }
 
-EXTERNAL_API void pojavSwapBuffers() {
+EXTERNAL_API void pojavSwapBuffers(void) {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK
      || pojav_environ->config_renderer == RENDERER_GL4ES)
     {
