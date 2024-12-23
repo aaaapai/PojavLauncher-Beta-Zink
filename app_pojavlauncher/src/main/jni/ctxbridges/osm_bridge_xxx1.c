@@ -9,7 +9,7 @@
 #include "osm_bridge_xxx1.h"
 #include "renderer_config.h"
 
-static void* mbuffer;
+void* mbuffer;
 
 
 static const char* osm_LogTag = "OSMBridge";
@@ -18,7 +18,7 @@ static char xxx1_no_render_buffer[4];
 static bool hasSetNoRendererBuffer = false;
 
 
-static void setNativeWindowSwapInterval(struct ANativeWindow* nativeWindow, int swapInterval);
+void setNativeWindowSwapInterval(struct ANativeWindow* nativeWindow, int swapInterval);
 
 bool xxx1_osm_init(void) {
     dlsym_OSMesa();
