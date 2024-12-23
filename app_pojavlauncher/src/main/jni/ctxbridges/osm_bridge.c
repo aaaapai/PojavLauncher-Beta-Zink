@@ -47,7 +47,7 @@ void osm_set_no_render_buffer(ANativeWindow_Buffer* buffer) {
     buffer->stride = 0;
 }
 
-void osm_swap_surfaces(osm_render_window_t* bundle) {
+static void osm_swap_surfaces(osm_render_window_t* bundle) {
     if(bundle->nativeSurface != NULL && bundle->newNativeSurface != bundle->nativeSurface) {
         if(!bundle->disable_rendering) {
             __android_log_print(ANDROID_LOG_INFO, g_LogTag, "Unlocking for cleanup...");
