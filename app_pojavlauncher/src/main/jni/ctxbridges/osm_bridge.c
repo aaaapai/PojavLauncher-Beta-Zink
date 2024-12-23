@@ -14,7 +14,7 @@ static char no_render_buffer[4];
 static bool hasSetNoRendererBuffer = false;
 
 // Its not in a .h file because it is not supposed to be used outsife of this file.
-static void setNativeWindowSwapInterval(struct ANativeWindow* nativeWindow, int swapInterval);
+void setNativeWindowSwapInterval(struct ANativeWindow* nativeWindow, int swapInterval);
 
 bool osm_init(void) {
     dlsym_OSMesa();
