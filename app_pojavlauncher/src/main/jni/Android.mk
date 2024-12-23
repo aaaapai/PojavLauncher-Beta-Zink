@@ -18,7 +18,7 @@ LOCAL_LDLIBS := -ldl -llog -landroid
 # -lGLESv2
 LOCAL_MODULE := pojavexec
 LOCAL_SHARED_LIBRARIES := bytehook
-LOCAL_CFLAGS += -g -rdynamic
+LOCAL_CFLAGS += -rdynamic
 # LOCAL_CFLAGS += -DDEBUG
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
@@ -35,13 +35,13 @@ LOCAL_SRC_FILES := \
     input_bridge_v3.c \
     jre_launcher.c \
     utils.c \
-    driver_helper.c\
+    driver_helper.c \
     stdio_is.c \
     driver_helper/nsbypass.c
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
 LOCAL_CFLAGS += -DADRENO_POSSIBLE
-LOCAL_CFLAGS += -flto=thin -fwhole-program-vtables -mllvm -polly -Weverything
+LOCAL_CFLAGS += -flto=thin -fwhole-program-vtables -mllvm -polly -Weverything -fPIC -DPIC -std=c2x
 LOCAL_LDLAGS += -flto=thin
 LOCAL_LDLIBS += -lEGL -lGLESv3
 endif
