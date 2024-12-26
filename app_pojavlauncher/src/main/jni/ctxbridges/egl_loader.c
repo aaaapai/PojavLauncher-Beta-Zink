@@ -36,7 +36,6 @@ void dlsym_EGL(void) {
     eglGetProcAddress_p = dlsym(dl_handle, "eglGetProcAddress");
     if(eglGetProcAddress_p == NULL) {
         printf("%s\n", dlerror());
-        return false;
     }
     eglBindAPI_p = dlsym(dl_handle,"eglBindAPI");
     eglChooseConfig_p = dlsym(dl_handle, "eglChooseConfig");
