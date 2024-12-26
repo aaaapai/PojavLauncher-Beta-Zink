@@ -57,5 +57,4 @@ void dlsym_EGL(void) {
     eglTerminate_p = dlsym(dl_handle, "eglTerminate");
     eglGetCurrentSurface_p = dlsym(dl_handle,"eglGetCurrentSurface");
     eglQuerySurface_p = dlsym(dl_handle, "eglQuerySurface");
-    eglQueryString_p = dlsym(dl_handle, "eglQueryString");
 }
