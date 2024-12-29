@@ -310,34 +310,11 @@ public final class Tools {
 
     public static void getCacioJavaArgs(List<String> javaArgList, boolean isJava8, boolean isJava11) {
         // Caciocavallo config AWT-enabled version
-        javaArgList.add("-Djava.awt.headless=false");
-        javaArgList.add("-Dcacio.managed.screensize=" + AWTCanvasView.AWT_CANVAS_WIDTH + "x" + AWTCanvasView.AWT_CANVAS_HEIGHT);
-        javaArgList.add("-Dcacio.font.fontmanager=sun.awt.X11FontManager");
-        javaArgList.add("-Dcacio.font.fontscaler=sun.font.FreetypeFontScaler");
-        javaArgList.add("-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel");
         if (isJava8) {
             javaArgList.add("-Dawt.toolkit=net.java.openjdk.cacio.ctc.CTCToolkit");
             javaArgList.add("-Djava.awt.graphicsenv=net.java.openjdk.cacio.ctc.CTCGraphicsEnvironment");
         } else {
-            javaArgList.add("-Dawt.toolkit=com.github.caciocavallosilano.cacio.ctc.CTCToolkit");
-            javaArgList.add("-Djava.awt.graphicsenv=com.github.caciocavallosilano.cacio.ctc.CTCGraphicsEnvironment");
-            javaArgList.add("-Djava.system.class.loader=com.github.caciocavallosilano.cacio.ctc.CTCPreloadClassLoader");
-
-            javaArgList.add("--add-exports=java.desktop/java.awt=ALL-UNNAMED");
-            javaArgList.add("--add-exports=java.desktop/java.awt.peer=ALL-UNNAMED");
-            javaArgList.add("--add-exports=java.desktop/sun.awt.image=ALL-UNNAMED");
-            javaArgList.add("--add-exports=java.desktop/sun.java2d=ALL-UNNAMED");
-            javaArgList.add("--add-exports=java.desktop/java.awt.dnd.peer=ALL-UNNAMED");
-            javaArgList.add("--add-exports=java.desktop/sun.awt=ALL-UNNAMED");
-            javaArgList.add("--add-exports=java.desktop/sun.awt.event=ALL-UNNAMED");
-            javaArgList.add("--add-exports=java.desktop/sun.awt.datatransfer=ALL-UNNAMED");
-            javaArgList.add("--add-exports=java.desktop/sun.font=ALL-UNNAMED");
-            javaArgList.add("--add-exports=java.base/sun.security.action=ALL-UNNAMED");
-            javaArgList.add("--add-opens=java.base/java.util=ALL-UNNAMED");
-            javaArgList.add("--add-opens=java.desktop/java.awt=ALL-UNNAMED");
-            javaArgList.add("--add-opens=java.desktop/sun.font=ALL-UNNAMED");
-            javaArgList.add("--add-opens=java.desktop/sun.java2d=ALL-UNNAMED");
-            javaArgList.add("--add-opens=java.base/java.lang.reflect=ALL-UNNAMED");
+            javaArgList.add("-Xss1M");
 
             // Opens the java.net package to Arc DNS injector on Java 9+
             javaArgList.add("--add-opens=java.base/java.net=ALL-UNNAMED");
@@ -354,7 +331,6 @@ public final class Tools {
                 }
             }
         }
-        javaArgList.add(cacioClasspath.toString());
     }
 
     public static String[] getMinecraftJVMArgs(String versionName, File gameDir) {
