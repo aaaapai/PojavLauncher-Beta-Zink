@@ -264,7 +264,7 @@ public class JREUtils {
 
         if (LOCAL_RENDERER.equals("opengles3_ltw")) {
             envMap.put("LIBGL_ES", "3");
-            envMap.put("POJAVEXEC_EGL", "libltw.so");
+            envMap.put("POJAVEXEC_EGL", "libEGL_angle.so");
         }
 
         if (!LOCAL_RENDERER.startsWith("opengles")) {
