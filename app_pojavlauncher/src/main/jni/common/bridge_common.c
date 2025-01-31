@@ -14,7 +14,7 @@ void* mbuffer;
 EGLConfig config;
 struct PotatoBridge potatoBridge;
 
-int SpareBuffer() {
+int SpareBuffer(void) {
     if (getenv("POJAV_SPARE_FRAME_BUFFER") != NULL) return 1;
     return 0;
 }
