@@ -35,6 +35,7 @@
 #define EVENT_TYPE_WINDOW_SIZE 1008
 
 static void registerFunctions(JNIEnv *env);
+void glfwGetMonitorPhysicalSize(GLFWmonitor* handle, int* widthMM, int* heightMM);
 
 jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
     if (pojav_environ->dalvikJavaVMPtr == NULL)
