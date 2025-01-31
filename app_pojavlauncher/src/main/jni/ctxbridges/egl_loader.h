@@ -26,6 +26,6 @@ extern EGLSurface (*eglGetCurrentSurface_p) (EGLint readdraw);
 extern EGLBoolean (*eglQuerySurface_p)(EGLDisplay display, EGLSurface surface, EGLint attribute, EGLint * value);
 extern __eglMustCastToProperFunctionPointerType (*eglGetProcAddress_p) (const char *procname);
 
-void dlsym_EGL();
+void dlsym_EGL(void);
 
 #endif //POJAVLAUNCHER_EGL_LOADER_H
