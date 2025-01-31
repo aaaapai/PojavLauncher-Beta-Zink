@@ -37,7 +37,7 @@ static bool recordBuffer(char* buf, ssize_t len) {
     return true;
 }
 
-static void *logger_thread() {
+static void *logger_thread(void) {
     JNIEnv *env;
     jstring writeString;
     JavaVM* dvm = pojav_environ->dalvikJavaVMPtr;
