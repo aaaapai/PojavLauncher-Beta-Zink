@@ -22,5 +22,5 @@ extern void (*glReadPixels_p) (GLint x, GLint y, GLsizei width, GLsizei height, 
 extern void (*glReadBuffer_p) (GLenum mode);
 extern void* (*OSMesaGetProcAddress_p)(const char* funcName);
 
-void dlsym_OSMesa();
+void dlsym_OSMesa(void);
 #endif //POJAVLAUNCHER_OSMESA_LOADER_H
