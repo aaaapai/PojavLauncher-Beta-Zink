@@ -12,13 +12,12 @@
 #include "pojav/log.h"
 
 struct pojav_environ_s *pojav_environ;
-__attribute__((constructor)) void env_init() {
+__attribute__((constructor)) void env_init(void) {
     char* strptr_env = getenv("POJAV_ENVIRON");
     if(strptr_env == NULL) {
         LOGI("No environ found, creating...");
-        pojav_environ = malloc(sizeof(struct pojav_environ_s));
+        pojav_environ = calloc(sizeof(struct pojav_environ_s), 1);
         assert(pojav_environ);
-        memset(pojav_environ, 0 , sizeof(struct pojav_environ_s));
         if(asprintf(&strptr_env, "%p", pojav_environ) == -1) abort();
         setenv("POJAV_ENVIRON", strptr_env, 1);
         free(strptr_env);
