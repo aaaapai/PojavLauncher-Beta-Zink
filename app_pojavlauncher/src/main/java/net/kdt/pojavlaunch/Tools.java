@@ -326,7 +326,6 @@ public final class Tools {
 
     public static void getCacioJavaArgs(List<String> javaArgList, boolean isJava8, boolean isJava11) {
         // Caciocavallo config AWT-enabled version
-        javaArgList.add("-Djava.awt.headless=false");
         javaArgList.add("-Dcacio.managed.screensize=" + AWTCanvasView.AWT_CANVAS_WIDTH + "x" + AWTCanvasView.AWT_CANVAS_HEIGHT);
         javaArgList.add("-Dcacio.font.fontmanager=sun.awt.X11FontManager");
         javaArgList.add("-Dcacio.font.fontscaler=sun.font.FreetypeFontScaler");
@@ -334,11 +333,29 @@ public final class Tools {
         if (isJava8) {
             javaArgList.add("-Dawt.toolkit=net.java.openjdk.cacio.ctc.CTCToolkit");
             javaArgList.add("-Djava.awt.graphicsenv=net.java.openjdk.cacio.ctc.CTCGraphicsEnvironment");
+            javaArgList.add("-Djava.awt.headless=false");
         } else {
+            if (isJava11) {
             javaArgList.add("-Dawt.toolkit=com.github.caciocavallosilano.cacio.ctc.CTCToolkit");
             javaArgList.add("-Djava.awt.graphicsenv=com.github.caciocavallosilano.cacio.ctc.CTCGraphicsEnvironment");
             javaArgList.add("-Djava.system.class.loader=com.github.caciocavallosilano.cacio.ctc.CTCPreloadClassLoader");
+            javaArgList.add("-Djava.awt.headless=false");
+            }
 
+            if (isJava17) {
+            javaArgList.add("-Dawt.toolkit=com.github.caciocavallosilano.cacio.ctc.CTCToolkit");
+            javaArgList.add("-Djava.awt.graphicsenv=com.github.caciocavallosilano.cacio.ctc.CTCGraphicsEnvironment");
+            javaArgList.add("-Djava.system.class.loader=com.github.caciocavallosilano.cacio.ctc.CTCPreloadClassLoader");
+            javaArgList.add("-Djava.awt.headless=false");
+            }
+
+            if (isJava21) {
+            javaArgList.add("-Dawt.toolkit=com.github.caciocavallosilano.cacio.ctc.CTCToolkit");
+            javaArgList.add("-Djava.awt.graphicsenv=com.github.caciocavallosilano.cacio.ctc.CTCGraphicsEnvironment");
+            javaArgList.add("-Djava.system.class.loader=com.github.caciocavallosilano.cacio.ctc.CTCPreloadClassLoader");
+            javaArgList.add("-Djava.awt.headless=false");
+            }
+            
             javaArgList.add("--add-exports=java.desktop/java.awt=ALL-UNNAMED");
             javaArgList.add("--add-exports=java.desktop/java.awt.peer=ALL-UNNAMED");
             javaArgList.add("--add-exports=java.desktop/sun.awt.image=ALL-UNNAMED");
@@ -370,8 +387,22 @@ public final class Tools {
                 }
             }
         }
-        javaArgList.add(cacioClasspath.toString());
-    }
+
+        if (isJava8) {
+           javaArgList.add(cacioClasspath.toString());
+        }
+
+        if (isJava11) {
+           javaArgList.add(cacioClasspath.toString());
+        }
+
+        if (isJava17) {
+           javaArgList.add(cacioClasspath.toString());
+        }
+
+        if (isJava21) {
+           javaArgList.add(cacioClasspath.toString());
+        }
 
     public static String[] getMinecraftJVMArgs(String versionName, File gameDir) {
         JMinecraftVersionList.Version versionInfo = Tools.getVersionInfo(versionName, true);
