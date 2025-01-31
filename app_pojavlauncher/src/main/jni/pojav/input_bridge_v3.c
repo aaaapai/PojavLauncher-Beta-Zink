@@ -35,7 +35,6 @@
 #define EVENT_TYPE_WINDOW_SIZE 1008
 
 static void registerFunctions(JNIEnv *env);
-void glfwGetMonitorPhysicalSize(GLFWmonitor* handle, int* widthMM, int* heightMM);
 
 jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
     if (pojav_environ->dalvikJavaVMPtr == NULL)
@@ -221,9 +220,16 @@ Java_org_lwjgl_glfw_GLFW_glfwSetCursorPos(__attribute__((unused)) JNIEnv *env,
     JavaCritical_org_lwjgl_glfw_GLFW_glfwSetCursorPos(window, xpos, ypos);
 }
 
+JNIEXPORT void JNICALL
+Java_org_lwjgl_glfw_GLFW_glfwGetMonitorPhysicalSize(JNIEnv *env,
+                                          __attribute__((unused)) jclass clazz,
+                                          __attribute__((unused)) jlong window,
+                                          jint* widthMM,
+                                          jint* heightMM) {
+}
 
 
-void sendData(int type, int i1, int i2, int i3, int i4) {
+static void sendData(int type, int i1, int i2, int i3, int i4) {
     GLFWInputEvent *event = &pojav_environ->events[pojav_environ->inEventIndex];
     event->type = type;
     event->i1 = i1;
