@@ -9,7 +9,7 @@
 #include "osmesa_loader.h"
 
 __eglMustCastToProperFunctionPointerType (*eglGetProcAddress_p) (const char *procname);
-void* (*OSMesaGetProcAddress_p)(const char* funcName);
+static void* (*OSMesaGetProcAddress_p)(const char* funcName);
 
 void* load_symbol(void* handle, const char* symbol_name) {
     void* symbol = dlsym(handle, symbol_name);
