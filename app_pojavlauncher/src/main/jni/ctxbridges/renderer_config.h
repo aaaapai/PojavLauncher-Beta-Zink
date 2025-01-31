@@ -4,7 +4,6 @@
 //
 
 
-#define RENDERER_GL4ES 1
 #define RENDERER_VK_ZINK 2
 #define RENDERER_VIRGL 3
 #define RENDERER_VULKAN 4
@@ -42,7 +41,7 @@ extern EGLConfig config;
 #ifndef SPARE_RENDERER_CONFIG_H
 #define SPARE_RENDERER_CONFIG_H
 
-int SpareBuffer();
+int SpareBuffer(void);
 
 #endif
 
