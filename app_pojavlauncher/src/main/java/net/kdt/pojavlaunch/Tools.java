@@ -404,6 +404,8 @@ public final class Tools {
            javaArgList.add(cacioClasspath.toString());
         }
 
+    }
+    
     public static String[] getMinecraftJVMArgs(String versionName, File gameDir) {
         JMinecraftVersionList.Version versionInfo = Tools.getVersionInfo(versionName, true);
         // Parse Forge 1.17+ additional JVM Arguments
