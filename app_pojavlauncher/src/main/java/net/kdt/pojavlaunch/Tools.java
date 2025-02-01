@@ -252,7 +252,7 @@ public final class Tools {
             }
         }
 
-        getCacioJavaArgs(javaArgList, runtime.javaVersion == 8, runtime.javaVersion == 11);
+        getCacioJavaArgs(javaArgList, runtime.javaVersion == 8, runtime.javaVersion == 11, runtime.javaVersion == 17, runtime.javaVersion == 21);
 
         boolean is7 = VersionNumber.compare(VersionNumber.asVersion(versionInfo.id != null ? versionInfo.id : "0.0").getCanonical(), "1.12") < 0;
         String configFilePath = Tools.DIR_DATA + "/security/log4j-rce-patch-" + (is7 ? "1.7" : "1.12") + ".xml";
