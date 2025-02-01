@@ -437,7 +437,7 @@ public class JREUtils {
         if (!onUseJSPH) return;
         File dir = new File(NATIVE_LIB_DIR);
         if (!dir.isDirectory()) return;
-        String jsphName = runtime.javaVersion == 17 ? "libjsph17" : "libjsph21";
+        String jsphName = runtime.javaVersion == 17 ? "libjsph17" : runtime.javaVersion == 21 ? "libjsph21" : "libjsph25";
         File[] files = dir.listFiles((dir1, name) -> name.startsWith(jsphName));
         if (files != null && files.length > 0) {
             String libName = NATIVE_LIB_DIR + "/" + jsphName + ".so";
