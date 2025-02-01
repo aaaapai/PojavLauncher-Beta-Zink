@@ -324,7 +324,7 @@ public final class Tools {
         }
     }
 
-    public static void getCacioJavaArgs(List<String> javaArgList, boolean isJava8, boolean isJava11) {
+    public static void getCacioJavaArgs(List<String> javaArgList, boolean isJava8, boolean isJava11, boolean isJava17, boolean isJava21) {
         // Caciocavallo config AWT-enabled version
         javaArgList.add("-Dcacio.managed.screensize=" + AWTCanvasView.AWT_CANVAS_WIDTH + "x" + AWTCanvasView.AWT_CANVAS_HEIGHT);
         javaArgList.add("-Dcacio.font.fontmanager=sun.awt.X11FontManager");
