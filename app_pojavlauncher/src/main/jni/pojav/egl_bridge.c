@@ -51,7 +51,7 @@
 
 #define RENDERER_GL4ES 1
 
-static void bigcore_set_affinity(void);
+void bigcore_set_affinity(void);
 
 static void* loadTurnipVulkan(void);
 
@@ -77,7 +77,7 @@ EXTERNAL_API void pojavTerminate(void) {
             // Nothing to do here
             break;
     }
-    return 0;
+    return;
 }
 
 static void ConfigBridgeTbl(void) {
@@ -113,7 +113,7 @@ static void ConfigBridgeTbl(void) {
         printf("Config Bridge: Config not found, using default config\n");
         pojav_environ->config_bridge = BRIDGE_TBL_DEFAULT;
     }
-    return 0;
+    return;
 }
 
 JNIEXPORT void JNICALL
@@ -178,6 +178,7 @@ static void load_vulkan(void) {
     void* vulkanPtr = dlopen("libvulkan.so", RTLD_LAZY | RTLD_LOCAL);
     printf("OSMDroid: Loaded Vulkan, ptr=%p\n", vulkanPtr);
     set_vulkan_ptr(vulkanPtr);
+    return;
 }
 
 static void renderer_load_config(void) {
@@ -211,6 +212,7 @@ static void renderer_load_config(void) {
             set_osm_bridge_tbl();
         } break;
     }
+    return;
 }
 
 int pojavInitOpenGL(void) {
@@ -365,7 +367,7 @@ EXTERNAL_API void pojavSwapBuffers(void) {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX1)
         br_swap_buffers();
 
-    return 0;
+    return;
 }
 
 EXTERNAL_API void pojavMakeCurrent(void* window) {
@@ -391,7 +393,7 @@ EXTERNAL_API void pojavMakeCurrent(void* window) {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX3)
         xxx3OsmMakeCurrent(window);
 
-    return 0;
+    return;
 }
 
 EXTERNAL_API void* pojavCreateContext(void* contextSrc) {
@@ -442,7 +444,7 @@ Java_org_lwjgl_opengl_GL_nativeRegalMakeCurrent(JNIEnv *env, jclass clazz) {
         printf("regal removed\n");
         abort();
     }
-    return 0;
+    return;
 }
 
 EXTERNAL_API JNIEXPORT jlong JNICALL
@@ -497,7 +499,7 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
         printf("eglSwapInterval: NOT IMPLEMENTED YET!\n");
         // Nothing to do here
     }
-    return 0;
+    return;
 }
 
 
