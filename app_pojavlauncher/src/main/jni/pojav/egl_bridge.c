@@ -499,7 +499,6 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
         printf("eglSwapInterval: NOT IMPLEMENTED YET!\n");
         // Nothing to do here
     }
-    return;
 }
 
 
