@@ -77,7 +77,6 @@ EXTERNAL_API void pojavTerminate(void) {
             // Nothing to do here
             break;
     }
-    return;
 }
 
 static void ConfigBridgeTbl(void) {
@@ -113,7 +112,6 @@ static void ConfigBridgeTbl(void) {
         printf("Config Bridge: Config not found, using default config\n");
         pojav_environ->config_bridge = BRIDGE_TBL_DEFAULT;
     }
-    return;
 }
 
 JNIEXPORT void JNICALL
@@ -178,7 +176,6 @@ static void load_vulkan(void) {
     void* vulkanPtr = dlopen("libvulkan.so", RTLD_LAZY | RTLD_LOCAL);
     printf("OSMDroid: Loaded Vulkan, ptr=%p\n", vulkanPtr);
     set_vulkan_ptr(vulkanPtr);
-    return;
 }
 
 static void renderer_load_config(void) {
@@ -187,7 +184,6 @@ static void renderer_load_config(void) {
     {
         pojav_environ->config_renderer = RENDERER_VK_ZINK;
         set_osm_bridge_tbl();
-        return;
     }
     printf("Config Bridge: Config = %p\n", pojav_environ->config_bridge);
     switch (pojav_environ->config_bridge) {
@@ -212,7 +208,6 @@ static void renderer_load_config(void) {
             set_osm_bridge_tbl();
         } break;
     }
-    return;
 }
 
 int pojavInitOpenGL(void) {
@@ -233,7 +228,6 @@ int pojavInitOpenGL(void) {
         ConfigBridgeTbl();
         pojav_environ->config_renderer = RENDERER_GL4ES;
         if (pojav_environ->config_bridge == 0) set_gl_bridge_tbl();
-        return 0;
     }
 
     if (!strcmp(renderer, "mesa_3d"))
@@ -245,7 +239,6 @@ int pojavInitOpenGL(void) {
             setenv("MESA_LOADER_DRIVER_OVERRIDE", "zink", 1);
             renderer_load_config();
             load_vulkan();
-            return 0;
         }
 
         if (!strcmp(ldrivermodel, "gallium_virgl"))
@@ -265,7 +258,6 @@ int pojavInitOpenGL(void) {
         {
             setenv("GALLIUM_DRIVER", "panfrost", 1);
             renderer_load_config();
-            return 0;
         }
 
         if (!strcmp(ldrivermodel, "gallium_freedreno"))
@@ -274,7 +266,6 @@ int pojavInitOpenGL(void) {
             if (mldo) setenv("MESA_LOADER_DRIVER_OVERRIDE", mldo, 1);
             else setenv("MESA_LOADER_DRIVER_OVERRIDE", "kgsl", 1);
             renderer_load_config();
-            return 0;
         }
 
         if (!strcmp(ldrivermodel, "gallium_softpipe"))
@@ -282,7 +273,6 @@ int pojavInitOpenGL(void) {
             setenv("GALLIUM_DRIVER", "softpipe", 1);
             setenv("LIBGL_ALWAYS_SOFTWARE", "1", 1);
             renderer_load_config();
-            return 0;
         }
 
         if (!strcmp(ldrivermodel, "gallium_llvmpipe"))
@@ -290,7 +280,6 @@ int pojavInitOpenGL(void) {
             setenv("GALLIUM_DRIVER", "llvmpipe", 1);
             setenv("LIBGL_ALWAYS_SOFTWARE", "1", 1);
             renderer_load_config();
-            return 0;
         }
     }
 
@@ -311,7 +300,6 @@ int pojavInitOpenGL(void) {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX1)
         if (br_init()) br_setup_window();
 
-    return 0;
 }
 
 EXTERNAL_API int pojavInit(void) {
@@ -367,7 +355,6 @@ EXTERNAL_API void pojavSwapBuffers(void) {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX1)
         br_swap_buffers();
 
-    return;
 }
 
 EXTERNAL_API void pojavMakeCurrent(void* window) {
@@ -392,8 +379,6 @@ EXTERNAL_API void pojavMakeCurrent(void* window) {
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX3)
         xxx3OsmMakeCurrent(window);
-
-    return;
 }
 
 EXTERNAL_API void* pojavCreateContext(void* contextSrc) {
@@ -444,7 +429,6 @@ Java_org_lwjgl_opengl_GL_nativeRegalMakeCurrent(JNIEnv *env, jclass clazz) {
         printf("regal removed\n");
         abort();
     }
-    return;
 }
 
 EXTERNAL_API JNIEXPORT jlong JNICALL
@@ -457,7 +441,6 @@ Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr(JNIEnv *env, jobject thiz) {
     } else if (SpareBuffer() && pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2) {
         return (jlong) &abuffer;
     }
-    return 0;
 }
 
 EXTERNAL_API JNIEXPORT jintArray JNICALL
@@ -471,7 +454,6 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
         (*env)->SetIntArrayRegion(env,ret,0,2,arr);
         return ret;
     }
-    return 0;
 }
 #endif
 
