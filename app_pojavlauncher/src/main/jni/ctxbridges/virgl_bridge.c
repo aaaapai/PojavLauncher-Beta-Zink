@@ -14,10 +14,7 @@
 #include "virgl_bridge.h"
 #include "egl_loader.h"
 #include "osmesa_loader.h"
-#define TAG __FILE_NAME__
 #include "renderer_config.h"
-
-#define EGL_OPENGL_ES3_BIT_KHR 0x00000040
 
 int (*vtest_main_p)(int argc, char **argv);
 void (*vtest_swap_buffers_p)(void);
@@ -47,7 +44,7 @@ void *egl_make_current(void *window) {
     }
 }
 
-bool loadSymbolsVirGL(void) {
+bool loadSymbolsVirGL() {
     dlsym_OSMesa();
     dlsym_EGL();
 
@@ -68,7 +65,7 @@ bool loadSymbolsVirGL(void) {
     return true;
 }
 
-int virglInit(void) {
+int virglInit() {
     if (pojav_environ->config_renderer != RENDERER_VIRGL)
         return 0;
 
@@ -89,8 +86,17 @@ int virglInit(void) {
         return 0;
     }
 
-    static EGLint attribs[] = { EGL_BLUE_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_RED_SIZE, 8, EGL_ALPHA_SIZE, 8, EGL_DEPTH_SIZE, 24, EGL_ALPHA_MASK_SIZE, 8, EGL_SURFACE_TYPE, EGL_WINDOW_BIT|EGL_PBUFFER_BIT, EGL_CONFORMANT, EGL_OPENGL_ES3_BIT_KHR, EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT_KHR, EGL_NONE };
-    
+    static const EGLint attribs[] = {
+            EGL_RED_SIZE, 8,
+            EGL_GREEN_SIZE, 8,
+            EGL_BLUE_SIZE, 8,
+            EGL_ALPHA_SIZE, 8,
+            // Minecraft required on initial 24
+            EGL_DEPTH_SIZE, 24,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
+            EGL_NONE
+    };
+
     EGLint num_configs;
     EGLint vid;
 
