@@ -124,7 +124,7 @@ int virglInit(void) {
     {
         EGLint val;
         assert(eglGetConfigAttrib_p(potatoBridge.eglDisplay, config, EGL_SURFACE_TYPE, &val));
-        assert(val & EGL_WINDOW_BIT|EGL_PBUFFER_BIT);
+        assert(val & EGL_WINDOW_BIT);
     }
 
     printf("EGLBridge: Initialized!\n");
