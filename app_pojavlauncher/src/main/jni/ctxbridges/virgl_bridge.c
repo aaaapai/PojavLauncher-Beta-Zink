@@ -108,9 +108,6 @@ int virglInit(void) {
         return 0;
     }
 
-    ANativeWindow_release(pojav_environ->pojavWindow);
-    eglDestroySurface_p(potatoBridge.eglDisplay, pojav_environ->pojavWindow);
-    ANativeWindow_acquire(pojav_environ->pojavWindow);
     ANativeWindow_setBuffersGeometry(pojav_environ->pojavWindow, 0, 0, vid);
 
     eglBindAPI_p(EGL_OPENGL_ES_API);
@@ -126,7 +123,7 @@ int virglInit(void) {
     {
         EGLint val;
         assert(eglGetConfigAttrib_p(potatoBridge.eglDisplay, config, EGL_SURFACE_TYPE, &val));
-        assert(val & EGL_WINDOW_BIT|EGL_PBUFFER_BIT);
+        assert(val & EGL_WINDOW_BIT);
     }
 
     printf("EGLBridge: Initialized!\n");
