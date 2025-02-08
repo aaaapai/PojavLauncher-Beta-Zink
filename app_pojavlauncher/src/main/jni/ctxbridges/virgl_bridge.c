@@ -16,8 +16,6 @@
 #include "osmesa_loader.h"
 #include "renderer_config.h"
 
-#define EGL_OPENGL_ES3_BIT_KHR 0x00000040
-
 int (*vtest_main_p)(int argc, char **argv);
 void (*vtest_swap_buffers_p)(void);
 
@@ -46,7 +44,7 @@ void *egl_make_current(void *window) {
     }
 }
 
-bool loadSymbolsVirGL(void) {
+bool loadSymbolsVirGL() {
     dlsym_OSMesa();
     dlsym_EGL();
 
@@ -67,7 +65,7 @@ bool loadSymbolsVirGL(void) {
     return true;
 }
 
-int virglInit(void) {
+int virglInit() {
     if (pojav_environ->config_renderer != RENDERER_VIRGL)
         return 0;
 
@@ -88,9 +86,9 @@ int virglInit(void) {
         return 0;
     }
 
-    static EGLint attribs[] = { EGL_BLUE_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_RED_SIZE, 8, EGL_ALPHA_SIZE, 8, EGL_DEPTH_SIZE, 24, EGL_ALPHA_MASK_SIZE, 8, EGL_SURFACE_TYPE, EGL_WINDOW_BIT|EGL_PBUFFER_BIT, EGL_CONFORMANT, EGL_OPENGL_ES3_BIT_KHR, EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT_KHR, EGL_NONE };
+    static const EGLint attribs[] = { EGL_BLUE_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_RED_SIZE, 8, EGL_ALPHA_SIZE, 8, EGL_DEPTH_SIZE, 24, EGL_ALPHA_MASK_SIZE, 8, EGL_SURFACE_TYPE, EGL_WINDOW_BIT|EGL_PBUFFER_BIT, EGL_CONFORMANT, EGL_OPENGL_ES3_BIT, EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT, EGL_NONE };
     
-    EGLint num_configs = 0;
+    EGLint num_configs;
     EGLint vid;
 
     if (!eglChooseConfig_p(potatoBridge.eglDisplay, attribs, &config, 1, &num_configs))
@@ -108,6 +106,9 @@ int virglInit(void) {
         return 0;
     }
 
+    ANativeWindow_release(pojav_environ->pojavWindow);
+    eglDestroySurface_p(potatoBridge.eglDisplay, pojav_environ->pojavWindow);
+    ANativeWindow_acquire(pojav_environ->pojavWindow);
     ANativeWindow_setBuffersGeometry(pojav_environ->pojavWindow, 0, 0, vid);
 
     eglBindAPI_p(EGL_OPENGL_ES_API);
@@ -123,7 +124,7 @@ int virglInit(void) {
     {
         EGLint val;
         assert(eglGetConfigAttrib_p(potatoBridge.eglDisplay, config, EGL_SURFACE_TYPE, &val));
-        assert(val & EGL_WINDOW_BIT);
+        assert(val & EGL_WINDOW_BIT|EGL_PBUFFER_BIT);
     }
 
     printf("EGLBridge: Initialized!\n");
