@@ -14,7 +14,10 @@
 #include "virgl_bridge.h"
 #include "egl_loader.h"
 #include "osmesa_loader.h"
+#define TAG __FILE_NAME__
 #include "renderer_config.h"
+
+#define EGL_OPENGL_ES3_BIT_KHR 0x00000040
 
 int (*vtest_main_p)(int argc, char **argv);
 void (*vtest_swap_buffers_p)(void);
@@ -38,13 +41,13 @@ void *egl_make_current(void *window) {
     
         printf("VirGL: vtest_main = %p\n", vtest_main_p);
         printf("VirGL: Calling VTest server's main function\n");
-        vtest_main_p(2, (const char*[]){"vtest", "--use-gles", NULL, NULL, NULL});
+        vtest_main_p(3, (const char*[]){"vtest", "--use-gles", "no-loop-or-fork", NULL, NULL});
     } else {
         return NULL;
     }
 }
 
-bool loadSymbolsVirGL() {
+bool loadSymbolsVirGL(void) {
     dlsym_OSMesa();
     dlsym_EGL();
 
@@ -65,7 +68,7 @@ bool loadSymbolsVirGL() {
     return true;
 }
 
-int virglInit() {
+int virglInit(void) {
     if (pojav_environ->config_renderer != RENDERER_VIRGL)
         return 0;
 
@@ -86,18 +89,9 @@ int virglInit() {
         return 0;
     }
 
-    static const EGLint attribs[] = {
-            EGL_RED_SIZE, 8,
-            EGL_GREEN_SIZE, 8,
-            EGL_BLUE_SIZE, 8,
-            EGL_ALPHA_SIZE, 8,
-            // Minecraft required on initial 24
-            EGL_DEPTH_SIZE, 24,
-            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
-            EGL_NONE
-    };
-
-    EGLint num_configs;
+    static EGLint attribs[] = { EGL_BLUE_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_RED_SIZE, 8, EGL_ALPHA_SIZE, 8, EGL_DEPTH_SIZE, 24, EGL_ALPHA_MASK_SIZE, 8, EGL_SURFACE_TYPE, EGL_WINDOW_BIT|EGL_PBUFFER_BIT, EGL_CONFORMANT, EGL_OPENGL_ES3_BIT_KHR, EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT_KHR, EGL_NONE };
+    
+    EGLint num_configs = 0;
     EGLint vid;
 
     if (!eglChooseConfig_p(potatoBridge.eglDisplay, attribs, &config, 1, &num_configs))
@@ -115,6 +109,9 @@ int virglInit() {
         return 0;
     }
 
+    ANativeWindow_release(pojav_environ->pojavWindow);
+    eglDestroySurface_p(potatoBridge.eglDisplay, pojav_environ->pojavWindow);
+    ANativeWindow_acquire(pojav_environ->pojavWindow);
     ANativeWindow_setBuffersGeometry(pojav_environ->pojavWindow, 0, 0, vid);
 
     eglBindAPI_p(EGL_OPENGL_ES_API);
@@ -130,7 +127,7 @@ int virglInit() {
     {
         EGLint val;
         assert(eglGetConfigAttrib_p(potatoBridge.eglDisplay, config, EGL_SURFACE_TYPE, &val));
-        assert(val & EGL_WINDOW_BIT);
+        assert(val & EGL_WINDOW_BIT|EGL_PBUFFER_BIT);
     }
 
     printf("EGLBridge: Initialized!\n");
