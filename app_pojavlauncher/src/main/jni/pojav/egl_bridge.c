@@ -399,7 +399,7 @@ EXTERNAL_API void* pojavCreateContext(void* contextSrc) {
     return br_init_context((basic_render_window_t*)contextSrc);
 }
 
-void* maybe_load_vulkan(void) {
+EXTERNAL_API void* maybe_load_vulkan(void) {
     // We use the env var because
     // 1. it's easier to do that
     // 2. it won't break if something will try to load vulkan and osmesa simultaneously
