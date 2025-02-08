@@ -14,7 +14,6 @@
 #include "virgl_bridge.h"
 #include "egl_loader.h"
 #include "osmesa_loader.h"
-#define TAG __FILE_NAME__
 #include "renderer_config.h"
 
 #define EGL_OPENGL_ES3_BIT_KHR 0x00000040
