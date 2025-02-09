@@ -38,7 +38,7 @@ void *egl_make_current(void *window) {
     
         printf("VirGL: vtest_main = %p\n", vtest_main_p);
         printf("VirGL: Calling VTest server's main function\n");
-        vtest_main_p(3, (const char*[]){"vtest", "--use-gles", "no-loop-or-fork", NULL, NULL});
+        vtest_main_p(3, (const char*[]){"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
     } else {
         return NULL;
     }
@@ -86,8 +86,17 @@ int virglInit() {
         return 0;
     }
 
-    static const EGLint attribs[] = { EGL_BLUE_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_RED_SIZE, 8, EGL_ALPHA_SIZE, 8, EGL_DEPTH_SIZE, 24, EGL_ALPHA_MASK_SIZE, 8, EGL_SURFACE_TYPE, EGL_WINDOW_BIT|EGL_PBUFFER_BIT, EGL_CONFORMANT, EGL_OPENGL_ES3_BIT, EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT, EGL_NONE };
-    
+    static const EGLint attribs[] = {
+            EGL_RED_SIZE, 8,
+            EGL_GREEN_SIZE, 8,
+            EGL_BLUE_SIZE, 8,
+            EGL_ALPHA_SIZE, 8,
+            // Minecraft required on initial 24
+            EGL_DEPTH_SIZE, 24,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
+            EGL_NONE
+    };
+
     EGLint num_configs;
     EGLint vid;
 
@@ -121,7 +130,7 @@ int virglInit() {
     {
         EGLint val;
         assert(eglGetConfigAttrib_p(potatoBridge.eglDisplay, config, EGL_SURFACE_TYPE, &val));
-        assert(val & EGL_WINDOW_BIT|EGL_PBUFFER_BIT);
+        assert(val & EGL_WINDOW_BIT);
     }
 
     printf("EGLBridge: Initialized!\n");
