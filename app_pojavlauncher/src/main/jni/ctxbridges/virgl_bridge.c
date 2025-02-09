@@ -106,9 +106,6 @@ int virglInit() {
         return 0;
     }
 
-    ANativeWindow_release(pojav_environ->pojavWindow);
-    eglDestroySurface_p(potatoBridge.eglDisplay, pojav_environ->pojavWindow);
-    ANativeWindow_acquire(pojav_environ->pojavWindow);
     ANativeWindow_setBuffersGeometry(pojav_environ->pojavWindow, 0, 0, vid);
 
     eglBindAPI_p(EGL_OPENGL_ES_API);
