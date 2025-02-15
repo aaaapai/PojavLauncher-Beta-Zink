@@ -368,7 +368,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             List<String> javaArgList = new ArrayList<>();
 
             // Enable Caciocavallo
-            Tools.getCacioJavaArgs(javaArgList, runtime.javaVersion == 8, runtime.javaVersion == 11, runtime.javaVersion == 17, runtime.javaVersion == 21);
+            Tools.getCacioJavaArgs(javaArgList, runtime.javaVersion == 8, runtime.javaVersion == 11);
 
             if (javaArgs != null) {
                 javaArgList.addAll(javaArgs);
@@ -389,7 +389,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
 
             Logger.appendToLog("Info: Java arguments: " + Arrays.toString(javaArgList.toArray(new String[0])));
 
-            JREUtils.launchWithUtils(this, runtime, null, javaArgList, LauncherPreferences.PREF_CUSTOM_JAVA_ARGS);
+            JREUtils.launchWithUtils(this, runtime, null, null, javaArgList, LauncherPreferences.PREF_CUSTOM_JAVA_ARGS);
         } catch (Throwable th) {
             Tools.showError(this, th, true);
         }
