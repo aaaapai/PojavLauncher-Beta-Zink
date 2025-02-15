@@ -50,6 +50,8 @@ import com.fifthLight.touchController.ControllerProxy;
 import com.firefly.utils.MesaUtils;
 import com.firefly.utils.TurnipUtils;
 
+import com.movtery.feature.version.VersionInfo;
+import com.movtery.feature.version.utils.VersionInfoUtils;
 import com.movtery.plugins.renderer.RendererPlugin;
 
 import com.google.gson.Gson;
@@ -108,6 +110,7 @@ public final class Tools {
     public static final float BYTE_TO_MB = 1024 * 1024;
     public static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
     public static String APP_NAME = "Pojav Glow·Worm";
+    public static String PGW_VERSION_CODE = null;
 
     public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -230,6 +233,12 @@ public final class Tools {
 
         File gamedir = Tools.getGameDirPath(minecraftProfile);
 
+        VersionInfo versionInfo1;
+        try {
+            versionInfo1 = VersionInfoUtils.parseJson(new File(getVersionJsonPath(versionId)));
+        } catch (RuntimeException e) {
+            versionInfo1 = null;
+        }
 
         // Pre-process specific files
         disableSplash(gamedir);
@@ -252,7 +261,7 @@ public final class Tools {
             }
         }
 
-        getCacioJavaArgs(javaArgList, runtime.javaVersion == 8, runtime.javaVersion == 11, runtime.javaVersion == 17, runtime.javaVersion == 21);
+        getCacioJavaArgs(javaArgList, runtime.javaVersion == 8, runtime.javaVersion == 11);
 
         boolean is7 = VersionNumber.compare(VersionNumber.asVersion(versionInfo.id != null ? versionInfo.id : "0.0").getCanonical(), "1.12") < 0;
         String configFilePath = Tools.DIR_DATA + "/security/log4j-rce-patch-" + (is7 ? "1.7" : "1.12") + ".xml";
@@ -266,10 +275,11 @@ public final class Tools {
         javaArgList.addAll(Arrays.asList(launchArgs));
         // ctx.appendlnToLog("full args: "+javaArgList.toString());
         String args = LauncherPreferences.PREF_CUSTOM_JAVA_ARGS;
+        PGW_VERSION_CODE = activity.getString(R.string.base_version_code);
         if (Tools.isValidString(minecraftProfile.javaArgs)) args = minecraftProfile.javaArgs;
         FFmpegPlugin.discover(activity);
         ControllerProxy.startProxy();
-        JREUtils.launchWithUtils(activity, runtime, gamedir, javaArgList, args);
+        JREUtils.launchWithUtils(activity, runtime, versionInfo1, gamedir, javaArgList, args);
         // If we returned, this means that the JVM exit dialog has been shown and we don't need to be active anymore.
         // We never return otherwise. The process will be killed anyway, and thus we will become inactive
     }
@@ -324,8 +334,9 @@ public final class Tools {
         }
     }
 
-    public static void getCacioJavaArgs(List<String> javaArgList, boolean isJava8, boolean isJava11, boolean isJava17, boolean isJava21) {
+    public static void getCacioJavaArgs(List<String> javaArgList, boolean isJava8, boolean isJava11) {
         // Caciocavallo config AWT-enabled version
+        javaArgList.add("-Djava.awt.headless=false");
         javaArgList.add("-Dcacio.managed.screensize=" + AWTCanvasView.AWT_CANVAS_WIDTH + "x" + AWTCanvasView.AWT_CANVAS_HEIGHT);
         javaArgList.add("-Dcacio.font.fontmanager=sun.awt.X11FontManager");
         javaArgList.add("-Dcacio.font.fontscaler=sun.font.FreetypeFontScaler");
@@ -333,29 +344,11 @@ public final class Tools {
         if (isJava8) {
             javaArgList.add("-Dawt.toolkit=net.java.openjdk.cacio.ctc.CTCToolkit");
             javaArgList.add("-Djava.awt.graphicsenv=net.java.openjdk.cacio.ctc.CTCGraphicsEnvironment");
-            javaArgList.add("-Djava.awt.headless=false");
         } else {
-            if (isJava11) {
             javaArgList.add("-Dawt.toolkit=com.github.caciocavallosilano.cacio.ctc.CTCToolkit");
             javaArgList.add("-Djava.awt.graphicsenv=com.github.caciocavallosilano.cacio.ctc.CTCGraphicsEnvironment");
             javaArgList.add("-Djava.system.class.loader=com.github.caciocavallosilano.cacio.ctc.CTCPreloadClassLoader");
-            javaArgList.add("-Djava.awt.headless=false");
-            }
 
-            if (isJava17) {
-            javaArgList.add("-Dawt.toolkit=com.github.caciocavallosilano.cacio.ctc.CTCToolkit");
-            javaArgList.add("-Djava.awt.graphicsenv=com.github.caciocavallosilano.cacio.ctc.CTCGraphicsEnvironment");
-            javaArgList.add("-Djava.system.class.loader=com.github.caciocavallosilano.cacio.ctc.CTCPreloadClassLoader");
-            javaArgList.add("-Djava.awt.headless=false");
-            }
-
-            if (isJava21) {
-            javaArgList.add("-Dawt.toolkit=com.github.caciocavallosilano.cacio.ctc.CTCToolkit");
-            javaArgList.add("-Djava.awt.graphicsenv=com.github.caciocavallosilano.cacio.ctc.CTCGraphicsEnvironment");
-            javaArgList.add("-Djava.system.class.loader=com.github.caciocavallosilano.cacio.ctc.CTCPreloadClassLoader");
-            javaArgList.add("-Djava.awt.headless=false");
-            }
-            
             javaArgList.add("--add-exports=java.desktop/java.awt=ALL-UNNAMED");
             javaArgList.add("--add-exports=java.desktop/java.awt.peer=ALL-UNNAMED");
             javaArgList.add("--add-exports=java.desktop/sun.awt.image=ALL-UNNAMED");
@@ -387,25 +380,9 @@ public final class Tools {
                 }
             }
         }
-
-        if (isJava8) {
-           javaArgList.add(cacioClasspath.toString());
-        }
-
-        if (isJava11) {
-           javaArgList.add(cacioClasspath.toString());
-        }
-
-        if (isJava17) {
-           javaArgList.add(cacioClasspath.toString());
-        }
-
-        if (isJava21) {
-           javaArgList.add(cacioClasspath.toString());
-        }
-
+        javaArgList.add(cacioClasspath.toString());
     }
-    
+
     public static String[] getMinecraftJVMArgs(String versionName, File gameDir) {
         JMinecraftVersionList.Version versionInfo = Tools.getVersionInfo(versionName, true);
         // Parse Forge 1.17+ additional JVM Arguments
@@ -788,33 +765,36 @@ public final class Tools {
                 // we have libjnidispatch 5.13.0 in jniLibs directory
                 if (Integer.parseInt(version[0]) >= 5 && Integer.parseInt(version[1]) >= 13)
                     continue;
-                Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 5.16.0");
+                Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 5.13.0");
                 createLibraryInfo(libItem);
-                libItem.name = "net.java.dev.jna:jna:5.16.0";
-                libItem.downloads.artifact.path = "net/java/dev/jna/jna/5.16.0/jna-5.16.0.jar";
-                libItem.downloads.artifact.url = "https://repo1.maven.org/maven2/net/java/dev/jna/jna/5.16.0/jna-5.16.0.jar";
+                libItem.name = "net.java.dev.jna:jna:5.13.0";
+                libItem.downloads.artifact.path = "net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
+                libItem.downloads.artifact.sha1 = "1200e7ebeedbe0d10062093f32925a912020e747";
+                libItem.downloads.artifact.url = "https://repo1.maven.org/maven2/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
             } else if (libItem.name.startsWith("com.github.oshi:oshi-core:")) {
                 //if (Integer.parseInt(version[0]) >= 6 && Integer.parseInt(version[1]) >= 3) return;
                 // FIXME: ensure compatibility
 
                 if (Integer.parseInt(version[0]) != 6 || Integer.parseInt(version[1]) != 2)
                     continue;
-                Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 6.6.6");
+                Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 6.3.0");
                 createLibraryInfo(libItem);
-                libItem.name = "com.github.oshi:oshi-core:6.6.6";
+                libItem.name = "com.github.oshi:oshi-core:6.3.0";
                 libItem.downloads.artifact.path = "com/github/oshi/oshi-core/6.3.0/oshi-core-6.3.0.jar";
-                libItem.downloads.artifact.url = "https://repo1.maven.org/maven2/com/github/oshi/oshi-core/6.6.6/oshi-core-6.6.6.jar";
+                libItem.downloads.artifact.sha1 = "9e98cf55be371cafdb9c70c35d04ec2a8c2b42ac";
+                libItem.downloads.artifact.url = "https://repo1.maven.org/maven2/com/github/oshi/oshi-core/6.3.0/oshi-core-6.3.0.jar";
             } else if (libItem.name.startsWith("org.ow2.asm:asm-all:")) {
                 // Early versions of the ASM library get repalced with 5.0.4 because Pojav's LWJGL is compiled for
                 // Java 8, which is not supported by old ASM versions. Mod loaders like Forge, which depend on this
                 // library, often include lwjgl in their class transformations, which causes errors with old ASM versions.
                 if (Integer.parseInt(version[0]) >= 5) continue;
-                Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 6.0_BETA");
+                Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 5.0.4");
                 createLibraryInfo(libItem);
-                libItem.name = "org.ow2.asm:asm-all:6.0_BETA";
+                libItem.name = "org.ow2.asm:asm-all:5.0.4";
                 libItem.url = null;
-                libItem.downloads.artifact.path = "org/ow2/asm/asm-all/6.0_BETA/asm-all-6.0_BETA.jar";
-                libItem.downloads.artifact.url = "https://repo1.maven.org/maven2/org/ow2/asm/asm-all/6.0_BETA/asm-all-6.0_BETA.jar";
+                libItem.downloads.artifact.path = "org/ow2/asm/asm-all/5.0.4/asm-all-5.0.4.jar";
+                libItem.downloads.artifact.sha1 = "e6244859997b3d4237a552669279780876228909";
+                libItem.downloads.artifact.url = "https://repo1.maven.org/maven2/org/ow2/asm/asm-all/5.0.4/asm-all-5.0.4.jar";
             }
         }
     }
@@ -833,6 +813,10 @@ public final class Tools {
         return libDir.toArray(new String[0]);
     }
 
+    public static String getVersionJsonPath(String versionName) {
+        return ProfilePathHome.getVersionsHome() + "/" + versionName + "/" + versionName + ".json";
+    }
+
     public static JMinecraftVersionList.Version getVersionInfo(String versionName) {
         return getVersionInfo(versionName, false);
     }
@@ -840,7 +824,7 @@ public final class Tools {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static JMinecraftVersionList.Version getVersionInfo(String versionName, boolean skipInheriting) {
         try {
-            JMinecraftVersionList.Version customVer = Tools.GLOBAL_GSON.fromJson(read(ProfilePathHome.getVersionsHome() + "/" + versionName + "/" + versionName + ".json"), JMinecraftVersionList.Version.class);
+            JMinecraftVersionList.Version customVer = Tools.GLOBAL_GSON.fromJson(read(getVersionJsonPath(versionName)), JMinecraftVersionList.Version.class);
             if (skipInheriting || customVer.inheritsFrom == null || customVer.inheritsFrom.equals(customVer.id)) {
                 preProcessLibraries(customVer.libraries);
             } else {
