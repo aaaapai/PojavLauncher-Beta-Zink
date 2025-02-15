@@ -17,10 +17,12 @@
 // Created by maks on 17.09.2022.
 //
 
+#define EGL_OPENGL_ES3_BIT_KHR 0x00000040
+
 static __thread gl_render_window_t* currentBundle;
 static EGLDisplay g_EglDisplay;
 
-bool gl_init() {
+bool gl_init(void) {
     dlsym_EGL();
     g_EglDisplay = eglGetDisplay_p(EGL_DEFAULT_DISPLAY);
     if (g_EglDisplay == EGL_NO_DISPLAY) {
@@ -52,10 +54,10 @@ static void gl4esi_get_display_dimensions(int* width, int* height) {
 }
 
 gl_render_window_t* gl_init_context(gl_render_window_t *share) {
+    EGLint egl_attributes[] = { EGL_BLUE_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_RED_SIZE, 8, EGL_ALPHA_SIZE, 8, EGL_DEPTH_SIZE, 24, EGL_ALPHA_MASK_SIZE, 8, EGL_SURFACE_TYPE, EGL_WINDOW_BIT|EGL_PBUFFER_BIT, EGL_CONFORMANT, EGL_OPENGL_ES3_BIT_KHR, EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT_KHR, EGL_NONE };
+    EGLint num_configs = 0;
     gl_render_window_t* bundle = malloc(sizeof(gl_render_window_t));
     memset(bundle, 0, sizeof(gl_render_window_t));
-    EGLint egl_attributes[] = { EGL_BLUE_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_RED_SIZE, 8, EGL_ALPHA_SIZE, 8, EGL_DEPTH_SIZE, 24, EGL_SURFACE_TYPE, EGL_WINDOW_BIT|EGL_PBUFFER_BIT, EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT, EGL_NONE };
-    EGLint num_configs = 0;
 
     if (eglChooseConfig_p(g_EglDisplay, egl_attributes, NULL, 0, &num_configs) != EGL_TRUE) {
         LOGE("eglChooseConfig_p() failed: %04x", eglGetError_p());
@@ -98,7 +100,7 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
     return bundle;
 }
 
-void gl_swap_surface(gl_render_window_t* bundle) {
+static void gl_swap_surface(gl_render_window_t* bundle) {
     if (bundle->nativeSurface != NULL)
         ANativeWindow_release(bundle->nativeSurface);
 
@@ -162,7 +164,7 @@ void gl_make_current(gl_render_window_t* bundle) {
 
 }
 
-void gl_swap_buffers() {
+void gl_swap_buffers(void) {
     if (currentBundle->state == STATE_RENDERER_NEW_WINDOW)
     {
         eglMakeCurrent_p(g_EglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
@@ -181,7 +183,7 @@ void gl_swap_buffers() {
 
 }
 
-void gl_setup_window() {
+void gl_setup_window(void) {
     if (pojav_environ->mainWindowBundle != NULL)
     {
         LOGI("Main window bundle is not NULL, changing state");

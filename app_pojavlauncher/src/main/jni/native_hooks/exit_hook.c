@@ -25,7 +25,7 @@ static void custom_exit(int code) {
     BYTEHOOK_POP_STACK();
 }
 
-static void custom_atexit() {
+static void custom_atexit(void) {
     if(exit_tripped) {
         return;
     }
@@ -43,7 +43,7 @@ static void create_hooks(bytehook_hook_all_t bytehook_hook_all_p) {
     }
 }
 
-static bool init_hooks() {
+static bool init_hooks(void) {
     void* bytehook_handle = dlopen("libbytehook.so", RTLD_NOW);
     if(bytehook_handle == NULL) {
         goto dlerror;

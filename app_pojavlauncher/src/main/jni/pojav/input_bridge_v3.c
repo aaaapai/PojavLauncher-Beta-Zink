@@ -43,7 +43,7 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         //Save dalvik global JavaVM pointer
         pojav_environ->dalvikJavaVMPtr = vm;
         JNIEnv *dvEnv;
-        (*vm)->GetEnv(vm, (void**) &dvEnv, JNI_VERSION_1_4);
+        (*vm)->GetEnv(vm, (void**) &dvEnv, JNI_VERSION_1_6);
         pojav_environ->bridgeClazz = (*dvEnv)->NewGlobalRef(dvEnv,(*dvEnv) ->FindClass(dvEnv,"org/lwjgl/glfw/CallbackBridge"));
         pojav_environ->method_accessAndroidClipboard = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "accessAndroidClipboard", "(ILjava/lang/String;)Ljava/lang/String;");
         pojav_environ->method_onGrabStateChanged = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "onGrabStateChanged", "(Z)V");
@@ -52,7 +52,7 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         LOGI("Saving JVM environ...");
         pojav_environ->runtimeJavaVMPtr = vm;
         JNIEnv *vmEnv;
-        (*vm)->GetEnv(vm, (void**) &vmEnv, JNI_VERSION_1_4);
+        (*vm)->GetEnv(vm, (void**) &vmEnv, JNI_VERSION_1_6);
         pojav_environ->vmGlfwClass = (*vmEnv)->NewGlobalRef(vmEnv, (*vmEnv)->FindClass(vmEnv, "org/lwjgl/glfw/GLFW"));
         pojav_environ->method_glftSetWindowAttrib = (*vmEnv)->GetStaticMethodID(vmEnv, pojav_environ->vmGlfwClass, "glfwSetWindowAttrib", "(JII)V");
         pojav_environ->method_internalWindowSizeChanged = (*vmEnv)->GetStaticMethodID(vmEnv, pojav_environ->vmGlfwClass, "internalWindowSizeChanged", "(JII)V");
@@ -71,12 +71,12 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
     {
         //perform in all DVM instances, not only during first ever set up
         JNIEnv *env;
-        (*vm)->GetEnv(vm, (void**) &env, JNI_VERSION_1_4);
+        (*vm)->GetEnv(vm, (void**) &env, JNI_VERSION_1_6);
         registerFunctions(env);
     }
     pojav_environ->isGrabbing = JNI_FALSE;
     
-    return JNI_VERSION_1_4;
+    return JNI_VERSION_1_6;
 }
 
 #define ADD_CALLBACK_WWIN(NAME) \
@@ -220,9 +220,16 @@ Java_org_lwjgl_glfw_GLFW_glfwSetCursorPos(__attribute__((unused)) JNIEnv *env,
     JavaCritical_org_lwjgl_glfw_GLFW_glfwSetCursorPos(window, xpos, ypos);
 }
 
+JNIEXPORT void JNICALL
+Java_org_lwjgl_glfw_GLFW_glfwGetMonitorPhysicalSize(JNIEnv *env,
+                                          __attribute__((unused)) jclass clazz,
+                                          __attribute__((unused)) jlong window,
+                                          jint* widthMM,
+                                          jint* heightMM) {
+}
 
 
-void sendData(int type, int i1, int i2, int i3, int i4) {
+static void sendData(int type, int i1, int i2, int i3, int i4) {
     GLFWInputEvent *event = &pojav_environ->events[pojav_environ->inEventIndex];
     event->type = type;
     event->i1 = i1;

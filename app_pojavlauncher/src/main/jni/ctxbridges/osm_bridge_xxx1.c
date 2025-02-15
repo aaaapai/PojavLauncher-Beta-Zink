@@ -17,7 +17,7 @@ static bool hasSetNoRendererBuffer = false;
 
 void setNativeWindowSwapInterval(struct ANativeWindow* nativeWindow, int swapInterval);
 
-bool xxx1_osm_init() {
+bool xxx1_osm_init(void) {
     dlsym_OSMesa();
     return true;
 }
@@ -56,7 +56,7 @@ void xxx1_osm_set_no_render_buffer(ANativeWindow_Buffer* buffer) {
     buffer->stride = 0;
 }
 
-void xxx1_osm_swap_surfaces(xxx1_osm_render_window_t* bundle) {
+static void xxx1_osm_swap_surfaces(xxx1_osm_render_window_t* bundle) {
 
     if (bundle->nativeSurface != NULL && bundle->newNativeSurface != bundle->nativeSurface)
     {
@@ -86,12 +86,12 @@ void xxx1_osm_swap_surfaces(xxx1_osm_render_window_t* bundle) {
 
 }
 
-void xxx1_osm_release_window() {
+void xxx1_osm_release_window(void) {
     currentBundle->newNativeSurface = NULL;
     xxx1_osm_swap_surfaces(currentBundle);
 }
 
-void xxx1_osm_apply_current_l(ANativeWindow_Buffer* buffer) {
+static void xxx1_osm_apply_current_l(ANativeWindow_Buffer* buffer) {
     OSMesaMakeCurrent_p(currentBundle->context,
                         buffer->bits,
                         GL_UNSIGNED_BYTE,
@@ -102,7 +102,7 @@ void xxx1_osm_apply_current_l(ANativeWindow_Buffer* buffer) {
     currentBundle->last_stride = buffer->stride;
 }
 
-void xxx1_osm_apply_current_ll(ANativeWindow_Buffer* buffer) {
+static void xxx1_osm_apply_current_ll(ANativeWindow_Buffer* buffer) {
     if (SpareBuffer())
     {
 #ifdef FRAME_BUFFER_SUPPOST

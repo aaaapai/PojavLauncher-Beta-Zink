@@ -18,6 +18,8 @@ LOCAL_MODULE := br_common
 LOCAL_SRC_FILES := \
     environ/environ.c \
     common/bridge_common.c 
+LOCAL_CFLAGS += -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -pthread -Wall -Weverything -std=c2x -fno-emulated-tls -march=armv8-a+simd+crc+crypto+fp16 -mcpu=cortex-a76
+LOCAL_LDLAGS += -flto=thin -Wl,-plugin-opt=-emulated-tls=0 -fuse-ld=lld
 include $(BUILD_SHARED_LIBRARY)
 
 
@@ -25,7 +27,9 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS := -ldl -llog -landroid
 LOCAL_MODULE := bridge_config
 LOCAL_SHARED_LIBRARIES := br_common
-LOCAL_CFLAGS += -g -rdynamic
+LOCAL_CFLAGS += -rdynamic
+LOCAL_CFLAGS += -O3 -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -pthread -Wall -Weverything -std=c2x -fno-emulated-tls -march=armv8-a+simd+crc+crypto+fp16 -mcpu=cortex-a76 -fdata-sections -ffunction-sections -fmerge-all-constants
+LOCAL_LDLAGS += -flto=thin -Wl,-plugin-opt=-emulated-tls=0 -fuse-ld=lld
 
 LOCAL_SRC_FILES := \
     ctxbridges/br_loader.c \
@@ -48,11 +52,13 @@ LOCAL_MODULE := driver_helper
 LOCAL_SRC_FILES := \
     driver_helper/driver_helper.c \
     driver_helper/nsbypass.c
-LOCAL_CFLAGS += -g -rdynamic
+LOCAL_CFLAGS += -rdynamic
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
 LOCAL_CFLAGS += -DADRENO_POSSIBLE
-LOCAL_LDLIBS += -lEGL -lGLESv2
+LOCAL_LDLIBS += -lEGL -lGLESv3
+LOCAL_CFLAGS += -O2 -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -pthread -Wall -Weverything -std=c2x -fno-emulated-tls -march=armv8-a+simd+crc+crypto+fp16 -mcpu=cortex-a76 -fdata-sections -ffunction-sections -fmerge-all-constants
+LOCAL_LDLAGS += -flto=thin -Wl,-plugin-opt=-emulated-tls=0 -fuse-ld=lld
 endif
 include $(BUILD_SHARED_LIBRARY)
 
@@ -61,7 +67,7 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS := -ldl -llog -landroid
 LOCAL_MODULE := pgw
 LOCAL_SHARED_LIBRARIES := driver_helper bridge_config br_common
-LOCAL_CFLAGS += -g -rdynamic
+LOCAL_CFLAGS += -rdynamic
 
 LOCAL_SRC_FILES := \
     jvm_hooks/emui_iterator_fix_hook.c \
@@ -76,7 +82,9 @@ LOCAL_SRC_FILES := \
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
 LOCAL_CFLAGS += -DADRENO_POSSIBLE
-LOCAL_LDLIBS += -lEGL -lGLESv2
+LOCAL_LDLIBS += -lEGL -lGLESv3
+LOCAL_CFLAGS += -O3 -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -pthread -Wall -Weverything -std=c2x -fno-emulated-tls -march=armv8-a+simd+crc+crypto+fp16 -mcpu=cortex-a76 -fdata-sections -ffunction-sections -fmerge-all-constants
+LOCAL_LDLAGS += -flto=thin -Wl,-plugin-opt=-emulated-tls=0 -fuse-ld=lld
 endif
 include $(BUILD_SHARED_LIBRARY)
 
@@ -97,6 +105,8 @@ LOCAL_SHARED_LIBRARIES := bytehook pgw
 LOCAL_SRC_FILES := \
     native_hooks/exit_hook.c \
     native_hooks/chmod_hook.c
+LOCAL_CFLAGS += -O2 -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -pthread -Wall -Weverything -std=c2x -fno-emulated-tls -march=armv8-a+simd+crc+crypto+fp16 -mcpu=cortex-a76 -fdata-sections -ffunction-sections -fmerge-all-constants
+LOCAL_LDLAGS += -flto=thin -Wl,-plugin-opt=-emulated-tls=0 -fuse-ld=lld
 include $(BUILD_SHARED_LIBRARY)
 
 
@@ -104,6 +114,8 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := pojavexec_awt
 LOCAL_SRC_FILES := \
     pojav/awt_bridge.c
+LOCAL_CFLAGS += -O2 -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -pthread -Wall -Weverything -std=c2x -fno-emulated-tls -march=armv8-a+simd+crc+crypto+fp16 -mcpu=cortex-a76 -fdata-sections -ffunction-sections -fmerge-all-constants
+LOCAL_LDLAGS += -flto=thin -Wl,-plugin-opt=-emulated-tls=0 -fuse-ld=lld
 include $(BUILD_SHARED_LIBRARY)
 
 
@@ -118,7 +130,6 @@ LOCAL_MODULE := awt_xawt
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SHARED_LIBRARIES := awt_headless
 LOCAL_SRC_FILES := xawt_fake.c
+LOCAL_CFLAGS += -O2 -fPIC -DPIC -flto=thin -fwhole-program-vtables -mllvm -polly -pthread -Wall -Weverything -std=c2x -fno-emulated-tls -march=armv8-a+simd+crc+crypto+fp16 -mcpu=cortex-a76 -fdata-sections -ffunction-sections -fmerge-all-constants
+LOCAL_LDLAGS += -flto=thin -Wl,-plugin-opt=-emulated-tls=0 -fuse-ld=lld
 include $(BUILD_SHARED_LIBRARY)
-
-$(info $(shell (rm $(HERE_PATH)/../jniLibs/*/libawt_headless.so)))
-

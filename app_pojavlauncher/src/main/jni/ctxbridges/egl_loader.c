@@ -27,7 +27,7 @@ EGLBoolean (*eglSwapInterval_p) (EGLDisplay dpy, EGLint interval);
 EGLSurface (*eglGetCurrentSurface_p) (EGLint readdraw);
 EGLBoolean (*eglQuerySurface_p)(EGLDisplay display, EGLSurface surface, EGLint attribute, EGLint * value);
 
-void dlsym_EGL() {
+void dlsym_EGL(void) {
     void* dl_handle = NULL;
     char* eglName = NULL;
     char* gles = getenv("LIBGL_GLES");
