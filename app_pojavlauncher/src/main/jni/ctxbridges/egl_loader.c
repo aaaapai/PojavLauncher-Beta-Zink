@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <dlfcn.h>
+#include <string.h>
 #include "br_loader.h"
 #include "egl_loader.h"
 
