@@ -73,18 +73,7 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
     eglChooseConfig_p(g_EglDisplay, egl_attributes, &bundle->config, 1, &num_configs);
     eglGetConfigAttrib_p(g_EglDisplay, bundle->config, EGL_NATIVE_VISUAL_ID, &bundle->format);
 
-    {
-        EGLBoolean bindResult;
-        if (!strncmp(getenv("POJAV_BETA_RENDERER"), "opengles3_desktopgl", 19))
-        {
-            printf("EGLBridge: Binding to OpenGL\n");
-            bindResult = eglBindAPI_p(EGL_OPENGL_API);
-        } else {
-            printf("EGLBridge: Binding to OpenGL ES\n");
-            bindResult = eglBindAPI_p(EGL_OPENGL_ES_API);
-        }
-        if (!bindResult) printf("EGLBridge: bind failed: %p\n", eglGetError_p());
-    }
+    EGLBoolean eglBindAPI_p(EGL_OPENGL_ES_API);
 
     int libgl_es = strtol(getenv("LIBGL_ES"), NULL, 0);
     if (libgl_es < 0 || libgl_es > INT16_MAX) libgl_es = 2;
