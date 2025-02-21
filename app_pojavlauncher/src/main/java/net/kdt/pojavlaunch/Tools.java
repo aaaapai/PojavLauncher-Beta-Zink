@@ -1066,10 +1066,6 @@ public final class Tools {
     }
 
     public static void installMod(Activity activity, boolean customJavaArgs) {
-        if (MultiRTUtils.getExactJreName(8) == null) {
-            Toast.makeText(activity, R.string.multirt_nojava8rt, Toast.LENGTH_LONG).show();
-            return;
-        }
 
         if (!customJavaArgs) { // Launch the intent to get the jar file
             if (!(activity instanceof LauncherActivity))
@@ -1082,7 +1078,7 @@ public final class Tools {
         // install mods with custom arguments
         final EditText editText = new EditText(activity);
         editText.setSingleLine();
-        editText.setHint("-jar/-cp /path/to/file.jar ...");
+        editText.setHint("-jar/-cp /路径/文件.jar ...");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity)
                 .setTitle(R.string.alerttitle_installmod)
