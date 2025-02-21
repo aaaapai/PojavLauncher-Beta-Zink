@@ -73,8 +73,14 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
     eglChooseConfig_p(g_EglDisplay, egl_attributes, &bundle->config, 1, &num_configs);
     eglGetConfigAttrib_p(g_EglDisplay, bundle->config, EGL_NATIVE_VISUAL_ID, &bundle->format);
 
-    EGLBoolean eglBindAPI_p(EGL_OPENGL_ES_API);
 
+    {
+        EGLBoolean bindResult;
+        printf("EGLBridge: Binding to OpenGL ES\n");
+        bindResult = eglBindAPI_p(EGL_OPENGL_ES_API);
+        if (!bindResult) printf("EGLBridge: bind failed: %p\n", eglGetError_p());
+    }
+    
     int libgl_es = strtol(getenv("LIBGL_ES"), NULL, 0);
     if (libgl_es < 0 || libgl_es > INT16_MAX) libgl_es = 2;
     const EGLint egl_context_attributes[] = { EGL_CONTEXT_CLIENT_VERSION, libgl_es, EGL_NONE };
