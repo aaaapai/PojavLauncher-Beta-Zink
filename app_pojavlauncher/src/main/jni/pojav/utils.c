@@ -38,7 +38,7 @@ jobjectArray convert_from_char_array(JNIEnv *env, char **charArray, int num_rows
 	return resultArr;
 }
 
-void free_char_array(JNIEnv *env, jobjectArray jstringArray, char **charArray) {
+void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charArray) {
 	int num_rows = (*env)->GetArrayLength(env, jstringArray);
 	jstring row;
 	
@@ -153,13 +153,13 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_executeBinary(JNI
 	int cmd_argv = (*env)->GetArrayLength(env, cmdArgs);
 	char **cmd_args_c = convert_to_char_array(env, cmdArgs);
 	int result = Main_Function(cmd_argv, cmd_args_c);
-	free_char_array(env, cmdArgs, cmd_args_c);
+	free_char_array(env, cmdArgs, (const char **)cmd_args_c);
 	return result;
 }
 
 JNIEnv* get_attached_env(JavaVM* jvm) {
     JNIEnv *jvm_env = NULL;
-    jint env_result = (*jvm)->GetEnv(jvm, (void**)&jvm_env, JNI_VERSION_1_4);
+    jint env_result = (*jvm)->GetEnv(jvm, (void**)&jvm_env, JNI_VERSION_1_6);
     if(env_result == JNI_EDETACHED) {
         env_result = (*jvm)->AttachCurrentThread(jvm, &jvm_env, NULL);
     }
