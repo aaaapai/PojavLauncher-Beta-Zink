@@ -31,13 +31,13 @@ static int latestlog_fd = -1;
 static bool recordBuffer(char* buf, ssize_t len) {
     if(strstr(buf, "Session ID is")) return false;
     if(latestlog_fd != -1) {
-        write(latestlog_fd, buf, len);
+        write(latestlog_fd, buf, (size_t)len);
         fdatasync(latestlog_fd);
     }
     return true;
 }
 
-static void *logger_thread(void) {
+static void *logger_thread(void *) {
     JNIEnv *env;
     jstring writeString;
     JavaVM* dvm = pojav_environ->dalvikJavaVMPtr;
@@ -141,7 +141,11 @@ _Noreturn void nominal_exit(int code, bool is_signal) {
 JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_Logger_appendToLog(JNIEnv *env, __attribute((unused)) jclass clazz, jstring text) {
     jsize appendStringLength = (*env)->GetStringUTFLength(env, text);
-    char newChars[appendStringLength+2];
+    char *newChars = (char *)malloc(appendStringLength + 2);
+    if (newChars == NULL) {
+        // Handle memory allocation failure
+        return;
+    }
     (*env)->GetStringUTFRegion(env, text, 0, (*env)->GetStringLength(env, text), newChars);
     newChars[appendStringLength] = '\n';
     newChars[appendStringLength+1] = 0;
@@ -164,6 +168,7 @@ Java_net_kdt_pojavlaunch_Logger_setLogListener(JNIEnv *env, __attribute((unused)
 JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_setupExitMethod(JNIEnv *env, jclass clazz,
                                                         jobject context) {
+    (void)clazz;
     exitTrap_ctx = (*env)->NewGlobalRef(env,context);
     (*env)->GetJavaVM(env,&exitTrap_jvm);
     exitTrap_exitClass = (*env)->NewGlobalRef(env,(*env)->FindClass(env,"net/kdt/pojavlaunch/ExitActivity"));
