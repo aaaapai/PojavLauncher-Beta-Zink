@@ -38,7 +38,7 @@ jobjectArray convert_from_char_array(JNIEnv *env, char **charArray, int num_rows
 	return resultArr;
 }
 
-void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charArray) {
+void free_char_array(JNIEnv *env, jobjectArray jstringArray, char **charArray) {
 	int num_rows = (*env)->GetArrayLength(env, jstringArray);
 	jstring row;
 	
