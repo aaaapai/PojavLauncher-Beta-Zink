@@ -320,10 +320,16 @@ public class JREUtils {
                 case "gallium_virgl": {
                     envMap.put("POJAV_BETA_RENDERER", "mesa_3d");
                     envMap.put("LOCAL_DRIVER_MODEL", "gallium_virgl");
-                    envMap.put("MESA_GL_VERSION_OVERRIDE", "4.3");
-                    envMap.put("MESA_GLSL_VERSION_OVERRIDE", "430");
+                    envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6fc");
+                    envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
                     envMap.put("mesa_glthread", "true");
+                    envMap.put("LIBGL_ALWAYS_SOFTWARE", "false");
+                    envMap.put("LIBGL_ALWAYS_INDIRECT", "true");
+                    envMap.put("MESA_NO_ERROR", "true");
                     envMap.put("VTEST_SOCKET_NAME", new File(Tools.DIR_CACHE, ".virgl_test").getAbsolutePath());
+                    envMap.put("MESA_SHADER_CACHE_DIR", new File(Tools.DIR_CACHE, ".virgl_test").getAbsolutePath());
+                    envMap.put("MESA_DISK_CACHE_SINGLE_FILE", new File(Tools.DIR_CACHE, ".virgl_test").getAbsolutePath());
+                    envMap.put("MESA_DISK_CACHE_MULTI_FILE", new File(Tools.DIR_CACHE, ".virgl_test").getAbsolutePath());
                 }
                 break;
                 case "gallium_freedreno": {
