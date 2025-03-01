@@ -617,7 +617,7 @@ public class JREUtils {
                 // GLFW Stub width height
                 "-Dglfwstub.windowWidth=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.widthPixels, LauncherPreferences.PREF_SCALE_FACTOR / 100F),
                 "-Dglfwstub.windowHeight=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.heightPixels, LauncherPreferences.PREF_SCALE_FACTOR / 100F),
-                "-Dglfwstub.initEgl=false",
+                "-Dglfwstub.initEgl=true",
                 "-Dext.net.resolvPath=" + resolvFile,
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
 
@@ -748,7 +748,7 @@ public class JREUtils {
                 case "opengles3_gl4es_ptitseb":
                     renderLibrary = "libgl4es_ptitseb.so";
                     break;
-                case "opengles2_vgpu":
+                case "opengles3_vgpu":
                     renderLibrary = "libvgpu.so";
                     break;
                 case "vulkan_zink":
