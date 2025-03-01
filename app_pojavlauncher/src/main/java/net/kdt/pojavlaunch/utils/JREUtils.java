@@ -320,9 +320,10 @@ public class JREUtils {
                 case "gallium_virgl": {
                     envMap.put("POJAV_BETA_RENDERER", "mesa_3d");
                     envMap.put("LOCAL_DRIVER_MODEL", "gallium_virgl");
-                    envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6fc");
+                    envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6FC");
                     envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
                     envMap.put("mesa_glthread", "true");
+                    envMap.put("MESA_GLTHREAD", "true");
                     envMap.put("LIBGL_ALWAYS_SOFTWARE", "false");
                     envMap.put("LIBGL_ALWAYS_INDIRECT", "true");
                     envMap.put("MESA_NO_ERROR", "true");
@@ -364,8 +365,8 @@ public class JREUtils {
                     }
                     break;
                     case "gallium_virgl": {
-                        envMap.put("MESA_GL_VERSION_OVERRIDE", "4.3");
-                        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "430");
+                        envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6FC");
+                        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
                     }
                     break;
                     case "gallium_panfrost": {
