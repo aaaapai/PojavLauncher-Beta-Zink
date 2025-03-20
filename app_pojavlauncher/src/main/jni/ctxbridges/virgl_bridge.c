@@ -17,6 +17,8 @@
 #define TAG __FILE_NAME__
 #include "renderer_config.h"
 
+#define EGL_OPENGL_ES3_BIT_KHR 0x00000040
+
 int (*vtest_main_p)(int argc, char **argv);
 void (*vtest_swap_buffers_p)(void);
 
@@ -94,7 +96,9 @@ int virglInit() {
             EGL_ALPHA_SIZE, 8,
             // Minecraft required on initial 24
             EGL_DEPTH_SIZE, 24,
-            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
+            EGL_ALPHA_MASK_SIZE, 8,
+            EGL_CONFORMANT, EGL_OPENGL_ES3_BIT_KHR,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT_KHR,
             EGL_NONE
     };
 
