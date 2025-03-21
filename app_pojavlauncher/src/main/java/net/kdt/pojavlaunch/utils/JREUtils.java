@@ -113,7 +113,7 @@ public class JREUtils {
 
         dlopen(findInLdLibPath("libjli.so"));
         if (!dlopen("libjvm.so")) {
-            Log.w("DynamicLoader", "Failed to load with no path, trying with full path");
+            Logger.getInstance().appendToLog("JREUtils: Failed to load libjvm with no path, trying with full path");
             dlopen(jvmLibraryPath + "/libjvm.so");
         }
         dlopen(findInLdLibPath("libverify.so"));
