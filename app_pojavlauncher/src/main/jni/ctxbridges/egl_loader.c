@@ -41,10 +41,10 @@ void dlsym_EGL(void) {
     }
 
     if (eglName)
-        dl_handle = dlopen(eglName, RTLD_GLOBAL | RTLD_NOW);
+        dl_handle = dlopen(eglName, RTLD_LOCAL | RTLD_LAZY);
 
     if (dl_handle == NULL)
-        dl_handle = dlopen("libEGL.so", RTLD_GLOBAL | RTLD_NOW);
+        dl_handle = dlopen("libEGL.so", RTLD_LOCAL | RTLD_LAZY);
 
     if (dl_handle == NULL) abort();
 
