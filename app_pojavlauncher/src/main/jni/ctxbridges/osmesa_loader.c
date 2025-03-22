@@ -55,7 +55,7 @@ void dlsym_OSMesa(void) {
         abort();
     }
 
-    void* dl_handle = dlopen(main_path, RTLD_GLOBAL | RTLD_NOW);
+    void* dl_handle = dlopen(main_path, RTLD_LOCAL | RTLD_LAZY);
     free(main_path);
     if (!dl_handle) {
         fprintf(stderr, "Error: Failed to open library: %s\n", dlerror());
