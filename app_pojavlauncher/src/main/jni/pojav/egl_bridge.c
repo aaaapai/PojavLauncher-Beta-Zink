@@ -233,10 +233,10 @@ static int pojavInitOpenGL(void) {
     
     if (!strncmp("renderer_vulkan", renderer, 15))
     {
+        load_vulkan();
         ConfigBridgeTbl();
         pojav_environ->config_renderer = RENDERER_GL4ES;
         if (pojav_environ->config_bridge == 0) set_gl_bridge_tbl();
-        load_vulkan();
     }
 
     if (!strcmp(renderer, "custom_gallium"))
