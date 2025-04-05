@@ -78,7 +78,7 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
         if (strncmp(getenv("POJAV_BETA_RENDERER"), "renderer_vulkan", 19) == 0)
         {
             printf("EGLBridge: Binding to OpenGL\n");
-            bindResult = eglBindAPI_p(EGL_OPENGL_API);
+            bindResult = eglBindAPI_p(EGL_OPENGL_ES_API);
         } else {
             printf("EGLBridge: Binding to OpenGL ES\n");
             bindResult = eglBindAPI_p(EGL_OPENGL_ES_API);
