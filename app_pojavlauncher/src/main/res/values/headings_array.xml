@@ -17,7 +17,7 @@
         <item>mesa_3d</item> <!-- Mesa3D Library -->
         <item>vulkan_zink</item> <!-- Zink renderer with Vulkan OpenGL4.6 -->
         <item>gallium_virgl</item> <!-- gallium_virgl with OpenGL ES 3 -->
-        <item>RENDERER_VULKAN_mg</item> <!-- gallium_virgl with OpenGL ES 3 -->
+        <item>renderer_vk_mg</item> <!-- gallium_virgl with OpenGL ES 3 -->
     </string-array>
 
     <string-array name="menu_customcontrol">
