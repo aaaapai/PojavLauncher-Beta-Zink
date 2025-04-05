@@ -75,7 +75,7 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
 
     {
         EGLBoolean bindResult;
-        if (!strncmp(pojav_environ->rendererTag, "renderer_vulkan", 15))
+        if (strncmp(getenv("POJAV_BETA_RENDERER"), "renderer_vulkan", 19) == 0)
         {
             printf("EGLBridge: Binding to OpenGL\n");
             bindResult = eglBindAPI_p(EGL_OPENGL_API);
