@@ -267,6 +267,9 @@ public class JREUtils {
             envMap.put("LIBGL_NORMALIZE", "1");
         }
 
+        if (LOCAL_RENDERER.startsWith("renderer_vulkan")) {
+        }
+
         RendererPlugin.Renderer customRenderer = RendererPlugin.getSelectedRenderer();
         if (customRenderer != null && LOCAL_RENDERER.equals(customRenderer.getIdName())) {
             customRenderer.getEnv().forEach(envPair -> {
@@ -611,13 +614,13 @@ public class JREUtils {
 
                 "-Dorg.lwjgl.vulkan.libname=libvulkan.so",
                 //LWJGL 3 DEBUG FLAGS
-                //"-Dorg.lwjgl.util.Debug=true",
-                //"-Dorg.lwjgl.util.DebugFunctions=true",
-                //"-Dorg.lwjgl.util.DebugLoader=true",
+                "-Dorg.lwjgl.util.Debug=true",
+                "-Dorg.lwjgl.util.DebugFunctions=true",
+                "-Dorg.lwjgl.util.DebugLoader=true",
                 // GLFW Stub width height
                 "-Dglfwstub.windowWidth=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.widthPixels, LauncherPreferences.PREF_SCALE_FACTOR / 100F),
                 "-Dglfwstub.windowHeight=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.heightPixels, LauncherPreferences.PREF_SCALE_FACTOR / 100F),
-                "-Dglfwstub.initEgl=true",
+                "-Dglfwstub.initEgl=false",
                 "-Dext.net.resolvPath=" + resolvFile,
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
 
@@ -750,6 +753,9 @@ public class JREUtils {
                     break;
                 case "opengles3_vgpu":
                     renderLibrary = "libvgpu.so";
+                    break;
+                case "renderer_vulkan_mg":
+                    renderLibrary = "libmobilegluvk.so";
                     break;
                 case "vulkan_zink":
                 case "gallium_freedreno":
