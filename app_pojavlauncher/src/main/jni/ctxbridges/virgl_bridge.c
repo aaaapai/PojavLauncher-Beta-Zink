@@ -125,7 +125,3 @@ void virglMakeCurrent(void *window) {
 void virglSwapInterval(int interval) {
     gl_swap_interval(interval);
 }
-void virglSwapBuffers() {
-    glFinish();
-    vtest_swap_buffers_p();
-}
