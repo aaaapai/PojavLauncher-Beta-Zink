@@ -384,7 +384,7 @@ EXTERNAL_API void pojavMakeCurrent(void* window) {
         br_make_current((basic_render_window_t*)window);
 
     if (pojav_environ->config_renderer == RENDERER_VIRGL)
-        virglMakeCurrent();
+        br_make_current((basic_render_window_t*)window);
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         xxx2OsmMakeCurrent(window);
