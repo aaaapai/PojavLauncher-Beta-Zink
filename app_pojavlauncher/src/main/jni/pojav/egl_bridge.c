@@ -256,14 +256,14 @@ static int pojavInitOpenGL(void) {
             load_vulkan();
         }
 
-        if (!strcmp(ldrivermodel, "gallium_virgl"))
+        if (!strcmp(ldrivermodel, "opengles3_gallium_virgl"))
         {
+            ConfigBridgeTbl();
             pojav_environ->config_renderer = RENDERER_VIRGL;
+            if (pojav_environ->config_bridge == 0) set_gl_bridge_tbl();
             setenv("MESA_LOADER_DRIVER_OVERRIDE", "zink", 1);
             setenv("GALLIUM_DRIVER", "virpipe", 1);
             loadSymbolsVirGL();
-            virglInit();
-            br_setup_window();
         }
 
         if (!strcmp(ldrivermodel, "gallium_panfrost"))
@@ -348,15 +348,13 @@ EXTERNAL_API void pojavSetWindowHint(int hint, int value) {
 
 EXTERNAL_API void pojavSwapBuffers(void) {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK
-     || pojav_environ->config_renderer == RENDERER_GL4ES)
+     || pojav_environ->config_renderer == RENDERER_GL4ES
+     || pojav_environ->config_renderer == RENDERER_VIRGL)
     {
         if (pojav_environ->config_bridge != 0 && pojav_environ->config_renderer == RENDERER_GL4ES)
             gl_swap_buffers();
         else br_swap_buffers();
     }
-
-    if (pojav_environ->config_renderer == RENDERER_VIRGL)
-        virglSwapBuffers();
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         xxx2OsmSwapBuffers();
