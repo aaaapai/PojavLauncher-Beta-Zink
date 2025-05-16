@@ -13,6 +13,7 @@
 #include "environ/environ.h"
 #include "virgl_bridge.h"
 #include "egl_loader.h"
+#include "gl_bridge.h"
 #include "osmesa_loader.h"
 #define TAG __FILE_NAME__
 #include "renderer_config.h"
