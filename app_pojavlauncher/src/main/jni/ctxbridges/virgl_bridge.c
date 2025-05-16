@@ -18,10 +18,13 @@
 #define TAG __FILE_NAME__
 #include "renderer_config.h"
 #include "../GL/gl.h"
+#include "pojav/log.h"
+
 int (*vtest_main_p)(int argc, char **argv);
 void (*vtest_swap_buffers_p)(void);
 
 static EGLContext virgl_context;
+static EGLDisplay g_EglDisplay;
 
 void *egl_make_current(void *window) {
     if (pojav_environ->config_renderer == RENDERER_VIRGL)
