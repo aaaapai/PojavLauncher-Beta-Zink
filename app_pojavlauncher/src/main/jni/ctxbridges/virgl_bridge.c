@@ -17,7 +17,7 @@
 #include "osmesa_loader.h"
 #define TAG __FILE_NAME__
 #include "renderer_config.h"
-
+#include "../GL/gl.h"
 int (*vtest_main_p)(int argc, char **argv);
 void (*vtest_swap_buffers_p)(void);
 
