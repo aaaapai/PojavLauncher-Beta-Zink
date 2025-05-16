@@ -401,7 +401,7 @@ EXTERNAL_API void* pojavCreateContext(void* contextSrc) {
         return gl_init_context(contextSrc);
 
     if (pojav_environ->config_renderer == RENDERER_VIRGL)
-        return virglCreateContext(contextSrc);
+        return gl_init_context(contextSrc);
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         return xxx2OsmCreateContext(contextSrc);
