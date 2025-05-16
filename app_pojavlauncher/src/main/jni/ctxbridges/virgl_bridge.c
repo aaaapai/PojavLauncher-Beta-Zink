@@ -83,13 +83,7 @@ int virglInit() {
         return 0;
     }
 
-    return gl_init_context();
-}
-
-void *virglCreateContext(void *contextSrc) {
-    printf("OSMDroid: generating context\n");
-    eglCreateContext_p();
-
+    return 1;
 }
 
 void *virglGetCurrentContext() {
@@ -99,31 +93,9 @@ void *virglGetCurrentContext() {
 static bool onMakeCurrent = false;
 
 void virglSwapBuffers() {
-    glFinish();
     gl_swap_buffers();
 }
 
-void virglMakeCurrent(void *window) {
-    if (!onMakeCurrent)
-        printf("OSMDroid: making current\n");
-
-    EGLMakeCurrent_p(virgl_context, setbuffer, GL_UNSIGNED_BYTE, pojav_environ->savedWidth, pojav_environ->savedHeight);
-
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
-
-    int pixelsArr[4];
-    glReadPixels(0, 0, 1, 1, GL_RGB, GL_INT, &pixelsArr);
-
-    if (!onMakeCurrent)
-    {
-        onMakeCurrent = true;
-        printf("OSMDroid: vendor: %s\n",glGetString_p(GL_VENDOR));
-        printf("OSMDroid: renderer: %s\n",glGetString_p(GL_RENDERER));
-
-        virglSwapBuffers();
-    }
-}
 
 void virglSwapInterval(int interval) {
     gl_swap_interval(interval);
