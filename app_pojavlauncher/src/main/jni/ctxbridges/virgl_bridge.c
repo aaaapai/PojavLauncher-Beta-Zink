@@ -51,7 +51,6 @@ void *egl_make_current(void *window) {
 }
 
 bool loadSymbolsVirGL() {
-    dlsym_EGL();
     char *fileName = calloc(1, 1024);
 
     sprintf(fileName, "%s/libvirgl_test_server.so", getenv("POJAV_NATIVEDIR"));
@@ -67,23 +66,6 @@ bool loadSymbolsVirGL() {
     free(fileName);
 
     return true;
-}
-
-int virglInit() {
-    if (pojav_environ->config_renderer != RENDERER_VIRGL)
-        return 0;
-
-    g_EglDisplay = eglGetDisplay_p(EGL_DEFAULT_DISPLAY);
-    if (g_EglDisplay == EGL_NO_DISPLAY) {
-        LOGE("%s", "eglGetDisplay_p(EGL_DEFAULT_DISPLAY) returned EGL_NO_DISPLAY");
-        return 0;
-    }
-    if (eglInitialize_p(g_EglDisplay, 0, 0) != EGL_TRUE) {
-        LOGE("eglInitialize_p() failed: %04x", eglGetError_p());
-        return 0;
-    }
-
-    return 1;
 }
 
 void *virglGetCurrentContext() {
