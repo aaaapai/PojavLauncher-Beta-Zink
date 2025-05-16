@@ -140,7 +140,7 @@ EXTERNAL_API void* pojavGetCurrentContext(void) {
         return (void *)eglGetCurrentContext_p();
 
     if (pojav_environ->config_renderer == RENDERER_VIRGL)
-        return virglGetCurrentContext();
+        return (void *)eglGetCurrentContext_p();
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         return xxx2OsmGetCurrentContext();
@@ -261,11 +261,9 @@ static int pojavInitOpenGL(void) {
             pojav_environ->config_renderer = RENDERER_VIRGL;
             setenv("MESA_LOADER_DRIVER_OVERRIDE", "zink", 1);
             setenv("GALLIUM_DRIVER", "virpipe", 1);
-            setenv("OSMESA_NO_FLUSH_FRONTBUFFER", "1", false);
-            if (!strcmp(getenv("OSMESA_NO_FLUSH_FRONTBUFFER"), "1"))
-                printf("VirGL: OSMesa buffer flush is DISABLED!\n");
             loadSymbolsVirGL();
             virglInit();
+            br_setup_window();
         }
 
         if (!strcmp(ldrivermodel, "gallium_panfrost"))
@@ -386,7 +384,7 @@ EXTERNAL_API void pojavMakeCurrent(void* window) {
         br_make_current((basic_render_window_t*)window);
 
     if (pojav_environ->config_renderer == RENDERER_VIRGL)
-        virglMakeCurrent(window);
+        virglMakeCurrent();
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         xxx2OsmMakeCurrent(window);
