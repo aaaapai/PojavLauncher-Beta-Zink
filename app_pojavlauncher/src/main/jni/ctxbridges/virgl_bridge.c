@@ -61,7 +61,6 @@ bool loadSymbolsVirGL() {
         return false;
     }
     vtest_main_p = dlsym(handle, "vtest_main");
-    vtest_swap_buffers_p = dlsym(handle, "vtest_swap_buffers");
 
     free(fileName);
 
