@@ -70,6 +70,17 @@ EXTERNAL_API void pojavTerminate(void) {
             potatoBridge.eglDisplay = EGL_NO_DISPLAY;
             potatoBridge.eglSurface = EGL_NO_SURFACE;
         } break;
+        case RENDERER_VIRGL: {
+            eglMakeCurrent_p(potatoBridge.eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+            eglDestroySurface_p(potatoBridge.eglDisplay, potatoBridge.eglSurface);
+            eglDestroyContext_p(potatoBridge.eglDisplay, potatoBridge.eglContext);
+            eglTerminate_p(potatoBridge.eglDisplay);
+            eglReleaseThread_p();
+
+            potatoBridge.eglContext = EGL_NO_CONTEXT;
+            potatoBridge.eglDisplay = EGL_NO_DISPLAY;
+            potatoBridge.eglSurface = EGL_NO_SURFACE;
+        } break;
         case RENDERER_VK_ZINK:
         case RENDERER_VK_ZINK_XXX1:
         case RENDERER_VK_ZINK_XXX2:
@@ -119,6 +130,9 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeWindow(JNIEnv* env, ABI_COMPA
     pojav_environ->pojavWindow = ANativeWindow_fromSurface(env, surface);
 
     if (pojav_environ->config_bridge != 0 && pojav_environ->config_renderer == RENDERER_GL4ES)
+        gl_setup_window();
+
+    if (pojav_environ->config_bridge != 0 && pojav_environ->config_renderer == RENDERER_VIRGL)
         gl_setup_window();
 
     if (br_setup_window) br_setup_window();
@@ -256,14 +270,14 @@ static int pojavInitOpenGL(void) {
             load_vulkan();
         }
 
-        if (!strcmp(ldrivermodel, "opengles3_gallium_virgl"))
+        if (!strcmp(ldrivermodel, "gallium_virgl"))
         {
-            ConfigBridgeTbl();
             pojav_environ->config_renderer = RENDERER_VIRGL;
+            setenv("POJAV_BETA_RENDERER", "opengles3_virgl", 1);
             if (pojav_environ->config_bridge == 0) set_gl_bridge_tbl();
-            setenv("MESA_LOADER_DRIVER_OVERRIDE", "zink", 1);
             setenv("GALLIUM_DRIVER", "virpipe", 1);
             loadSymbolsVirGL();
+            renderer_load_config();
         }
 
         if (!strcmp(ldrivermodel, "gallium_panfrost"))
@@ -298,7 +312,8 @@ static int pojavInitOpenGL(void) {
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK)
         if (br_init()) br_setup_window();
 
-    if (pojav_environ->config_renderer == RENDERER_GL4ES)
+    if (pojav_environ->config_renderer == RENDERER_GL4ES
+     || pojav_environ->config_renderer == RENDERER_VIRGL)
     {
         if (pojav_environ->config_bridge != 0)
         {
@@ -371,6 +386,7 @@ EXTERNAL_API void pojavMakeCurrent(void* window) {
     if (getenv("POJAV_BIG_CORE_AFFINITY") != NULL) bigcore_set_affinity();
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK
+     || pojav_environ->config_renderer == RENDERER_VIRGL
      || pojav_environ->config_renderer == RENDERER_GL4ES)
     {
         if (pojav_environ->config_bridge != 0 && pojav_environ->config_renderer == RENDERER_GL4ES)
@@ -379,9 +395,6 @@ EXTERNAL_API void pojavMakeCurrent(void* window) {
     }
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX1)
-        br_make_current((basic_render_window_t*)window);
-
-    if (pojav_environ->config_renderer == RENDERER_VIRGL)
         br_make_current((basic_render_window_t*)window);
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
@@ -456,7 +469,6 @@ Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr(JNIEnv *env, jobject thiz) {
 EXTERNAL_API JNIEXPORT jintArray JNICALL
 Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
     if (SpareBuffer() && (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX1
-     || pojav_environ->config_renderer == RENDERER_VIRGL
      || pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2))
     {
         jintArray ret = (*env)->NewIntArray(env,2);
@@ -469,15 +481,13 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
 
 EXTERNAL_API void pojavSwapInterval(int interval) {
     if(pojav_environ->config_renderer == RENDERER_VK_ZINK
+     || pojav_environ->config_renderer == RENDERER_VIRGL
      || pojav_environ->config_renderer == RENDERER_GL4ES)
     {
         if (pojav_environ->config_bridge != 0 && pojav_environ->config_renderer == RENDERER_GL4ES)
             gl_swap_interval(interval);
         else br_swap_interval(interval);
     }
-
-    if (pojav_environ->config_renderer == RENDERER_VIRGL)
-        virglSwapInterval(interval);
 
     if (pojav_environ->config_renderer == RENDERER_VK_ZINK_XXX2)
         xxx2OsmSwapInterval(interval);
