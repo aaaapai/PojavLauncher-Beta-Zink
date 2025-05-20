@@ -11,6 +11,7 @@
 #include "gl_bridge.h"
 #include "egl_loader.h"
 #include "virgl_bridge.h"
+#include "renderer_config.h"
 
 #define TAG __FILE_NAME__
 #include "pojav/log.h"
@@ -19,6 +20,8 @@
 //
 
 #define EGL_OPENGL_ES3_BIT_KHR 0x00000040
+
+int (*vtest_main_p)(int argc, char **argv);
 
 static __thread gl_render_window_t* currentBundle;
 static EGLDisplay g_EglDisplay;
