@@ -27,18 +27,8 @@ static EGLContext virgl_context;
 static EGLDisplay g_EglDisplay;
 
 void *egl_make_current(void *window) {
-    if (pojav_environ->config_renderer == RENDERER_NULL)
+    if (pojav_environ->config_renderer == RENDERER_VIRGL)
     {
-            eglMakeCurrent_p(potatoBridge.eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-            eglDestroySurface_p(potatoBridge.eglDisplay, potatoBridge.eglSurface);
-            eglDestroyContext_p(potatoBridge.eglDisplay, potatoBridge.eglContext);
-            eglTerminate_p(potatoBridge.eglDisplay);
-            eglReleaseThread_p();
-
-            potatoBridge.eglContext = EGL_NO_CONTEXT;
-            potatoBridge.eglDisplay = EGL_NO_DISPLAY;
-            potatoBridge.eglSurface = EGL_NO_SURFACE;
-
             printf("EGLBridge: eglMakeCurrent() succeed!\n");
 
     
