@@ -162,6 +162,15 @@ void gl_make_current(gl_render_window_t* bundle) {
         LOGE("eglMakeCurrent returned with error: %04x", eglGetError_p());
     }
 
+    if (pojav_environ->config_renderer == RENDERER_VIRGL)
+    {
+            printf("EGLBridge: eglMakeCurrent() succeed!\n");
+
+            printf("VirGL: vtest_main = %p\n", vtest_main_p);
+            printf("VirGL: Calling VTest server's main function\n");
+            vtest_main_p(4, (const char*[]){"vtest", "--use-gles", "multi-clients", NULL, "compat", NULL, NULL, NULL, NULL, NULL, NULL});
+    }
+
 }
 
 void gl_swap_buffers(void) {
