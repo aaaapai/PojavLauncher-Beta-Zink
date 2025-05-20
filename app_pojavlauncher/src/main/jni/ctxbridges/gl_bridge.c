@@ -172,7 +172,7 @@ void gl_make_current(gl_render_window_t* bundle) {
 
             printf("VirGL: vtest_main = %p\n", vtest_main_p);
             printf("VirGL: Calling VTest server's main function\n");
-            vtest_main_p(4, (const char*[]){"vtest", "--use-gles", "multi-clients", NULL, "compat", NULL, NULL, NULL, NULL, NULL, NULL});
+            vtest_main_p(3, (const char*[]){"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
     }
 
 }
