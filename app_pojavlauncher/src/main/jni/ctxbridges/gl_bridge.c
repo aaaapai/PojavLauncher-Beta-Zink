@@ -10,6 +10,7 @@
 #include "environ/environ.h"
 #include "gl_bridge.h"
 #include "egl_loader.h"
+#include "virgl_bridge.h"
 
 #define TAG __FILE_NAME__
 #include "pojav/log.h"
