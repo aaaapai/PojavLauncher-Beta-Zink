@@ -21,7 +21,7 @@
 
 #define EGL_OPENGL_ES3_BIT_KHR 0x00000040
 
-int (*vtest_main_p)(int argc, char **argv);
+extern int (*vtest_main_p)(int argc, char **argv);
 
 static __thread gl_render_window_t* currentBundle;
 static EGLDisplay g_EglDisplay;
