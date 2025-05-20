@@ -195,13 +195,13 @@ static void load_vulkan(void) {
 
 static void renderer_load_config(void) {
     ConfigBridgeTbl();
-    if (pojav_environ->config_bridge == 0)
+    if (pojav_environ->config_bridge == 0 && pojav_environ->config_renderer == RENDERER_VIRGL)
     {
         pojav_environ->config_renderer = RENDERER_VK_ZINK;
         set_osm_bridge_tbl();
     }
     printf("Config Bridge: Config = %p\n", pojav_environ->config_bridge);
-    switch (pojav_environ->config_bridge) {
+    switch (pojav_environ->config_bridge && pojav_environ->config_renderer == RENDERER_VIRGL) {
         case BRIDGE_TBL_XXX1: {
             pojav_environ->config_renderer = RENDERER_VK_ZINK_XXX1;
             osm_bridge_xxx1();
@@ -278,7 +278,6 @@ static int pojavInitOpenGL(void) {
             if (pojav_environ->config_bridge == 0) set_gl_bridge_tbl();
             setenv("GALLIUM_DRIVER", "virpipe", 1);
             loadSymbolsVirGL();
-            renderer_load_config();
         }
 
         if (!strcmp(ldrivermodel, "gallium_panfrost"))
