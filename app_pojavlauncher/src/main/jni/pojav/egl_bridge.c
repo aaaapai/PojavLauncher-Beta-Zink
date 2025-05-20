@@ -81,10 +81,6 @@ EXTERNAL_API void pojavTerminate(void) {
             potatoBridge.eglContext = EGL_NO_CONTEXT;
             potatoBridge.eglDisplay = EGL_NO_DISPLAY;
             potatoBridge.eglSurface = EGL_NO_SURFACE;
-
-            pthread_t t;
-            pthread_create(&t, NULL, gl_make_current, (void *)ctx);
-            usleep(100*1000);
         } break;
         case RENDERER_VK_ZINK:
         case RENDERER_VK_ZINK_XXX1:
