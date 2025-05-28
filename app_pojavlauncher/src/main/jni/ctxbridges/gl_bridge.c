@@ -10,8 +10,6 @@
 #include "environ/environ.h"
 #include "gl_bridge.h"
 #include "egl_loader.h"
-#include "virgl_bridge.h"
-#include "renderer_config.h"
 
 #define TAG __FILE_NAME__
 #include "pojav/log.h"
@@ -20,8 +18,6 @@
 //
 
 #define EGL_OPENGL_ES3_BIT_KHR 0x00000040
-
-extern int (*vtest_main_p)(int argc, char **argv);
 
 static __thread gl_render_window_t* currentBundle;
 static EGLDisplay g_EglDisplay;
@@ -82,7 +78,7 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
         if (strncmp(getenv("POJAV_BETA_RENDERER"), "renderer_vulkan", 19) == 0)
         {
             printf("EGLBridge: Binding to OpenGL\n");
-            bindResult = eglBindAPI_p(EGL_OPENGL_ES_API);
+            bindResult = eglBindAPI_p(EGL_OPENGL_API);
         } else {
             printf("EGLBridge: Binding to OpenGL ES\n");
             bindResult = eglBindAPI_p(EGL_OPENGL_ES_API);
@@ -164,15 +160,6 @@ void gl_make_current(gl_render_window_t* bundle) {
             pojav_environ->mainWindowBundle = NULL;
         }
         LOGE("eglMakeCurrent returned with error: %04x", eglGetError_p());
-    }
-
-    if (pojav_environ->config_renderer == RENDERER_VIRGL)
-    {
-            printf("EGLBridge: eglMakeCurrent() succeed!\n");
-
-            printf("VirGL: vtest_main = %p\n", vtest_main_p);
-            printf("VirGL: Calling VTest server's main function\n");
-            vtest_main_p(3, (const char*[]){"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
     }
 
 }
