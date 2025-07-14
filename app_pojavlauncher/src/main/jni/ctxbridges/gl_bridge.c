@@ -111,9 +111,9 @@ static void gl_swap_surface(gl_render_window_t* bundle) {
         ANativeWindow_setBuffersGeometry(bundle->nativeSurface, 0, 0, bundle->format);
         bundle->surface = eglCreateWindowSurface_p(g_EglDisplay, bundle->config, bundle->nativeSurface, NULL);
     } else {
-        LOGI("No new native surface, switching to 1x1 pbuffer");
+        LOGI("No new native surface, switching to 32x32 pbuffer");
         bundle->nativeSurface = NULL;
-        const EGLint pbuffer_attrs[] = {EGL_WIDTH, 1 , EGL_HEIGHT, 1, EGL_NONE};
+        const EGLint pbuffer_attrs[] = {EGL_WIDTH, 32 , EGL_HEIGHT, 32, EGL_NONE};
         bundle->surface = eglCreatePbufferSurface_p(g_EglDisplay, bundle->config, pbuffer_attrs);
     }
 }
