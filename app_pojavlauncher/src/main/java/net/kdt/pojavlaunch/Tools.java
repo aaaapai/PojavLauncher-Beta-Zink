@@ -118,6 +118,7 @@ public final class Tools {
     public static String NATIVE_LIB_DIR;
     public static String DIR_DATA; //Initialized later to get context
     public static String MESA_DIR;
+    public static String MESA_EGL_DIR = null;
     public static String TURNIP_DIR;
     public static File DIR_CACHE;
     public static File FILE_PROFILE_PATH;
@@ -185,6 +186,7 @@ public final class Tools {
         MULTIRT_HOME = DIR_DATA + "/runtimes";
         DIR_ACCOUNT_NEW = DIR_DATA + "/accounts";
         MESA_DIR = DIR_DATA + "/mesa";
+        MESA_EGL_DIR = DIR_DATA + "/mesa2520";
         TURNIP_DIR = DIR_DATA + "/turnip";
         NATIVE_LIB_DIR = ctx.getApplicationInfo().nativeLibraryDir;
     }
@@ -762,7 +764,7 @@ public final class Tools {
             if (libItem.name.startsWith("net.java.dev.jna:jna:")) {
                 // Special handling for LabyMod 1.8.9, Forge 1.12.2(?) and oshi
                 // we have libjnidispatch 5.16.0 in jniLibs directory
-                if (Integer.parseInt(version[0]) >= 5 && Integer.parseInt(version[1]) >= 13)
+                if (Integer.parseInt(version[0]) >= 5 && Integer.parseInt(version[1]) >= 16)
                     continue;
                 Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 5.16.0");
                 createLibraryInfo(libItem);
@@ -778,7 +780,7 @@ public final class Tools {
                 Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 6.6.6");
                 createLibraryInfo(libItem);
                 libItem.name = "com.github.oshi:oshi-core:6.6.6";
-                libItem.downloads.artifact.path = "com/github/oshi/oshi-core/6.3.0/oshi-core-6.6.6.jar";
+                libItem.downloads.artifact.path = "com/github/oshi/oshi-core/6.6.6/oshi-core-6.6.6.jar";
                 libItem.downloads.artifact.url = "https://repo1.maven.org/maven2/com/github/oshi/oshi-core/6.6.6/oshi-core-6.6.6.jar";
             } else if (libItem.name.startsWith("org.ow2.asm:asm-all:")) {
                 // Early versions of the ASM library get repalced with 5.0.4 because Pojav's LWJGL is compiled for
@@ -794,7 +796,7 @@ public final class Tools {
             }
         }
     }
-
+    
     private static void createLibraryInfo(DependentLibrary library) {
         if (library.downloads == null || library.downloads.artifact == null)
             library.downloads = new DependentLibrary.LibraryDownloads(new MinecraftLibraryArtifact());
@@ -1540,3 +1542,4 @@ public final class Tools {
         return String.format("%.2f %s", value, units[unitIndex]);
     }
 }
+
