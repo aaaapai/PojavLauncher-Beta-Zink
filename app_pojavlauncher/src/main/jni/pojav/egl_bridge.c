@@ -157,7 +157,7 @@ static void set_vulkan_ptr(void* ptr) {
     setenv("VULKAN_PTR", envval, 1);
 }
 
-static void load_vulkan(void) {
+void load_vulkan(void) {
     const char* zinkPreferSystemDriver = getenv("POJAV_ZINK_PREFER_SYSTEM_DRIVER");
     int deviceApiLevel = android_get_device_api_level();
     if (zinkPreferSystemDriver == NULL && deviceApiLevel >= 28) {
