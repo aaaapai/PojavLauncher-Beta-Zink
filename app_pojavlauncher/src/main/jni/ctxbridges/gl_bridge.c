@@ -22,6 +22,8 @@
 static __thread gl_render_window_t* currentBundle;
 static EGLDisplay g_EglDisplay;
 
+extern void load_vulkan(void);
+
 bool gl_init(void) {
     dlsym_EGL();
     g_EglDisplay = eglGetDisplay_p(EGL_DEFAULT_DISPLAY);
@@ -79,6 +81,7 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
         if (strncmp(getenv("POJAV_BETA_RENDERER"), "opengles3_desktopgl", 19) == 0)
         {
             printf("EGLBridge: Binding to OpenGL\n");
+            load_vulkan();
             bindResult = eglBindAPI_p(EGL_OPENGL_API);
         } else {
             printf("EGLBridge: Binding to OpenGL ES\n");
