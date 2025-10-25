@@ -225,6 +225,14 @@ static int pojavInitOpenGL(void) {
 
     if (!strncmp("opengles", renderer, 8))
     {
+        load_vulkan();
+        setenv("GALLIUM_DRIVER", "zink", 1);
+        setenv("MESA_LOADER_DRIVER_OVERRIDE", "zink", 1);
+        setenv("MESA_LOG_LEVEL", "debug", 1);
+        setenv("MESA_LOG", "file", 1);
+        setenv("MESA_GL_VERSION_OVERRIDE", "4.6", 1);
+        setenv("MESA_GLSL_VERSION_OVERRIDE", "460", 1);
+        setenv("GALLIUM_DRIVER", "zink", 1);
         ConfigBridgeTbl();
         pojav_environ->config_renderer = RENDERER_GL4ES;
         if (pojav_environ->config_bridge == 0) set_gl_bridge_tbl();
