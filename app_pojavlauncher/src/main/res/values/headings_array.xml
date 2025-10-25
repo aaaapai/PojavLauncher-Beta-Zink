@@ -7,6 +7,7 @@
         <item name="3">Mesa 3D</item>
         <item name="4">@string/mcl_setting_renderer_vulkan_zink</item>
         <item name="5">@string/mcl_setting_renderer_virgl</item>
+        <item name="6">Kopper Zink</item>
     </string-array>
 
     <string-array name="renderer_values">
@@ -16,6 +17,7 @@
         <item>mesa_3d</item> <!-- Mesa3D Library -->
         <item>vulkan_zink</item> <!-- Zink renderer with Vulkan OpenGL4.6 -->
         <item>gallium_virgl</item> <!-- gallium_virgl with OpenGL ES 3 -->
+        <item>opengles3_desktopgl_zink_kopper</item>
     </string-array>
 
     <string-array name="menu_customcontrol">
