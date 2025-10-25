@@ -267,6 +267,21 @@ public class JREUtils {
             envMap.put("LIBGL_NORMALIZE", "1");
         }
 
+        if (LOCAL_RENDERER.startsWith("opengles3_desktopgl_zink_kopper")) {
+            envMap.put("LIBGL_ES", "3");
+            envMap.put("LIBGL_FB", "3");
+            envMap.put("LIBGL_GLES", "libgallium_dri.so");
+            envMap.put("LIBGL_EGL", "libEGL_mesa.so");
+            envMap.put("POJAVEXEC_EGL", "libEGL_mesa.so");
+            envMap.put("LOCAL_DRIVER_MODEL", "gallium_zink");
+            envMap.put("mesa_glthread", "true");
+            envMap.put("MESA_NO_ERROR", "true");
+            envMap.put("LIBGL_MIPMAP", "3");
+            envMap.put("LIBGL_NOERROR", "1");
+            envMap.put("LIBGL_NOINTOVLHACK", "1");
+            envMap.put("LIBGL_NORMALIZE", "1");
+        }
+
         RendererPlugin.Renderer customRenderer = RendererPlugin.getSelectedRenderer();
         if (customRenderer != null && LOCAL_RENDERER.equals(customRenderer.getIdName())) {
             customRenderer.getEnv().forEach(envPair -> {
@@ -617,7 +632,7 @@ public class JREUtils {
                 // GLFW Stub width height
                 "-Dglfwstub.windowWidth=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.widthPixels, LauncherPreferences.PREF_SCALE_FACTOR / 100F),
                 "-Dglfwstub.windowHeight=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.heightPixels, LauncherPreferences.PREF_SCALE_FACTOR / 100F),
-                "-Dglfwstub.initEgl=true",
+                "-Dglfwstub.initEgl=false",
                 "-Dext.net.resolvPath=" + resolvFile,
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
 
@@ -744,6 +759,9 @@ public class JREUtils {
             switch (LOCAL_RENDERER) {
                 case "opengles3_gl4es":
                     renderLibrary = "libgl4es_114.so";
+                    break;
+                case "opengles3_desktopgl_zink_kopper":
+                    renderLibrary = "libgallium_dri.so";
                     break;
                 case "opengles3_gl4es_ptitseb":
                     renderLibrary = "libgl4es_ptitseb.so";
@@ -882,3 +900,4 @@ public class JREUtils {
         System.loadLibrary("pojavexec_awt");
     }
 }
+
