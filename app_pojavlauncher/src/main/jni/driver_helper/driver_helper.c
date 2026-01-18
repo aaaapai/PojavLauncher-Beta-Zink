@@ -66,12 +66,11 @@ void* loadTurnipVulkan(void) {
     if (!native_dir) 
         native_dir = getenv("POJAV_NATIVEDIR");
 
-    if (!linker_ns_load(native_dir))
-        return NULL;
+    linker_ns_load(native_dir);
 
     void* linkerhook = linker_ns_dlopen("liblinkerhook.so", RTLD_LOCAL | RTLD_NOW);
-    if (!linkerhook)
-        return NULL;
+    /*if (!linkerhook)
+        return NULL;*/
 
     const char* libvkdriverenv = getenv("LIBGL_VKDRIVER");
     void* turnip_driver_handle = NULL;
@@ -80,27 +79,27 @@ void* loadTurnipVulkan(void) {
     } else {
         turnip_driver_handle = linker_ns_dlopen("libvulkan_virtio.so", RTLD_LOCAL | RTLD_NOW);
     }
-    if (!turnip_driver_handle) {
+    /*if (!turnip_driver_handle) {
         dlclose(linkerhook);
         return NULL;
-    }
+    }*/
 
     void* dl_android = linker_ns_dlopen("libdl_android.so", RTLD_LOCAL | RTLD_LAZY);
-    if (!dl_android) {
+    /*if (!dl_android) {
         dlclose(linkerhook);
         dlclose(turnip_driver_handle);
         return NULL;
-    }
+    }*/
 
     void* android_get_exported_namespace = dlsym(dl_android, "android_get_exported_namespace");
     void (*linkerhookPassHandles)(void*, void*, void*) = dlsym(linkerhook, "linker_hook_set_handles");
 
-    if (!linkerhookPassHandles || !android_get_exported_namespace) {
+    /*if (!linkerhookPassHandles || !android_get_exported_namespace) {
         dlclose(dl_android);
         dlclose(linkerhook);
         dlclose(turnip_driver_handle);
         return NULL;
-    }
+    }*/
 
     linkerhookPassHandles(turnip_driver_handle, android_dlopen_ext, android_get_exported_namespace);
 
