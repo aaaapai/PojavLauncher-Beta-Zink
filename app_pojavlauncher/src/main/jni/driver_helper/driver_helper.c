@@ -74,10 +74,11 @@ void* loadTurnipVulkan(void) {
         return NULL;
 
     const char* libvkdriverenv = getenv("LIBGL_VKDRIVER");
+    void* turnip_driver_handle = NULL;
     if (libvkdriverenv) {
-        void* turnip_driver_handle = linker_ns_dlopen(libvkdriverenv, RTLD_LOCAL | RTLD_NOW);
+        turnip_driver_handle = linker_ns_dlopen(libvkdriverenv, RTLD_LOCAL | RTLD_NOW);
     } else {
-        void* turnip_driver_handle = linker_ns_dlopen("libvulkan_virtio.so", RTLD_LOCAL | RTLD_NOW);
+        turnip_driver_handle = linker_ns_dlopen("libvulkan_virtio.so", RTLD_LOCAL | RTLD_NOW);
     }
     if (!turnip_driver_handle) {
         dlclose(linkerhook);
