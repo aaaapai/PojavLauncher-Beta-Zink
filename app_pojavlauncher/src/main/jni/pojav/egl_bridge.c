@@ -54,7 +54,7 @@
 
 void bigcore_set_affinity(void);
 
-void* loadTurnipVulkan(void);
+extern void* loadTurnipVulkan(void);
 
 EXTERNAL_API void pojavTerminate(void) {
     printf("EGLBridge: Terminating\n");
@@ -161,16 +161,13 @@ static void set_vulkan_ptr(void* ptr) {
 void load_vulkan(void) {
     const char* zinkPreferSystemDriver = getenv("POJAV_ZINK_PREFER_SYSTEM_DRIVER");
     int deviceApiLevel = android_get_device_api_level();
-    if (zinkPreferSystemDriver == NULL && deviceApiLevel >= 28) {
-#ifdef ADRENO_POSSIBLE
+    if (zinkPreferSystemDriver == NULL) {
         void* result = loadTurnipVulkan();
-        if (result != NULL)
         {
             printf("AdrenoSupp: Loaded Turnip, loader address: %p\n", result);
             set_vulkan_ptr(result);
             return;
         }
-#endif
     }
 
     printf("OSMDroid: Loading Vulkan regularly...\n");
