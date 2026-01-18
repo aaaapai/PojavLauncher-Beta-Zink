@@ -11,7 +11,7 @@
 #include "GL/gl.h"
 
 //#define ADRENO_POSSIBLE
-#ifdef ADRENO_POSSIBLE
+void* loadTurnipVulkan(void);
 
 /*bool checkAdrenoGraphics(void) {
     EGLDisplay eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
@@ -113,5 +113,3 @@ void* loadTurnipVulkan(void) {
 
     return libvulkan;
 }
-
-#endif
