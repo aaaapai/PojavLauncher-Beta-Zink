@@ -13,7 +13,7 @@
 //#define ADRENO_POSSIBLE
 #ifdef ADRENO_POSSIBLE
 
-bool checkAdrenoGraphics(void) {
+/*bool checkAdrenoGraphics(void) {
     EGLDisplay eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
     if (eglDisplay == EGL_NO_DISPLAY || eglInitialize(eglDisplay, NULL, NULL) != EGL_TRUE) 
         return false;
@@ -56,11 +56,9 @@ bool checkAdrenoGraphics(void) {
     eglTerminate(eglDisplay);
 
     return is_adreno;
-}
+}*/
 
 void* loadTurnipVulkan(void) {
-    if (!checkAdrenoGraphics())
-        return NULL;
 
     const char* native_dir = getenv("DRIVER_PATH");
     const char* cache_dir = getenv("TMPDIR");
@@ -75,7 +73,12 @@ void* loadTurnipVulkan(void) {
     if (!linkerhook)
         return NULL;
 
-    void* turnip_driver_handle = linker_ns_dlopen("libvulkan_freedreno.so", RTLD_LOCAL | RTLD_NOW);
+    const char* libvkdriverenv = getenv("LIBGL_VKDRIVER");
+    if (libvkdriverenv) {
+        void* turnip_driver_handle = linker_ns_dlopen(libvkdriverenv, RTLD_LOCAL | RTLD_NOW);
+    } else {
+        void* turnip_driver_handle = linker_ns_dlopen("libvulkan_virtio.so", RTLD_LOCAL | RTLD_NOW);
+    }
     if (!turnip_driver_handle) {
         dlclose(linkerhook);
         return NULL;
