@@ -54,7 +54,7 @@
 
 void bigcore_set_affinity(void);
 
-static void* loadTurnipVulkan(void);
+void* loadTurnipVulkan(void);
 
 EXTERNAL_API void pojavTerminate(void) {
     printf("EGLBridge: Terminating\n");
