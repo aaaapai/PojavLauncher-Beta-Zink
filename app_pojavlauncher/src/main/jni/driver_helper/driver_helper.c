@@ -68,16 +68,16 @@ void* loadTurnipVulkan(void) {
 
     linker_ns_load(native_dir);
 
-    void* linkerhook = linker_ns_dlopen("liblinkerhook.so", RTLD_LOCAL | RTLD_NOW);
+    void* linkerhook = linker_ns_dlopen("liblinkerhook.so", RTLD_LOCAL | RTLD_LAZY);
     /*if (!linkerhook)
         return NULL;*/
 
     const char* libvkdriverenv = getenv("LIBGL_VKDRIVER");
     void* turnip_driver_handle = NULL;
     if (libvkdriverenv) {
-        turnip_driver_handle = linker_ns_dlopen(libvkdriverenv, RTLD_LOCAL | RTLD_NOW);
+        turnip_driver_handle = linker_ns_dlopen(libvkdriverenv, RTLD_LOCAL | RTLD_LAZY);
     } else {
-        turnip_driver_handle = linker_ns_dlopen("libvulkan_virtio.so", RTLD_LOCAL | RTLD_NOW);
+        turnip_driver_handle = linker_ns_dlopen("libvulkan_virtio.so", RTLD_LOCAL | RTLD_LAZY);
     }
     /*if (!turnip_driver_handle) {
         dlclose(linkerhook);
@@ -103,7 +103,7 @@ void* loadTurnipVulkan(void) {
 
     linkerhookPassHandles(turnip_driver_handle, android_dlopen_ext, android_get_exported_namespace);
 
-    void* libvulkan = linker_ns_dlopen_unique(cache_dir, "libvulkan.so", RTLD_LOCAL | RTLD_NOW);
+    void* libvulkan = linker_ns_dlopen_unique(cache_dir, "libGLES_mali.so", RTLD_LOCAL | RTLD_NOW);
     if (!libvulkan) {
         dlclose(dl_android);
         dlclose(linkerhook);
