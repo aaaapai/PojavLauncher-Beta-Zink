@@ -93,19 +93,14 @@ bool linker_ns_load(const char* lib_search_path) {
 }
 
 void* linker_ns_dlopen(const char* name, int flag) {
-#ifdef ADRENO_POSSIBLE
     android_dlextinfo dlextinfo = {
         .flags = ANDROID_DLEXT_USE_NAMESPACE,
         .library_namespace = driver_namespace
     };
     return android_dlopen_ext(name, flag, &dlextinfo);
-#else
-    return NULL;
-#endif
 }
 
 void* linker_ns_dlopen_unique(const char* tmpdir, const char* name, int flags) {
-#ifdef ADRENO_POSSIBLE
     char pathbuf[PATH_MAX];
     static uint16_t patch_id;
     int patch_fd, real_fd;
@@ -133,9 +128,6 @@ void* linker_ns_dlopen_unique(const char* tmpdir, const char* name, int flags) {
     };
     snprintf(pathbuf, PATH_MAX, "/proc/self/fd/%d", patch_fd);
     return android_dlopen_ext(pathbuf, flags, &extinfo);
-#else
-    return NULL;
-#endif
 }
 
 bool patch_elf_soname(int patchfd, int realfd, uint16_t patchid) {
